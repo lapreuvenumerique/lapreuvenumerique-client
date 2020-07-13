@@ -1,5 +1,6 @@
 {
   "login":{
+    "headerInfo":"Login to your account",
     "submit": "Submit",
     "usernameRequired": "Username required",
     "usernameLabel" : "Username",
@@ -9,6 +10,7 @@
     "errorServer":"Web service unavailable, please try again later"
   },
   "register":{
+    "headerInfo":"Register your new account",
     "submit": "Submit",
     "usernameRequired": "Username required",
     "usernameLabel" : "Username",
@@ -21,7 +23,17 @@
     "apiKeyRequired": "API key required",
     "apiKeyCount":"64 characters required",
     "apiKeyLabel" : "API key",
-    "errorCrendentials" : "Your credentials are incorrect",
+    "secretKeyRequired": "Secret key required",
+    "secretKeyCount":"64 characters required",
+    "secretKeyLabel" : "Secret key",
+    "errorKeys" : "One of your keys is incorrect",
     "errorServer":"Web service unavailable, please try again later"
+  },
+  "home":{
+    "proofDeposit":"Proof deposit",
+    "proofSearch":"Proof search",
+    "docVerify":"Verify a document",
+    "integrity":"Integrity",
+    "settings":"Settings"
   }
 }

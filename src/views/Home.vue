@@ -45,9 +45,11 @@ export default {
     return {
       displayName:"",
      items: [
-          { title: 'Home', icon: 'mdi-home-city' },
-          { title: 'My Account', icon: 'mdi-account' },
-          { title: 'Users', icon: 'mdi-account-group-outline' },
+          { title: this.$t("home.proofDeposit"), icon: 'mdi-upload' },
+          { title: this.$t("home.proofSearch"), icon: 'mdi-file-search' },
+          { title: this.$t("home.docVerify"), icon: 'mdi-file-check' },
+          { title: this.$t("home.integrity"), icon: 'mdi-check-circle' },
+          { title: this.$t("home.settings"), icon: 'mdi-cog' },
         ],
         mini: true
     }

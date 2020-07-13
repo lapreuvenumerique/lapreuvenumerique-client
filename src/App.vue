@@ -8,14 +8,14 @@
 </template>
 
 <script>
-import dbService from "./service/db-service"
+//import dbService from "./service/db-service"
 export default {
     name: "App",
 
     components: {},
     mounted() {
-        dbService.createTables()
-        this.$router.replace("/login");
+        //dbService.createTables()
+        //this.$router.replace("/");
     },
 
     data: () => ({

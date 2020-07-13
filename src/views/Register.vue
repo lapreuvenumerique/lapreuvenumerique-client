@@ -1,69 +1,76 @@
 <template>
-    <v-container>
-        <v-row>
-            <v-col>
+<v-container fill-height fluid>
+        <v-row justify="center" align="center" style="height:'100%';">
+            <v-col cols="4">
+                <v-card class="elevation-12">
+              <v-toolbar
+                color="primary"
+                dark
+                flat
+              >
+                <v-toolbar-title>{{this.$t("register.headerInfo")}}</v-toolbar-title>
+                <v-spacer></v-spacer>
+              </v-toolbar>
+              <v-card-text>
                 <v-form
                 v-model="isValid"
                 >
-                    <v-row justify="center">
-                        <v-col cols="4">
-                            <v-text-field
-                                v-model="username"
-                                required
-                                :rules="usernameRules"
-                                :label="$t('register.usernameLabel')"
-                            ></v-text-field>
-                        </v-col>
-                    </v-row>
-                    <v-row justify="center">
-                        <v-col cols="4">
-                            <v-text-field
-                                v-model="password"
-                                :rules="passwordRules"
-                                type="password"
-                                :label="$t('register.passwordLabel')"
-                            ></v-text-field>
-                        </v-col>
-                    </v-row>
-                    <v-row justify="center">
-                        <v-col cols="4">
-                            <v-text-field
-                                v-model="customerUID"
-                                counter="36"
-                                required
-                                :rules="customerUIDRules"
-                                :label="$t('register.uidLabel')"
-                                maxlength="36"
-                            ></v-text-field>
-                        </v-col>
-                    </v-row>
-                    <v-row justify="center">
-                        <v-col cols="4">
-                            <v-text-field
-                                v-model="apiKey"
-                                counter="64"
-                                :rules="apiKeyRules"
-                                type="password"
-                                :label="$t('register.apiKeyLabel')"
-                                maxlength="64"
-                            ></v-text-field>
-                        </v-col>
-                    </v-row>
+                <v-text-field
+                   v-model="username"
+                   counter="36"
+                   required
+                   :rules="usernameRules"
+                   :label="$t('register.usernameLabel')"
+                   maxlength="36"
+                ></v-text-field>
+                  <v-text-field
+                      v-model="password"
+                      counter="64"
+                      :append-icon="passwordeyevalue ? 'mdi-eye' : 'mdi-eye-off'"
+                      :rules="passwordRules"
+                      :type="passwordeyevalue ? 'password' : 'text'"
+                      @click:append="() => (passwordeyevalue = !passwordeyevalue)"
+                      :label="$t('register.passwordLabel')"
+                      maxlength="64"
+                  ></v-text-field>
+                  <v-text-field
+                      v-model="customerUID"
+                      counter="36"
+                      required
+                      :rules="customerUIDRules"
+                      :label="$t('register.uidLabel')"
+                      maxlength="36"
+                  ></v-text-field>
+                  <v-text-field
+                      v-model="apiKey"
+                      counter="64"
+                      :append-icon="apiKeyeyevalue ? 'mdi-eye' : 'mdi-eye-off'"
+                      :rules="apiKeyRules"
+                      :type="apiKeyeyevalue ? 'password' : 'text'"
+                      @click:append="() => (apiKeyeyevalue = !apiKeyeyevalue)"
+                      :label="$t('register.apiKeyLabel')"
+                      maxlength="64"
+                  ></v-text-field>
+                  <v-text-field
+                      v-model="secretKey"
+                      counter="64"
+                      :append-icon="secretKeyeyevalue ? 'mdi-eye' : 'mdi-eye-off'"
+                      :rules="secretKeyRules"
+                      :type="secretKeyeyevalue ? 'password' : 'text'"
+                      @click:append="() => (secretKeyeyevalue = !secretKeyeyevalue)"
+                      :label="$t('register.secretKeyLabel')"
+                      maxlength="64"
+                  ></v-text-field>
                     <v-row justify="center">
                         <v-col cols="4" class="text-center">
-                            <v-btn 
-                            @click="register"
-                            :disabled="!isValid"
-                            >
-                                {{$t("register.submit")}}
-                            </v-btn>
+                            
                             
                             <v-alert
-                            v-if="errorCredentials"
+                            v-if="errorKeys"
                             type="error"
                             class="mt-3"
                             >
-                               {{$t("register.errorcrendentials")}} 
+                               {{$t("register.errorKeys")}} 
                             </v-alert>
                             
                             <v-alert
@@ -71,11 +78,23 @@
                             type="error"
                             class="mt-3"
                             >
-                               {{$t("register.errorserver")}} 
+                               {{$t("register.errorServer")}} 
                             </v-alert>
                         </v-col>
                     </v-row>
                 </v-form>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn 
+                    @click="register"
+                    :disabled="!isValid"
+                    color="primary"
+                    >
+                        {{$t("register.submit")}}
+                </v-btn>
+              </v-card-actions>
+            </v-card>
             </v-col>
         </v-row>
     </v-container>
@@ -83,16 +102,21 @@
 
 <script>
 import servicesFactory from "../service/service-factory"
-import dbService from "../service/db-service"
+//import dbService from "../service/db-service"
 export default {
     data(){
         return{
-            errorCredentials: false,
+            errorKeys:false,
             errorServer: false,
+            passwordeyevalue : true,
+            secretKeyeyevalue:true,
+            apiKeyeyevalue:true,
             username : "Admin",
             usernameRules:[value => !!value || this.$t("register.usernameRequired"),value => value.length > 4  || this.$t("register.usernameCount")],
+            secretKey:"65750c2bf72356197925d7ce83338b871f758e4b70ec639ea2fcec61679abb60",
+            secretKeyRules:[value => !!value || this.$t("register.secretKeyRequired"),value => value.length == 64  || this.$t("register.secretKeyCount")],
             password : "Admin123",
-            passwordRules:[value => !!value || this.$t("register.passwordRequired"), value => value.search(/((?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,30})/g) != -1 || this.$t  || this.$t("register.passwordWrong")],
+            passwordRules:[value => !!value || this.$t("register.passwordRequired"), value => value.search(/((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,30})/g) != -1  || this.$t("register.passwordWrong")],
             apiKey : "84816873e95047d2a02853421a1d21deb133680b812378a82e7c32d8fdea4960",
             apiKeyRules:[value => !!value || this.$t("register.apiKeyRequired"),value => value.length == 64  || this.$t("register.apiKeyCount")],
             customerUID : "3b462174-7bc9-445f-b746-83decc854d92",
@@ -102,9 +126,10 @@ export default {
     },
     methods:{
         async register(){
-            localStorage.setItem("apiKey", this.apiKey)
-            localStorage.setItem("customerUID", this.customerUID)
-            dbService.register()
+
+            //localStorage.setItem("apiKey", this.apiKey)
+            //localStorage.setItem("customerUID", this.customerUID)
+            //dbService.register()
             try{
                 
                 const response = await servicesFactory.getClientService().register()
@@ -113,12 +138,6 @@ export default {
                 localStorage.setItem("name", response.data.name)
             }
             catch(err){
-                if(err.status == 401)
-                {
-                    this.errorCredentials = true
-                    console.log(err)
-                    return
-                }
                 if(err.status == 500)
                 {
                     this.errorServer = true
@@ -131,3 +150,13 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+html{
+    background: url('../assets/clouds.jpg'); 
+    background-size:cover;
+}
+#app{
+    background:none;
+}
+</style>

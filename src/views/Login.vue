@@ -1,42 +1,39 @@
 <template>
-    <v-container>
-        <v-row>
-            <v-col>
+    <v-container fill-height fluid>
+        <v-row justify="center" align="center" style="height:'100%';">
+            <v-col cols="4">
+                <v-card class="elevation-12">
+              <v-toolbar
+                color="primary"
+                dark
+                flat
+              >
+                <v-toolbar-title>{{this.$t("login.headerInfo")}}</v-toolbar-title>
+                <v-spacer></v-spacer>
+              </v-toolbar>
+              <v-card-text>
                 <v-form
                 v-model="isValid"
                 >
-                    <v-row justify="center">
-                        <v-col cols="4">
-                            <v-text-field
-                                v-model="username"
-                                counter="36"
-                                required
-                                :rules="usernameRules"
-                                :label="$t('login.usernameLabel')"
-                                maxlength="36"
-                            ></v-text-field>
-                        </v-col>
-                    </v-row>
-                    <v-row justify="center">
-                        <v-col cols="4">
-                            <v-text-field
-                                v-model="password"
-                                counter="64"
-                                :rules="passwordRules"
-                                type="password"
-                                :label="$t('login.passwordLabel')"
-                                maxlength="64"
-                            ></v-text-field>
-                        </v-col>
-                    </v-row>
+                <v-text-field
+                   v-model="username"
+                   counter="36"
+                   required
+                   :rules="usernameRules"
+                   :label="$t('login.usernameLabel')"
+                   maxlength="36"
+                ></v-text-field>
+                  <v-text-field
+                      v-model="password"
+                      counter="64"
+                      :rules="passwordRules"
+                      type="password"
+                      :label="$t('login.passwordLabel')"
+                      maxlength="64"
+                  ></v-text-field>
                     <v-row justify="center">
                         <v-col cols="4" class="text-center">
-                            <v-btn 
-                            @click="login"
-                            :disabled="!isValid"
-                            >
-                                {{$t("login.submit")}}
-                            </v-btn>
+                            
                             
                             <v-alert
                             v-if="errorCredentials"
@@ -56,31 +53,53 @@
                         </v-col>
                     </v-row>
                 </v-form>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn 
+                    @click="login"
+                    :disabled="!isValid"
+                    color="primary"
+                    >
+                        {{$t("login.submit")}}
+                </v-btn>
+              </v-card-actions>
+            </v-card>
             </v-col>
         </v-row>
     </v-container>
 </template>
 
 <script>
-import dbService from "../service/db-service"
+//import dbService from "../service/db-service"
 export default {
     data(){
         return{
             errorCredentials: false,
             errorServer: false,
-            password : "84816873e95047d2a02853421a1d21deb133680b812378a82e7c32d8fdea4960",
-            passwordRules:[value => !!value || this.$t("login.passwordRequired"),value => value.length == 64  || this.$t("login.passwordCount")],
-            username : "3b462174-7bc9-445f-b746-83decc854d92",
-            usernameRules:[value => !!value || this.$t("login.usernameRequired"), value => value.length == 36 || this.$t("login.usernameCount")],
+            password : "Admin123",
+            passwordRules:[value => !!value || this.$t("login.passwordRequired")],
+            username : "Admin",
+            usernameRules:[value => !!value || this.$t("login.usernameRequired")],
             isValid : false
         }
     },
     methods:{
         login(){
-            const response = dbService.login(this.username, this.password)
-            console.log(response)
-            this.$router.push("/")
+            //const response = dbService.login(this.username, this.password)
+            //console.log(response)
+            //this.$router.push("/")
         }
     }
 }
 </script>
+
+<style scoped>
+html{
+    background: url('../assets/clouds.jpg'); 
+    background-size:cover;
+}
+#app{
+    background:none;
+}
+</style>
