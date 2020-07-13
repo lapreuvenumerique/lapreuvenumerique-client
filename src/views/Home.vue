@@ -1,18 +1,65 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-container fluid& style="height: 100%;">
+    <v-navigation-drawer
+      v-model="drawer"
+      permanent
+       style="height: 100%;"
+    >
+      <v-list-item class="px-2">
+        <v-list-item-avatar>
+          <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
+        </v-list-item-avatar>
+
+        <v-list-item-title>{{displayName}}</v-list-item-title>
+
+        
+      </v-list-item>
+
+      <v-divider></v-divider>
+
+      <v-list dense>
+        <v-list-item
+          v-for="item in items"
+          :key="item.title"
+          link
+        >
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+    <v-row>
+      <v-col cols="12">
+        
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
 export default {
-  name: 'Home',
-  components: {
-    HelloWorld
+  data(){
+    return {
+      displayName:"",
+     items: [
+          { title: 'Home', icon: 'mdi-home-city' },
+          { title: 'My Account', icon: 'mdi-account' },
+          { title: 'Users', icon: 'mdi-account-group-outline' },
+        ],
+        mini: true
+    }
+  },
+  mounted(){
+    this.displayName =this.$store.state.name
+  },
+  methods:{
+
   }
+
 }
 </script>

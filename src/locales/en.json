@@ -1,3 +1,12 @@
 {
-  "message": "hello i18n !!"
+  "login":{
+    "submit": "Submit",
+    "uidRequired": "Customer UID Required",
+    "uidCount":"36 characters required",
+    "uidLabel" : "Customer UID",
+    "apiKeyRequired": "API Key Required",
+    "apiKeyCount":"64 characters required",
+    "apiKeyLabel" : "API Key",
+    "errorcrendentials" : "Your credentials are incorrect"
+  }
 }

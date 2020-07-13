@@ -1,10 +1,10 @@
-import httpService from "./http-service"
 
 export class ClientService {
     constructor(httpService) {
         this.httpService = httpService
     }
+    login() {
+        return this.httpService.get("/1.0/companyname")
+    }
 
 }
-
-export default new ClientService(httpService)

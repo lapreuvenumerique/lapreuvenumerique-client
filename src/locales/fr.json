@@ -1,0 +1,11 @@
+{
+    "login":{
+      "submit": "Envoyer",
+      "uidRequired": "Customer UID Requis",
+      "uidCount":"36 characters required",
+      "uidLabel" : "Customer UID",
+      "apiKeyRequired": "API Key Required",
+      "apiKeyCount":"64 characters required",
+      "apiKeyLabel" : "API Key"
+    }
+  }

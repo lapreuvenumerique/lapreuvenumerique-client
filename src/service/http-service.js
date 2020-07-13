@@ -44,9 +44,11 @@ export class HttpService {
     }
 
     getHeaders() {
-        const headers = new Headers()
-        headers.append('authorization', 'Basic ' + localStorage.getItem('apikey'))
-        headers.append('x-customeruid', localStorage.getItem("customerUid"))
+        const headers = {'Authorization': 'Basic ' + localStorage.getItem('apiKey'),
+        'x-customeruid': localStorage.getItem("customerUID")}
+        return headers
     }
 
 }
+
+export default new HttpService()
