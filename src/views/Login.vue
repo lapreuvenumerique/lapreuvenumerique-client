@@ -93,13 +93,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-    html{
-        background: url('../assets/clouds.jpg'); 
-        background-size:cover;
-    }
-    #app{
-        background:none;
-    }
-</style>

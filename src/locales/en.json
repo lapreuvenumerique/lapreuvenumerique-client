@@ -27,7 +27,36 @@
     "secretKeyCount":"64 characters required",
     "secretKeyLabel" : "Secret key",
     "errorKeys" : "One of your keys is incorrect",
-    "errorServer":"Web service unavailable, please try again later"
+    "errorServer":"Web service unavailable, please try again later",
+    "permissionsInfo":"Set the permissions of the account",
+
+    "togglelist":{
+      "line1":{
+        "title" : "Line 1",
+        "label1" : "Toggle 1",
+        "label2" : "Toggle 2"
+      },
+      "line2":{
+        "title" : "Line 2",
+        "label1" : "Toggle 3",
+        "label2" : "Toggle 4"
+      },
+      "line3":{
+        "title" : "Line 3",
+        "label1" : "Toggle 5",
+        "label2" : "Toggle 6"
+      },
+      "line4":{
+        "title" : "Line 4",
+        "label1" : "Toggle 7",
+        "label2" : "Toggle 8"
+      },
+      "line5":{
+        "title" : "Line 5",
+        "label1" : "Toggle 9",
+        "label2" : "Toggle 10"
+      }
+    }
   },
   "home":{
     "proofDeposit":"Proof deposit",

@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid style="height: 100%;">
+  <v-container fluid style="height: 100%;background:white;">
     <v-row style="height: 100%;">
       <v-col cols="12" style="height: 100%;">
           <v-navigation-drawer
@@ -27,7 +27,6 @@
             <v-list-item-icon>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-icon>
-
             <v-list-item-content>
               <v-list-item-title>{{ item.title }}</v-list-item-title>
             </v-list-item-content>

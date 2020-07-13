@@ -15,7 +15,7 @@ export default {
     components: {},
     mounted() {
         //dbService.createTables()
-        this.$router.replace("/register");
+        //this.$router.replace("/register");
     },
 
     data: () => ({
@@ -24,8 +24,17 @@ export default {
 };
 </script>
 <style>
-html,
-body {
-    height: 100%;
-}
+    html,
+    body {
+        height: 100%;
+    }
+    html{
+        background: url('./assets/clouds.jpg'); 
+        background-size:cover;
+    }
+    #app{
+        background:none;
+    }
+</style>
+<style>
 </style>

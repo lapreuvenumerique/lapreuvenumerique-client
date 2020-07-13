@@ -1,8 +1,8 @@
 <template>
 <v-container fill-height fluid>
         <v-row justify="center" align="center" style="height:'100%';">
-            <v-col cols="4">
-                <v-card class="elevation-12">
+            <v-col cols="5">
+             <v-card class="elevation-12">
               <v-toolbar
                 color="primary"
                 dark
@@ -96,6 +96,45 @@
               </v-card-actions>
             </v-card>
             </v-col>
+            <v-col cols="3">
+                <v-card class="elevation-12">
+                    <v-toolbar
+                      color="primary"
+                      dark
+                      flat
+                    >
+                      <v-toolbar-title>{{this.$t("register.permissionsInfo")}}</v-toolbar-title>
+                      <v-spacer></v-spacer>
+                    </v-toolbar>
+                    <v-card-text >
+                        <v-row
+                        v-for="toggle in toggles"
+                        :key="toggle.label1"
+                        link
+                        >
+                            <v-col cols="1">
+                                <span class="layout align-center justify-center fill-height">{{toggle.index}}</span>
+                            </v-col>
+                            <v-col cols="2">
+                                <span class="layout align-center justify-center fill-height">{{toggle.line}}</span>
+                            </v-col>
+                            <v-col cols="4">
+                                <v-switch
+                                    :label=toggle.label1
+                                    v-model= toggle.enabled
+                                ></v-switch>
+                            </v-col>
+                            <v-col cols="4">
+                                <v-switch
+                                    :label=toggle.label2
+                                    v-if= toggle.enabled
+                                ></v-switch>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+                </v-card>
+            </v-col>
+            
         </v-row>
     </v-container>
 </template>
@@ -121,7 +160,15 @@ export default {
             apiKeyRules:[value => !!value || this.$t("register.apiKeyRequired"),value => value.length == 64  || this.$t("register.apiKeyCount")],
             customerUID : "3b462174-7bc9-445f-b746-83decc854d92",
             customerUIDRules:[value => !!value || this.$t("register.uidRequired"), value => value.length == 36 || this.$t("register.uidCount")],
-            isValid : false
+            isValid : false,
+
+           toggles: [
+          {index : 1, line : this.$t("register.togglelist.line1.title"), label1 : this.$t("register.togglelist.line1.label1"),  label2 : this.$t("register.togglelist.line1.label2"), enabled : false},
+          {index : 2, line : this.$t("register.togglelist.line2.title"), label1 : this.$t("register.togglelist.line2.label1"),  label2 : this.$t("register.togglelist.line2.label2"), enabled : false},
+          {index : 3, line : this.$t("register.togglelist.line3.title"), label1 : this.$t("register.togglelist.line3.label1"),  label2 : this.$t("register.togglelist.line3.label2"), enabled : false},
+          {index : 4, line : this.$t("register.togglelist.line4.title"), label1 : this.$t("register.togglelist.line4.label1"),  label2 : this.$t("register.togglelist.line4.label2"), enabled : false},
+          {index : 5, line : this.$t("register.togglelist.line5.title"), label1 : this.$t("register.togglelist.line5.label1"),  label2 : this.$t("register.togglelist.line5.label2"), enabled : false},
+        ],
         }
     },
     methods:{
@@ -150,13 +197,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-    html{
-        background: url('../assets/clouds.jpg'); 
-        background-size:cover;
-    }
-    #app{
-        background:none;
-    }
-</style>
