@@ -1,6 +1,20 @@
 {
   "login":{
     "submit": "Submit",
+    "usernameRequired": "Username required",
+    "usernameLabel" : "Username",
+    "passwordRequired": "Password required",
+    "passwordLabel" : "Password",
+    "errorCredentials" : "Your credentials are incorrect",
+    "errorServer":"Web service unavailable, please try again later"
+  },
+  "register":{
+    "submit": "Submit",
+    "usernameRequired": "Username required",
+    "usernameLabel" : "Username",
+    "passwordRequired": "Password required",
+    "passwordWrong":"Password must include at least an uppercase, a lowercase letter, a number and must contain between 8 to 30 characters",
+    "passwordLabel" : "Password",
     "uidRequired": "Customer UID required",
     "uidCount":"36 characters required",
     "uidLabel" : "Customer UID",
