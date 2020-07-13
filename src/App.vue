@@ -15,7 +15,7 @@ export default {
     components: {},
     mounted() {
         //dbService.createTables()
-        //this.$router.replace("/");
+        this.$router.replace("/register");
     },
 
     data: () => ({

@@ -7,6 +7,11 @@ import Home from '../views/Home.vue'
 Vue.use(VueRouter)
 
   const routes = [
+    {
+      path: '/register',
+      name: 'Register',
+      component: Register
+    },
   {
     path: '/',
     name: 'Home',
@@ -16,11 +21,6 @@ Vue.use(VueRouter)
     path: '/login',
     name: 'Login',
     component: Login
-  },
-  {
-    path: '/register',
-    name: 'Register',
-    component: Register
   }
 ]
 
