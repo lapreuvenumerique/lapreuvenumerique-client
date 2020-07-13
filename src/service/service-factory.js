@@ -12,7 +12,6 @@ export class ServicesFactory {
         if(!this.clientService) {
             this.clientService = new ClientService(this.httpService)
         }
-
         return this.clientService
     }
 }

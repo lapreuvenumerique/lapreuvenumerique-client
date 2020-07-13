@@ -45,6 +45,14 @@
                             >
                                {{$t("login.errorcrendentials")}} 
                             </v-alert>
+                            
+                            <v-alert
+                            v-if="errorServer"
+                            type="error"
+                            class="mt-3"
+                            >
+                               {{$t("login.errorserver")}} 
+                            </v-alert>
                         </v-col>
                     </v-row>
                 </v-form>
@@ -59,6 +67,7 @@ export default {
     data(){
         return{
             errorCredentials: false,
+            errorServer: false,
             apiKey : "84816873e95047d2a02853421a1d21deb133680b812378a82e7c32d8fdea4960",
             apiKeyRules:[value => !!value || this.$t("login.apiKeyRequired"),value => value.length == 64  || this.$t("login.apiKeyCount")],
             customerUID : "3b462174-7bc9-445f-b746-83decc854d92",
@@ -77,9 +86,18 @@ export default {
                 localStorage.setItem("name", response.data.name)
             }
             catch(err){
-                this.errorCredentials = true
-                console.log(err)
-                return
+                if(err.status == 401)
+                {
+                    this.errorCredentials = true
+                    console.log(err)
+                    return
+                }
+                if(err.status == 500)
+                {
+                    this.errorServer = true
+                    console.log(err)
+                    return
+                }
             }
             this.$router.push("/")
         }

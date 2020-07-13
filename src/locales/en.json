@@ -1,12 +1,13 @@
 {
   "login":{
     "submit": "Submit",
-    "uidRequired": "Customer UID Required",
+    "uidRequired": "Customer UID required",
     "uidCount":"36 characters required",
     "uidLabel" : "Customer UID",
-    "apiKeyRequired": "API Key Required",
+    "apiKeyRequired": "API key required",
     "apiKeyCount":"64 characters required",
-    "apiKeyLabel" : "API Key",
-    "errorcrendentials" : "Your credentials are incorrect"
+    "apiKeyLabel" : "API key",
+    "errorCrendentials" : "Your credentials are incorrect",
+    "errorServer":"Web service unavailable, please try again later"
   }
 }
