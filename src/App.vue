@@ -1,28 +1,28 @@
 <template>
-  <v-app>
-
-    <v-main>
-      <router-view />
-    </v-main>
-  </v-app>
+    <v-app>
+        <v-main>
+            <router-view />
+        </v-main>
+    </v-app>
 </template>
 
 <script>
-
 export default {
-  name: 'App',
+    name: "App",
 
-  components: {
-    
-  },
+    components: {},
+    mounted() {
+        this.$router.replace("/login");
+    },
 
-  data: () => ({
-    //
-  }),
+    data: () => ({
+        //
+    })
 };
 </script>
 <style>
-html, body{
-  height: 100%;
+html,
+body {
+    height: 100%;
 }
 </style>
