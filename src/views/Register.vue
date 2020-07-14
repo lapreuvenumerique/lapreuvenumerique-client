@@ -8,7 +8,7 @@
                 dark
                 flat
               >
-                <v-toolbar-title>{{this.$t("register.headerInfo")}}</v-toolbar-title>
+                <v-toolbar-title style="word-wrap: break-word;">{{this.$t("register.headerInfo")}}</v-toolbar-title>
                 <v-spacer></v-spacer>
               </v-toolbar>
               <v-card-text>
@@ -96,42 +96,60 @@
               </v-card-actions>
             </v-card>
             </v-col>
-            <v-col cols="3">
+            <v-col cols="4">
                 <v-card class="elevation-12">
                     <v-toolbar
                       color="primary"
                       dark
                       flat
                     >
-                      <v-toolbar-title>{{this.$t("register.permissionsInfo")}}</v-toolbar-title>
+                      <v-toolbar-title style="word-wrap: break-word;">{{this.$t("register.permissionsInfo")}}</v-toolbar-title>
                       <v-spacer></v-spacer>
                     </v-toolbar>
                     <v-card-text >
                         <v-row
                         v-for="toggle in toggles"
-                        :key="toggle.label1"
+                        :key="toggle.index"
                         link
+                        dense
                         >
-                            <v-col cols="1">
-                                <span class="layout align-center justify-center fill-height">{{toggle.index}}</span>
-                            </v-col>
-                            <v-col cols="2">
-                                <span class="layout align-center justify-center fill-height">{{toggle.line}}</span>
+                            <v-col cols="4">
+                                <span class="layout align-center justify-center fill-height">{{toggle.title}}</span>
                             </v-col>
                             <v-col cols="4">
                                 <v-switch
                                     :label=toggle.label1
-                                    v-model= toggle.enabled
+                                    v-model= toggle.enabled1
+                                    inset
+                                    dense
                                 ></v-switch>
                             </v-col>
                             <v-col cols="4">
                                 <v-switch
                                     :label=toggle.label2
-                                    v-if= toggle.enabled
+                                    v-if= toggle.enabled1
+                                    v-model= toggle.enabled2
+                                    inset
+                                    dense
                                 ></v-switch>
                             </v-col>
                         </v-row>
                     </v-card-text>
+                    <v-card-actions dense>
+                        <v-btn 
+                        @click="resetToggles"
+                        color="primary"
+                        >
+                                {{$t("register.reset")}}
+                        </v-btn>
+                        <v-spacer></v-spacer>
+                        <v-btn 
+                        @click="saveToggles"
+                        color="primary"
+                        >
+                                {{$t("register.save")}}
+                        </v-btn>
+                    </v-card-actions>
                 </v-card>
             </v-col>
             
@@ -163,11 +181,11 @@ export default {
             isValid : false,
 
            toggles: [
-          {index : 1, line : this.$t("register.togglelist.line1.title"), label1 : this.$t("register.togglelist.line1.label1"),  label2 : this.$t("register.togglelist.line1.label2"), enabled : false},
-          {index : 2, line : this.$t("register.togglelist.line2.title"), label1 : this.$t("register.togglelist.line2.label1"),  label2 : this.$t("register.togglelist.line2.label2"), enabled : false},
-          {index : 3, line : this.$t("register.togglelist.line3.title"), label1 : this.$t("register.togglelist.line3.label1"),  label2 : this.$t("register.togglelist.line3.label2"), enabled : false},
-          {index : 4, line : this.$t("register.togglelist.line4.title"), label1 : this.$t("register.togglelist.line4.label1"),  label2 : this.$t("register.togglelist.line4.label2"), enabled : false},
-          {index : 5, line : this.$t("register.togglelist.line5.title"), label1 : this.$t("register.togglelist.line5.label1"),  label2 : this.$t("register.togglelist.line5.label2"), enabled : false},
+          {index : 1, title : this.$t("register.togglelist.line1.title"), label1 : this.$t("register.togglelist.line1.label1"),  label2 : this.$t("register.togglelist.line1.label2"), enabled1 : false, enabled2 : false},
+          {index : 2, title : this.$t("register.togglelist.line2.title"), label1 : this.$t("register.togglelist.line2.label1"),  label2 : this.$t("register.togglelist.line2.label2"), enabled1 : false, enabled2 : false},
+          {index : 3, title : this.$t("register.togglelist.line3.title"), label1 : this.$t("register.togglelist.line3.label1"),  label2 : this.$t("register.togglelist.line3.label2"), enabled1 : false, enabled2 : false},
+          {index : 4, title : this.$t("register.togglelist.line4.title"), label1 : this.$t("register.togglelist.line4.label1"),  label2 : this.$t("register.togglelist.line4.label2"), enabled1 : false, enabled2 : false},
+          {index : 5, title : this.$t("register.togglelist.line5.title"), label1 : this.$t("register.togglelist.line5.label1"),  label2 : this.$t("register.togglelist.line5.label2"), enabled1 : false, enabled2 : false},
         ],
         }
     },
@@ -193,6 +211,28 @@ export default {
                 }
             }
             this.$router.push("/")
+        },
+        saveToggles()
+        {
+            var togglesValues = []
+            var i = 0
+            for(var s = 0; s < this.toggles.length; s ++){
+                togglesValues[i] = this.toggles[s].enabled1
+                if(!this.toggles[s].enabled1){
+                    this.toggles[s].enabled2 = false
+                }
+                togglesValues[i + 1] = this.toggles[s].enabled2
+                i+=2
+            }
+            console.log("saved with results : " + togglesValues)
+        },
+        resetToggles()
+        {
+            for(var s = 0; s < this.toggles.length; s ++){
+                this.toggles[s].enabled1 = false
+                this.toggles[s].enabled2 = false
+            }
+            console.log("reset")
         }
     }
 }

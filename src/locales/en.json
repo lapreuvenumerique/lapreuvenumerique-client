@@ -29,6 +29,8 @@
     "errorKeys" : "One of your keys is incorrect",
     "errorServer":"Web service unavailable, please try again later",
     "permissionsInfo":"Set the permissions of the account",
+    "save": "Save",
+    "reset": "Reset",
 
     "togglelist":{
       "line1":{
