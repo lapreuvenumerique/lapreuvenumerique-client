@@ -43,7 +43,7 @@ export class DbService {
             return {status : "FAILED", message : "This username is not available"}
         }
         await this.db.users.add({
-            username, password: (await bcrypt.hash(password, 12)), displayName, apiKey, customerUid, properties, userPicture:null
+            username, password, displayName, apiKey, customerUid, properties, userPicture:null
         })
         return {status : "SUCCESS", message : "User created"}
     }
