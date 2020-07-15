@@ -23,18 +23,3 @@ export default {
     })
 };
 </script>
-<style>
-    html,
-    body {
-        height: 100%;
-    }
-    html{
-        background: url('./assets/clouds.jpg'); 
-        background-size:cover;
-    }
-    #app{
-        background:none;
-    }
-</style>
-<style>
-</style>

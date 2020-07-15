@@ -65,6 +65,25 @@
     "proofSearch":"Proof search",
     "docVerify":"Verify a document",
     "integrity":"Integrity",
-    "settings":"Settings"
+    "settings":"Settings",
+
+    "adminTitle": "Admin options",
+    "adminSettings":{
+      "setting1": "Setting 1",
+      "setting2": "Setting 2",
+      "setting3": "Setting 3",
+      "setting4": "Setting 4",
+      "setting5": "Setting 5"
+    },
+
+
+    "nonAdminTitle": "Not admin options",
+    "nonAdminSettings":{
+      "setting1": "Setting 1",
+      "setting2": "Setting 2",
+      "setting3": "Setting 3",
+      "setting4": "Setting 4",
+      "setting5": "Setting 5"
+    }
   }
 }

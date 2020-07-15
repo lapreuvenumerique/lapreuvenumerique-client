@@ -1,5 +1,5 @@
 <template>
-    <v-container fill-height fluid>
+    <v-container fill-height fluid class="back">
         <v-row justify="center" align="center" style="height:'100%';">
             <v-col cols="4">
                 <v-card class="elevation-12">
@@ -93,3 +93,16 @@ export default {
     }
 }
 </script>
+<style scoped>
+    html,
+    body {
+        height: 100%;
+    }
+    #app{
+        background: none;
+    }
+    .back{
+        background-image: url('../assets/clouds.jpg');
+        background-size:cover; 
+    }
+</style>
