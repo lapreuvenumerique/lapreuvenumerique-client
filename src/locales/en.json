@@ -36,7 +36,10 @@
     "passwordDifferent":"Passwords are different"
   },
   "proofDeposit":{
-    "proofDeposit" : "Proof deposit"
+    "proofDeposit" : "Proof deposit",
+    "uploadProof": "Upload your proof",
+    "uploadProofSubtitle": "Drag or click to browse",
+    "allowDuplicate" : "Allow duplicate files"
   },
   "common":{
     "togglelist":{
@@ -46,7 +49,7 @@
       "file" : "File",
       "fileNumber" : "Folder name",
       "reference" : "Reference",
-      "uids" : "Customer UID",
+      "uids" : "Linked UID",
       "copy" : "Email copy",
       "identity" : "Identity",
       "batchNumber" : "Batch number",

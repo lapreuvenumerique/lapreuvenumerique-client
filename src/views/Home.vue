@@ -17,9 +17,9 @@
                     max-width="40"
                     max-height="40"
                     class="mr-4 rounded-circle"
-                    src="https://alumni.crg.eu/sites/default/files/default_images/default-picture_0_0.png"
+                    :src="userPicture"
                   ></v-img>
-                  <span>{{displayName}}</span>
+                  <span>{{this.user.displayName}}</span>
                 </v-list-item>
                 <v-list-item
                   v-for="item in items"
@@ -42,7 +42,7 @@
       </v-col>
       <v-col cols="10">
         <register-form v-if="this.pageOpened=='settings'" submitMethod="update" :user="user"></register-form>
-        <proof-deposit v-if="this.pageOpened=='proofDeposit'"></proof-deposit>
+        <proof-deposit v-if="this.pageOpened=='proofDeposit'" :user="user"></proof-deposit>
       </v-col>
     </v-row>
   </v-container>
@@ -63,7 +63,9 @@ export default {
 
   data() {
     return {
-      pageOpened: "proofDeposit",
+      pageOpened: "",
+      userPicture:
+        "https://alumni.crg.eu/sites/default/files/default_images/default-picture_0_0.png",
       user: {
         customerUid: "",
         apiKey: ""
@@ -106,6 +108,10 @@ export default {
     }
     this.user = res;
     this.user.displayName = res.displayName;
+    if (res.userPicture) {
+      this.userPicture = res.userPicture;
+    }
+    this.pageOpened = "proofDeposit"
   },
   methods: {
     async setPage(page) {
@@ -116,6 +122,9 @@ export default {
           return;
         }
         this.user = res;
+        if (res.userPicture) {
+          this.userPicture = res.userPicture;
+        }
       }
       if (page == "settings") {
         const resPassword = await swal.fire({
@@ -128,7 +137,7 @@ export default {
           swal.fire({
             icon: "error",
             title: this.$t("common.password"),
-            text: this.$t("common.notCorrespondingPassword"),
+            text: this.$t("common.notCorrespondingPassword")
           });
           return;
         }
