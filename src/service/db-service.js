@@ -1,24 +1,71 @@
-//import sqlite3 from "sqlite3"
+import Dexie from "dexie"
+import bcrypt from "bcryptjs"
 
-export class DbService{
-    constructor(){
-        //this.clientdb = sqlite3.Database('client.db')
+export class DbService {
+    constructor() {
+        this.db = new Dexie("clientDb")
+        this.createTables()
     }
 
-    createTables(){
-        //this.clientdb.run("CREATE TABLE IF NOT EXISTS users(id integer PRIMARY KEY autoincrement, username varchar unique, displayname varchar, password varchar, apikey varchar(64), uid varchar(36))")
-    }
-    
-    login(username, password){
-        //return this.clientdb.get("SELECT * FROM users WHERE username = ? AND password = ?", [username, password])
+    createTables() {
+        this.db.version(1).stores({
+            users: "++id, username"
+        })
     }
 
-    register(username, password, apiKey, customeruid){
-        //if(!this.clientdb.get("SELECT * FROM users WHERE username = ?").get(username)){
-        //    return this.clientdb.run("INSERT INTO users(username, password, apikey, uid) VALUES(?,?,?,?)", [username, password, apiKey, customeruid])
-        //}else{
-        //    return null
-        //}
+    /**
+     * 
+     * @param {string} username 
+     * @param {string} password 
+     */
+    async login(username, password) {
+        const user = await this.db.users.where({ username })
+        if (user && await bcrypt.compare(password, user.password)) {
+            return true
+        }
+        return false
+    }
+
+    /**
+     * 
+     * @param {string} username 
+     * @param {string} password 
+     * @param {string} displayName
+     * @param {string} userPicture
+     * @param {string} apiKey 
+     * @param {string} customerUid 
+     */
+    async register(username, password, displayName, userPicture, apiKey, customerUid, properties) {
+        if (await this.db.users.where({ username }).count() !== 0) {
+            return null
+        }
+        console.log('creating')
+        return this.db.users.add({
+            username, password: (await bcrypt.hash(password, 12)), displayName, userPicture, apiKey, customerUid, properties
+        })
+    }
+
+    getUserByUsername(username) {
+        return this.db.users.where({ username }).first()
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {string} username 
+     * @param {string} password 
+     * @param {string} displayName
+     * @param {blob} userPicture
+     * @param {string} apiKey 
+     * @param {string} customerUid 
+     * @param {string} properties 
+     */
+    async updateUserById(id, username, password, displayName, userPicture, apiKey, customerUid, properties) {
+        const userExists = await this.db.users.where({ id }).count()
+        if (userExists === 0) {
+            return { status: "FAILED", message: "This username is not avaible" }
+        }
+        return this.db.users.where({ id }).modify({ username, password, displayName, userPicture, apiKey, customerUid, properties })
     }
 }
 export default new DbService()

@@ -8,13 +8,11 @@
 </template>
 
 <script>
-//import dbService from "./service/db-service"
 export default {
     name: "App",
 
     components: {},
     mounted() {
-        //dbService.createTables()
         //this.$router.replace("/register");
     },
 
