@@ -26,8 +26,10 @@
                   <v-text-field
                       v-model="password"
                       counter="64"
+                      :append-icon="passwordeyevalue ? 'mdi-eye' : 'mdi-eye-off'"
                       :rules="passwordRules"
-                      type="password"
+                      :type="passwordeyevalue ? 'password' : 'text'"
+                      @click:append="() => (passwordeyevalue = !passwordeyevalue)"
                       :label="$t('login.passwordLabel')"
                       maxlength="64"
                   ></v-text-field>
@@ -75,6 +77,7 @@
 export default {
     data(){
         return{
+            passwordeyevalue : true,
             errorCredentials: false,
             errorServer: false,
             password : "Admin123",

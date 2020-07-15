@@ -30,8 +30,18 @@
     "errorServer":"Web service unavailable, please try again later",
     "permissionsInfo":"Set the permissions of the account",
     "save": "Save",
-    "reset": "Reset",
-
+    "reset": "Reset"
+  },
+  "home":{
+    "proofDeposit":"Proof deposit",
+    "proofSearch":"Proof search",
+    "docVerify":"Verify a document",
+    "integrity":"Integrity",
+    "settings":"Settings",
+    "dropzoneHeader":"Drop your profile picture here",
+    "dropzoneSubtitle":"...or click to browse"
+  },
+  "common":{
     "togglelist":{
       "line1":{
         "title" : "Line 1",
@@ -58,32 +68,6 @@
         "label1" : "Toggle 9",
         "label2" : "Toggle 10"
       }
-    }
-  },
-  "home":{
-    "proofDeposit":"Proof deposit",
-    "proofSearch":"Proof search",
-    "docVerify":"Verify a document",
-    "integrity":"Integrity",
-    "settings":"Settings",
-
-    "adminTitle": "Admin options",
-    "adminSettings":{
-      "setting1": "Setting 1",
-      "setting2": "Setting 2",
-      "setting3": "Setting 3",
-      "setting4": "Setting 4",
-      "setting5": "Setting 5"
-    },
-
-
-    "nonAdminTitle": "Not admin options",
-    "nonAdminSettings":{
-      "setting1": "Setting 1",
-      "setting2": "Setting 2",
-      "setting3": "Setting 3",
-      "setting4": "Setting 4",
-      "setting5": "Setting 5"
     }
   }
 }

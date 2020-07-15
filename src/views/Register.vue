@@ -181,11 +181,11 @@ export default {
             isValid : false,
 
            toggles: [
-          {index : 1, title : this.$t("register.togglelist.line1.title"), label1 : this.$t("register.togglelist.line1.label1"),  label2 : this.$t("register.togglelist.line1.label2"), enabled1 : false, enabled2 : false},
-          {index : 2, title : this.$t("register.togglelist.line2.title"), label1 : this.$t("register.togglelist.line2.label1"),  label2 : this.$t("register.togglelist.line2.label2"), enabled1 : false, enabled2 : false},
-          {index : 3, title : this.$t("register.togglelist.line3.title"), label1 : this.$t("register.togglelist.line3.label1"),  label2 : this.$t("register.togglelist.line3.label2"), enabled1 : false, enabled2 : false},
-          {index : 4, title : this.$t("register.togglelist.line4.title"), label1 : this.$t("register.togglelist.line4.label1"),  label2 : this.$t("register.togglelist.line4.label2"), enabled1 : false, enabled2 : false},
-          {index : 5, title : this.$t("register.togglelist.line5.title"), label1 : this.$t("register.togglelist.line5.label1"),  label2 : this.$t("register.togglelist.line5.label2"), enabled1 : false, enabled2 : false},
+          {index : 1, title : this.$t("common.togglelist.line1.title"), label1 : this.$t("common.togglelist.line1.label1"),  label2 : this.$t("common.togglelist.line1.label2"), enabled1 : false, enabled2 : false},
+          {index : 2, title : this.$t("common.togglelist.line2.title"), label1 : this.$t("common.togglelist.line2.label1"),  label2 : this.$t("common.togglelist.line2.label2"), enabled1 : false, enabled2 : false},
+          {index : 3, title : this.$t("common.togglelist.line3.title"), label1 : this.$t("common.togglelist.line3.label1"),  label2 : this.$t("common.togglelist.line3.label2"), enabled1 : false, enabled2 : false},
+          {index : 4, title : this.$t("common.togglelist.line4.title"), label1 : this.$t("common.togglelist.line4.label1"),  label2 : this.$t("common.togglelist.line4.label2"), enabled1 : false, enabled2 : false},
+          {index : 5, title : this.$t("common.togglelist.line5.title"), label1 : this.$t("common.togglelist.line5.label1"),  label2 : this.$t("common.togglelist.line5.label2"), enabled1 : false, enabled2 : false},
         ],
         }
     },

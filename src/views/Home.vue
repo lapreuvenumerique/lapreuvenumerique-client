@@ -49,14 +49,37 @@
               <v-col
               v-if="this.admin"
               >
-                <h4 class="mb-5">{{this.$t("home.adminTitle")}}</h4>
-                <form action="/upload-target" class="dropzone"></form>
-                <v-switch
-                v-for="toggle in settingsAdmin"
-                :key="toggle.label"
-                :label="toggle.label"
-                v-model="toggle.enabled"
-                ></v-switch>
+                <v-text-field :value="this.displayName" label="Username">
+                </v-text-field>
+
+                <vue-dropzone ref="imageDropzone" id="dropzone" :options="dropzoneOptions" :useCustomSlot="true">
+                     <div class="dropzone-custom-content">
+                      <h3 class="dropzone-custom-title">{{this.$t("home.dropzoneHeader")}}</h3>
+                      <div class="subtitle">{{this.$t("home.dropzoneSubtitle")}}</div>
+                    </div>
+                </vue-dropzone>
+                <v-row>
+                  <v-col
+                    v-for="toggle in settingsToggles"
+                    :key="toggle.label1">
+                    <span>
+                      {{toggle.title}}
+                    </span>
+                  </v-col>
+                  <v-col>
+                      <v-switch
+                      :label="toggle.label1"
+                      v-model="toggle.enabled1"
+                      ></v-switch>
+                  </v-col>
+                    <v-col>
+                      <v-switch
+                      :label="toggle.label2"
+                      v-if="toggle.enabled1"
+                      v-model="toggle.enabled2"
+                      ></v-switch>
+                  </v-col>
+                </v-row>
               </v-col>
             </v-row>
           </v-card>
@@ -66,9 +89,23 @@
 </template>
 
 <script>
+import vue2Dropzone from 'vue2-dropzone'
+import 'vue2-dropzone/dist/vue2Dropzone.min.css'
+import 'material-design-icons-iconfont/dist/material-design-icons.css'
 export default {
+  icons: {
+    iconfont: 'md',
+  },
+  
   data(){
+    
     return {
+      dropzoneOptions: {
+          url: 'https://httpbin.org/post',
+          thumbnailWidth: 500,
+          addRemoveLinks: true,
+          maxFiles: 1
+      },
       admin: true,
       displayName:"John",
       pageOpened: "settings",
@@ -80,13 +117,13 @@ export default {
           { title: this.$t("home.integrity"), icon: 'mdi-check-circle',label:"integrity"},
           { title: this.$t("home.settings"), icon: 'mdi-cog',label:"settings"},
       ],
-      settingsAdmin:
+      settingsToggles:
       [
-        {label: this.$t("home.adminSettings.setting1"), enabled: false},
-        {label: this.$t("home.adminSettings.setting2"), enabled: false},
-        {label: this.$t("home.adminSettings.setting3"), enabled: false},
-        {label: this.$t("home.adminSettings.setting4"), enabled: false},
-        {label: this.$t("home.adminSettings.setting5"), enabled: false},
+          {index : 1, title : this.$t("common.togglelist.line1.title"), label1 : this.$t("common.togglelist.line1.label1"),  label2 : this.$t("common.togglelist.line1.label2"), enabled1 : false, enabled2 : false},
+          {index : 2, title : this.$t("common.togglelist.line2.title"), label1 : this.$t("common.togglelist.line2.label1"),  label2 : this.$t("common.togglelist.line2.label2"), enabled1 : false, enabled2 : false},
+          {index : 3, title : this.$t("common.togglelist.line3.title"), label1 : this.$t("common.togglelist.line3.label1"),  label2 : this.$t("common.togglelist.line3.label2"), enabled1 : false, enabled2 : false},
+          {index : 4, title : this.$t("common.togglelist.line4.title"), label1 : this.$t("common.togglelist.line4.label1"),  label2 : this.$t("common.togglelist.line4.label2"), enabled1 : false, enabled2 : false},
+          {index : 5, title : this.$t("common.togglelist.line5.title"), label1 : this.$t("common.togglelist.line5.label1"),  label2 : this.$t("common.togglelist.line5.label2"), enabled1 : false, enabled2 : false},
       ]
     }
   },
@@ -95,6 +132,9 @@ export default {
   },
   methods:{
 
+  },
+  components:{
+    vueDropzone: vue2Dropzone
   }
 
 }
