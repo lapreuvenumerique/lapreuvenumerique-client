@@ -12,12 +12,10 @@
     "usernameLabel" : "Username",
     "passwordRequired": "Password required",
     "passwordWrong":"Password must include at least an uppercase, a lowercase letter, a number and must contain between 8 to 30 characters",
-    "uidRequired": "Customer UID required",
-    "apiKeyRequired": "API key required",
     "secretKeyRequired": "Secret key required",
     "secretKeyCount":"64 characters required",
     "secretKeyLabel" : "Secret key",
-    "errorKeys" : "One of your keys is incorrect",
+    "errorUsername" : "Username already exists",
     "errorServer":"Web service unavailable, please try again later",
     "permissionsInfo":"Set the permissions of the account",
     "save": "Save",
@@ -32,53 +30,28 @@
     "dropzoneHeader":"Drop your profile picture here",
     "dropzoneSubtitle":"...or click to browse",
     "newPassword":"New password",
-    "confirmNewPassword":"Confirm new password"
+    "confirmNewPassword":"Confirm new password",
+    "passwordDifferent":"Passwords are different"
   },
   "common":{
     "togglelist":{
       "title" : "Information needed",
-      "label1" : "Available",
-      "label2" : "Required",
-      "line1":{
-        "title" : "File"
+      "available" : "Available",
+      "required" : "Required",
+      "file" : "File",
+      "fileNumber" : "Folder name",
+      "reference" : "Reference",
+      "uids" : "Customer UID",
+      "copy" : "Email copy",
+      "identity" : "Identity",
+      "batchNumber" : "Batch number",
+      "topic" : "Topic",
+      "rgpdDuration" : "RGPD duration",
+      "visa" : "Visa",
+      "keywords" : "Keywords",
+      "okkayId" : "Okkayid",
+      "filename" : "File name"
       },
-      "line2":{
-        "title" : "Folder name"
-      },
-      "line3":{
-        "title" : "Reference"
-      },
-      "line4":{
-        "title" : "Customer UID"
-      },
-      "line5":{
-        "title" : "Email copy"
-      },
-      "line6":{
-        "title" : "Identity"
-      },
-      "line7":{
-        "title" : "Batch number"
-      },
-      "line8":{
-        "title" : "Topic"
-      },
-      "line9":{
-        "title" : "RGPD duration"
-      },
-      "line10":{
-        "title" : "Visa"
-      },
-      "line11":{
-        "title" : "Keywords"
-      },
-      "line12":{
-        "title" : "Okkayid"
-      },
-      "line13":{
-        "title" : "File name"
-      }
-    },
     "apiKeyCount":"64 characters required",
     "apiKeyLabel" : "API key",
     "uidCount":"36 characters required",
@@ -87,11 +60,14 @@
     "passwordRequired" : "Password required",
     "usernameLabel" :"Username",
     "usernameRequired" : "Username required",
+    "usernameCount": "Username must have at least 4 characters",
     "submit": "Submit",
     "save": "Save",
     "reset" : "Reset",
+    "register" : "Register",
+    "displayNameLabel" : "Display name",
+    "uidRequired": "Customer UID required",
+    "apiKeyRequired": "API key required",
     "passwordWrong" : "Password must include at least an uppercase, a lowercase letter, a number and must contain between 8 to 30 characters"
-    
-
   }
 }

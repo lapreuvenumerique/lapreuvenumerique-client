@@ -17,21 +17,17 @@
                 >
                 <v-text-field
                    v-model="username"
-                   counter="36"
                    required
                    :rules="usernameRules"
                    :label="$t('common.usernameLabel')"
-                   maxlength="36"
                 ></v-text-field>
                   <v-text-field
                       v-model="password"
-                      counter="64"
                       :append-icon="passwordeyevalue ? 'mdi-eye' : 'mdi-eye-off'"
                       :rules="passwordRules"
                       :type="passwordeyevalue ? 'password' : 'text'"
                       @click:append="() => (passwordeyevalue = !passwordeyevalue)"
                       :label="$t('common.passwordLabel')"
-                      maxlength="64"
                   ></v-text-field>
                     <v-row justify="center">
                         <v-col cols="4" class="text-center">
@@ -57,6 +53,12 @@
                 </v-form>
               </v-card-text>
               <v-card-actions>
+                <v-btn 
+                    @click="gotoRegister()"
+                    color="primary"
+                    >
+                        {{$t("common.register")}}
+                </v-btn>
                 <v-spacer></v-spacer>
                 <v-btn 
                     @click="login"
@@ -73,8 +75,9 @@
 </template>
 
 <script>
-//import dbService from "../service/db-service"
+import dbService from "../service/db-service"
 export default {
+
     data(){
         return{
             passwordeyevalue : true,
@@ -88,10 +91,21 @@ export default {
         }
     },
     methods:{
-        login(){
-            //const response = dbService.login(this.username, this.password)
-            //console.log(response)
-            //this.$router.push("/")
+        gotoRegister(){
+            this.$router.push('/register')
+        },
+        async login(){
+            //console.log(await dbService.resetDB())
+            const response = await dbService.login(this.username, this.password)
+            if(response.status != "FAILED")
+            {
+                this.$store.commit("setUser", {name : response.user.displayName, id : response.user.id})
+                this.$router.push("/")
+            }
+            else
+            {
+                this.errorCredentials = true
+            }
         }
     }
 }

@@ -20,6 +20,7 @@
     "dexie": "^3.0.1",
     "electron-builder": "^22.7.0",
     "vue": "^2.6.11",
+    "vue-cryptojs": "^2.1.4",
     "vue-i18n": "^8.17.3",
     "vue-router": "^3.2.0",
     "vue2-dropzone": "^3.6.0",

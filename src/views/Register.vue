@@ -23,6 +23,12 @@
                    :label="$t('common.usernameLabel')"
                    maxlength="36"
                 ></v-text-field>
+                <v-text-field
+                   v-model="displayName"
+                   required
+                   :rules="usernameRules"
+                   :label="$t('common.displayNameLabel')"
+                ></v-text-field>
                   <v-text-field
                       v-model="password"
                       counter="64"
@@ -56,11 +62,11 @@
                             
                             
                             <v-alert
-                            v-if="errorKeys"
+                            v-if="errorUsername"
                             type="error"
                             class="mt-3"
                             >
-                               {{$t("register.errorKeys")}} 
+                               {{$t("register.errorUsername")}} 
                             </v-alert>
                             
                             <v-alert
@@ -97,6 +103,17 @@
                       <v-spacer></v-spacer>
                     </v-toolbar>
                     <v-card-text >
+                        <v-row>
+                            <v-col cols="4">
+                                
+                            </v-col>
+                            <v-col cols="4" class="text-center">
+                                <span>{{this.$t("common.togglelist.available")}}</span>
+                            </v-col>
+                            <v-col cols="4" class="text-center">
+                                <span>{{this.$t("common.togglelist.required")}}</span>
+                            </v-col>
+                        </v-row>
                         <v-row
                         v-for="toggle in toggles"
                         :key="toggle.index"
@@ -106,17 +123,16 @@
                             <v-col cols="4" dense>
                                 <span class="layout align-center justify-center fill-height">{{toggle.title}}</span>
                             </v-col>
-                            <v-col cols="4">
+                            <v-col cols="4" class="justify-center">
                                 <v-switch
-                                    :label=toggle.label1
                                     v-model= toggle.enabled1
                                     inset
                                     dense
+                                    
                                 ></v-switch>
                             </v-col>
-                            <v-col cols="4">
+                            <v-col cols="4" class="justify-center">
                                 <v-switch
-                                    :label=toggle.label2
                                     v-if= toggle.enabled1
                                     v-model= toggle.enabled2
                                     inset
@@ -132,13 +148,6 @@
                         >
                                 {{$t("common.reset")}}
                         </v-btn>
-                        <v-spacer></v-spacer>
-                        <v-btn 
-                        @click="saveToggles"
-                        color="primary"
-                        >
-                                {{$t("common.save")}}
-                        </v-btn>
                     </v-card-actions>
                 </v-card>
             </v-col>
@@ -148,18 +157,18 @@
 </template>
 
 <script>
-import servicesFactory from "../service/service-factory"
-//import dbService from "../service/db-service"
+import dbService from "../service/db-service"
 export default {
     data(){
         return{
-            errorKeys:false,
+            errorUsername:false,
             errorServer: false,
             passwordeyevalue : true,
             secretKeyeyevalue:true,
             apiKeyeyevalue:true,
+            displayName : "John",
             username : "Admin",
-            usernameRules:[value => !!value || this.$t("common.usernameRequired"),value => value.length > 4  || this.$t("common.usernameCount")],
+            usernameRules:[value => !!value || this.$t("register.usernameRequired"),value => value.length >= 4  || this.$t("common.usernameCount")],
             password : "Admin123",
             passwordRules:[value => !!value || this.$t("common.passwordRequired"), value => value.search(/((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,30})/g) != -1  || this.$t("common.passwordWrong")],
             apiKey : "84816873e95047d2a02853421a1d21deb133680b812378a82e7c32d8fdea4960",
@@ -169,62 +178,51 @@ export default {
             isValid : false,
 
            toggles: [
-          {index : 1, title : this.$t("common.togglelist.line1.title"), label1 : this.$t("common.togglelist.label1"),  label2 : this.$t("common.togglelist.label2"), enabled1 : false, enabled2 : false},
-          {index : 2, title : this.$t("common.togglelist.line2.title"), label1 : this.$t("common.togglelist.label1"),  label2 : this.$t("common.togglelist.label2"), enabled1 : false, enabled2 : false},
-          {index : 3, title : this.$t("common.togglelist.line3.title"), label1 : this.$t("common.togglelist.label1"),  label2 : this.$t("common.togglelist.label2"), enabled1 : false, enabled2 : false},
-          {index : 4, title : this.$t("common.togglelist.line4.title"), label1 : this.$t("common.togglelist.label1"),  label2 : this.$t("common.togglelist.label2"), enabled1 : false, enabled2 : false},
-          {index : 5, title : this.$t("common.togglelist.line5.title"), label1 : this.$t("common.togglelist.label1"),  label2 : this.$t("common.togglelist.label2"), enabled1 : false, enabled2 : false},
-          {index : 6, title : this.$t("common.togglelist.line6.title"), label1 : this.$t("common.togglelist.label1"),  label2 : this.$t("common.togglelist.label2"), enabled1 : false, enabled2 : false},
-          {index : 7, title : this.$t("common.togglelist.line7.title"), label1 : this.$t("common.togglelist.label1"),  label2 : this.$t("common.togglelist.label2"), enabled1 : false, enabled2 : false},
-          {index : 8, title : this.$t("common.togglelist.line8.title"), label1 : this.$t("common.togglelist.label1"),  label2 : this.$t("common.togglelist.label2"), enabled1 : false, enabled2 : false},
-          {index : 9, title : this.$t("common.togglelist.line9.title"), label1 : this.$t("common.togglelist.label1"),  label2 : this.$t("common.togglelist.label2"), enabled1 : false, enabled2 : false},
-          {index : 10, title : this.$t("common.togglelist.line10.title"), label1 : this.$t("common.togglelist.label1"),  label2 : this.$t("common.togglelist.label2"), enabled1 : false, enabled2 : false},
-          {index : 11, title : this.$t("common.togglelist.line11.title"), label1 : this.$t("common.togglelist.label1"),  label2 : this.$t("common.togglelist.label2"), enabled1 : false, enabled2 : false},
-          {index : 12, title : this.$t("common.togglelist.line12.title"), label1 : this.$t("common.togglelist.label1"),  label2 : this.$t("common.togglelist.label2"), enabled1 : false, enabled2 : false},
-          {index : 13, title : this.$t("common.togglelist.line13.title"), label1 : this.$t("common.togglelist.label1"),  label2 : this.$t("common.togglelist.label2"), enabled1 : false, enabled2 : false}
+          {index : "file", title : this.$t("common.togglelist.file"), available : this.$t("common.togglelist.available"),  required : this.$t("common.togglelist.required"), enabled1 : false, enabled2 : false},
+          {index : "fileNumber", title : this.$t("common.togglelist.fileNumber"), available : this.$t("common.togglelist.available"),  required : this.$t("common.togglelist.required"), enabled1 : false, enabled2 : false},
+          {index : "reference", title : this.$t("common.togglelist.reference"), available : this.$t("common.togglelist.available"),  required : this.$t("common.togglelist.required"), enabled1 : false, enabled2 : false},
+          {index : "uids", title : this.$t("common.togglelist.uids"), available : this.$t("common.togglelist.available"),  required : this.$t("common.togglelist.required"), enabled1 : false, enabled2 : false},
+          {index : "copy", title : this.$t("common.togglelist.copy"), available : this.$t("common.togglelist.available"),  required : this.$t("common.togglelist.required"), enabled1 : false, enabled2 : false},
+          {index : "identity", title : this.$t("common.togglelist.identity"), available : this.$t("common.togglelist.available"),  required : this.$t("common.togglelist.required"), enabled1 : false, enabled2 : false},
+          {index : "batchNumber", title : this.$t("common.togglelist.batchNumber"), available : this.$t("common.togglelist.available"),  required : this.$t("common.togglelist.required"), enabled1 : false, enabled2 : false},
+          {index : "topic", title : this.$t("common.togglelist.topic"), available : this.$t("common.togglelist.available"),  required : this.$t("common.togglelist.required"), enabled1 : false, enabled2 : false},
+          {index : "rgpdDuration", title : this.$t("common.togglelist.rgpdDuration"), available : this.$t("common.togglelist.available"),  required : this.$t("common.togglelist.required"), enabled1 : false, enabled2 : false},
+          {index : "visa", title : this.$t("common.togglelist.visa"), available : this.$t("common.togglelist.available"),  required : this.$t("common.togglelist.required"), enabled1 : false, enabled2 : false},
+          {index : "keywords", title : this.$t("common.togglelist.keywords"), available : this.$t("common.togglelist.available"),  required : this.$t("common.togglelist.required"), enabled1 : false, enabled2 : false},
+          {index : "okkayId", title : this.$t("common.togglelist.okkayId"), available : this.$t("common.togglelist.available"),  required : this.$t("common.togglelist.required"), enabled1 : false, enabled2 : false},
+          {index : "filename", title : this.$t("common.togglelist.filename"), available : this.$t("common.togglelist.available"),  required : this.$t("common.togglelist.required"), enabled1 : false, enabled2 : false}
         ],
         }
     },
     methods:{
-        async register(){
-
-            //localStorage.setItem("apiKey", this.apiKey)
-            //localStorage.setItem("customerUID", this.customerUID)
-            //dbService.register()
-            try{
-                
-                const response = await servicesFactory.getClientService().register()
-                console.log(response)
-                this.$store.commit("setName", response.data.name)
-                localStorage.setItem("name", response.data.name)
-            }
-            catch(err){
-                if(err.status == 500)
-                {
-                    this.errorServer = true
-                    console.log(err)
-                    return
-                }
-            }
-            this.$router.push("/")
-        },
-        saveToggles()
+        async register()
         {
-            var togglesValues = []
-            var i = 0
-            for(var s = 0; s < this.toggles.length; s ++){
-                togglesValues[i] = this.toggles[s].enabled1
-                if(!this.toggles[s].enabled1){
-                    this.toggles[s].enabled2 = false
+            let properties = {}
+            for(let i = 0; i < this.toggles.length; i ++){
+                let val = 0
+                if(this.toggles[i].enabled1){
+                    if(this.toggles[i].enabled2){
+                        val = 2
+                    }else{
+                        val = 1
+                    }
                 }
-                togglesValues[i + 1] = this.toggles[s].enabled2
-                i+=2
+                properties[this.toggles[i].index] = val
             }
-            console.log("saved with results : " + togglesValues)
+            const res = await dbService.register(this.username, this.password, this.displayName ,this.apiKey, this.customerUID, properties)
+           
+            if(res.status == "SUCCESS")
+            {
+                this.$router.push("/login")
+            }else
+            {
+                this.errorUsername = true
+            }
+
         },
         resetToggles()
         {
-            for(var s = 0; s < this.toggles.length; s ++){
+            for(let s = 0; s < this.toggles.length; s ++){
                 this.toggles[s].enabled1 = false
                 this.toggles[s].enabled2 = false
             }

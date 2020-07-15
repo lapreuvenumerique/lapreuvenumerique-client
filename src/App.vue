@@ -13,7 +13,9 @@ export default {
 
     components: {},
     mounted() {
-        //this.$router.replace("/register");
+        if(this.$route.path != "/login"){
+            this.$router.replace("/login");
+        }
     },
 
     data: () => ({
