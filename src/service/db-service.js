@@ -20,14 +20,14 @@ export class DbService {
      */
     async login(username, password) {
         const user = await this.getUserByUsername(username)
-        if(!user){
-            return {status : "FAILED"}
+        if (!user) {
+            return { status: "FAILED" }
         }
         const res = await bcrypt.compare(password, user.password)
         if (res) {
-            return {status : "SUCCESS", user}
+            return { status: "SUCCESS", user }
         }
-        return {status : "FAILED"}
+        return { status: "FAILED" }
     }
 
     /**
@@ -40,12 +40,12 @@ export class DbService {
      */
     async register(username, password, displayName, apiKey, customerUid, properties) {
         if (await this.db.users.where({ username }).count() !== 0) {
-            return {status : "FAILED", message : "This username is not available"}
+            return { status: "FAILED", message: "This username is not available" }
         }
         await this.db.users.add({
-            username, password, displayName, apiKey, customerUid, properties, userPicture:null
+            username, password, displayName, apiKey, customerUid, properties, userPicture: null
         })
-        return {status : "SUCCESS", message : "User created"}
+        return { status: "SUCCESS", message: "User created" }
     }
 
     getUserByUsername(username) {
@@ -56,7 +56,7 @@ export class DbService {
         return this.db.users.where({ id }).first()
     }
 
-    resetDB(){
+    resetDB() {
         return this.db.users.where({ username: "Admin" }).delete()
     }
 
@@ -71,12 +71,26 @@ export class DbService {
      * @param {string} customerUid 
      * @param {string} properties 
      */
-    async updateUserById(id, username, password, displayName, userPicture, apiKey, customerUid, properties) {
+    async updateUserById(id, username, displayName, userPicture, apiKey, customerUid, properties) {
         const userExists = await this.db.users.where({ id }).count()
         if (userExists === 0) {
+            return { status: "FAILED", message: "This user does not exist" }
+        }
+        const usernameExists = await this.db.users.where({username}).first()
+        if(usernameExists.id !== id) {
             return { status: "FAILED", message: "This username is not available" }
         }
-        return this.db.users.where({ id }).modify({ username, password, displayName, userPicture, apiKey, customerUid, properties })
+        await this.db.users.where({ id }).modify({ username, displayName, userPicture, apiKey, customerUid, properties })
+        return { status: "SUCCESS", message: "Password changed" }
+    }
+
+    async updatePasswordById(id, password) {
+        const userExists = await this.db.users.where({ id }).count()
+        if (userExists === 0) {
+            return { status: "FAILED", message: "This user does not exist" }
+        }
+        await this.db.users.where({ id }).modify({password})
+        return { status: "SUCCESS", message: "Password changed" }
     }
 }
 export default new DbService()

@@ -31,7 +31,12 @@
     "dropzoneSubtitle":"...or click to browse",
     "newPassword":"New password",
     "confirmNewPassword":"Confirm new password",
+    "password":"Password",
+    "confirmPassword":"Confirm password",
     "passwordDifferent":"Passwords are different"
+  },
+  "proofDeposit":{
+    "proofDeposit" : "Proof deposit"
   },
   "common":{
     "togglelist":{
@@ -68,6 +73,15 @@
     "displayNameLabel" : "Display name",
     "uidRequired": "Customer UID required",
     "apiKeyRequired": "API key required",
-    "passwordWrong" : "Password must include at least an uppercase, a lowercase letter, a number and must contain between 8 to 30 characters"
+    "passwordWrong" : "Password must include at least an uppercase, a lowercase letter, a number and must contain between 8 to 30 characters",
+    "changePassword" : "Change password",
+    "validatePassword" : "Validate password",
+    "passwordChanged": "Password changed successfully",
+    "passwordSuccess" : "SUCCESS!",
+    "configChanged" : "Config successfully saved",
+    "saveSuccess" : "SUCCESS!",
+    "password": "Password",
+    "enterPassword": "Enter your password",
+    "notCorrespondingPassword": "The password doesn't correspond to the one you entered"
   }
 }

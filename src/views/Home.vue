@@ -25,7 +25,7 @@
                   v-for="item in items"
                   :key="item.title"
                   link
-                  @click="pageOpened = item.label"
+                  @click="setPage(item.label)"
                 >
                   <v-list-item-icon>
                     <v-icon>{{ item.icon }}</v-icon>
@@ -42,16 +42,20 @@
       </v-col>
       <v-col cols="10">
         <register-form v-if="this.pageOpened=='settings'" submitMethod="update" :user="user"></register-form>
+        <proof-deposit v-if="this.pageOpened=='proofDeposit'"></proof-deposit>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import swal from "sweetalert2";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
 import "material-design-icons-iconfont/dist/material-design-icons.css";
 import dbService from "../service/db-service";
 import RegisterForm from "@/components/RegisterForm.vue";
+import ProofDeposit from "@/components/ProofDeposit.vue";
+import bcrypt from "bcryptjs";
 export default {
   icons: {
     iconfont: "md"
@@ -59,7 +63,7 @@ export default {
 
   data() {
     return {
-      pageOpened: "settings",
+      pageOpened: "proofDeposit",
       user: {
         customerUid: "",
         apiKey: ""
@@ -91,19 +95,46 @@ export default {
     };
   },
   components: {
-    RegisterForm
+    RegisterForm,
+    ProofDeposit
   },
 
   async mounted() {
     const res = await dbService.getUserById(this.$store.state.id);
-    if(!res){
-      return
+    if (!res) {
+      return;
     }
-    this.user = res
+    this.user = res;
     this.user.displayName = res.displayName;
   },
   methods: {
-
+    async setPage(page) {
+      if (page == this.pageOpened) return;
+      if (this.pageOpened == "settings") {
+        const res = await dbService.getUserById(this.$store.state.id);
+        if (!res) {
+          return;
+        }
+        this.user = res;
+      }
+      if (page == "settings") {
+        const resPassword = await swal.fire({
+          title: this.$t("common.password"),
+          text: this.$t("common.enterPassword"),
+          input: "password",
+          confirmButtonText: "Confirm"
+        });
+        if (!(await bcrypt.compare(resPassword.value, this.user.password))) {
+          swal.fire({
+            icon: "error",
+            title: this.$t("common.password"),
+            text: this.$t("common.notCorrespondingPassword"),
+          });
+          return;
+        }
+      }
+      this.pageOpened = page;
+    }
   }
 };
 </script>

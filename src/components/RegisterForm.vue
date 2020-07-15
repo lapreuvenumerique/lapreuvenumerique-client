@@ -1,19 +1,21 @@
-<template>
+<template style="font-family: Helvetica;">
   <v-container>
     <v-card class="pa-8">
       <h2 class="mb-5">{{this.$t("home.settings") + " :"}}</h2>
       <v-row>
         <v-col>
           <v-row>
-            <v-col>
+            <v-col cols="4">
               <v-text-field v-model="user.displayName" label="Display name"></v-text-field>
+                <v-text-field v-model="user.username" label="Username"></v-text-field>
             </v-col>
-            <v-col>
+            <v-col v-on:vdropzone-success="uploadImage(file)" cols="4">
               <vue-dropzone
                 ref="imageDropzone"
                 id="dropzone"
                 :options="dropzoneOptions"
                 :useCustomSlot="true"
+                
               >
                 <div class="dropzone-custom-content">
                   <h3 class="dropzone-custom-title">{{this.$t("home.dropzoneHeader")}}</h3>
@@ -21,27 +23,46 @@
                 </div>
               </vue-dropzone>
             </v-col>
+            <v-col cols="4">
+              <v-btn
+              color="primary"
+              @click="updatingPassword = !updatingPassword"
+              v-if="!updatingPassword"
+              >
+                {{this.$t("common.changePassword")}}
+              </v-btn>
+              <div v-if="this.updatingPassword">
+                    <v-text-field
+                      v-model="password"
+                      :append-icon="passwordeyevalue ? 'mdi-eye' : 'mdi-eye-off'"
+                      :rules="passwordRules"
+                      :type="passwordeyevalue ? 'password' : 'text'"
+                      @click:append="() => (passwordeyevalue = !passwordeyevalue)"
+                      :label="this.submitMethod == 'update'? this.$t('home.newPassword'): this.$t('home.password')"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="confirmPassword"
+                      :append-icon="confirmPasswordeyevalue ? 'mdi-eye' : 'mdi-eye-off'"
+                      :rules="confirmPasswordRules"
+                      :type="confirmPasswordeyevalue ? 'password' : 'text'"
+                      @click:append="() => (confirmPasswordeyevalue = !confirmPasswordeyevalue)"
+                      :label="this.submitMethod == 'update'? this.$t('home.confirmNewPassword'): this.$t('home.confirmPassword')"
+                    ></v-text-field>
+                </div>
+              <v-btn
+              color="primary"
+              @click="changePassword(); updatingPassword = !updatingPassword"
+              v-if="updatingPassword"
+              >
+                {{this.$t("common.validatePassword")}}
+              </v-btn>
+            </v-col>
           </v-row>
           <v-row>
             <v-col>
               <span>
-                <v-text-field v-model="user.username" label="Username"></v-text-field>
-                <v-text-field
-                  v-model="password"
-                  :append-icon="passwordeyevalue ? 'mdi-eye' : 'mdi-eye-off'"
-                  :rules="passwordRules"
-                  :type="passwordeyevalue ? 'password' : 'text'"
-                  @click:append="() => (passwordeyevalue = !passwordeyevalue)"
-                  :label="this.$t('home.newPassword')"
-                ></v-text-field>
-                <v-text-field
-                  v-model="confirmPassword"
-                  :append-icon="confirmPasswordeyevalue ? 'mdi-eye' : 'mdi-eye-off'"
-                  :rules="confirmPasswordRules"
-                  :type="confirmPasswordeyevalue ? 'password' : 'text'"
-                  @click:append="() => (confirmPasswordeyevalue = !confirmPasswordeyevalue)"
-                  :label="this.$t('home.confirmNewPassword')"
-                ></v-text-field>
+                
+                
                 <v-alert
                   v-if="this.passwordError"
                   type="error"
@@ -95,19 +116,23 @@
           </v-row>
         </v-col>
       </v-row>
-      <div class="full-width">
-        <v-btn @click="register" color="primary">{{$t("register.save")}}</v-btn>
-      </div>
+      <v-row>
+        <v-col class="text-right">
+          <v-btn @click="register" color="primary">{{$t("register.save")}}</v-btn>
+        </v-col>
+      </v-row>
     </v-card>
   </v-container>
 </template>
 <script>
+import swal from 'sweetalert2'
 import vue2Dropzone from "vue2-dropzone";
 import dbService from "../service/db-service";
 import bcrypt from "bcryptjs";
 export default {
   data() {
     return {
+      updatingPassword: false,
       customerUIDRules: [
         value => !!value || this.$t("common.uidRequired"),
         value => value.length == 36 || this.$t("common.uidCount")
@@ -227,16 +252,21 @@ export default {
     submitMethod: String
   },
   mounted() {
-    this.syncToggles()
+    this.syncToggles();
   },
   components: {
     vueDropzone: vue2Dropzone
   },
   methods: {
+    uploadImage(file) {
+      console.log(file);
+    },
     async register() {
-      if (this.password != this.confirmPassword) {
-        this.passwordError = true;
-        return;
+      if (this.submitMethod == "register") {
+        if(this.password != this.confirmPassword) {
+          this.passwordError = true;
+          return;
+        }
       }
       let properties = {};
       for (let i = 0; i < this.toggles.length; i++) {
@@ -269,7 +299,6 @@ export default {
         const res = await dbService.updateUserById(
           this.$store.state.id,
           this.user.username,
-          await bcrypt.hash(this.confirmPassword, 12),
           this.user.displayName,
           this.user.userPicture,
           this.user.apiKey,
@@ -278,22 +307,32 @@ export default {
         );
 
         if (res.status == "SUCCESS") {
-          console.log(res);
+          swal.fire({title: this.$t("common.saveSuccess"), text: this.$t("common.configChanged"), icon: "success", confirmButtonText:"OK"})
+          
         } else {
           this.errorUsername = true;
         }
       }
     },
 
-    syncToggles(){
-      
-      let prop = this.user.properties
-      if(!prop){
-        return
+    async changePassword(){
+      const res = await dbService.updatePasswordById(
+        this.user.id,
+        this.password.trim().length > 0 ? await bcrypt.hash(this.confirmPassword, 12): this.user.password,
+      )
+      swal.fire({title: this.$t("common.passwordSuccess"), text: this.$t("common.passwordChanged"), icon: "success", confirmButtonText:"OK"})
+    },
+
+    syncToggles() {
+      let prop = this.user.properties;
+      if (!prop) {
+        return;
       }
-      for(let i = 0; i < this.toggles.length; i ++){
-        this.toggles[i].enabled1 = prop[this.toggles[i].index] > 0? true: false
-        this.toggles[i].enabled2 = prop[this.toggles[i].index] == 2? true: false
+      for (let i = 0; i < this.toggles.length; i++) {
+        this.toggles[i].enabled1 =
+          prop[this.toggles[i].index] > 0 ? true : false;
+        this.toggles[i].enabled2 =
+          prop[this.toggles[i].index] == 2 ? true : false;
       }
     },
 
@@ -305,5 +344,15 @@ export default {
       console.log("reset");
     }
   }
+
 };
 </script>
+
+<style scoped>
+body{
+  font-family: Arial, Helvetica, sans-serif;
+}
+.swal2-popup {
+  font-family: Helvetica;
+}
+</style>
