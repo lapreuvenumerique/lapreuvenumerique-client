@@ -20,7 +20,7 @@
                    counter="36"
                    required
                    :rules="usernameRules"
-                   :label="$t('register.usernameLabel')"
+                   :label="$t('common.usernameLabel')"
                    maxlength="36"
                 ></v-text-field>
                   <v-text-field
@@ -30,7 +30,7 @@
                       :rules="passwordRules"
                       :type="passwordeyevalue ? 'password' : 'text'"
                       @click:append="() => (passwordeyevalue = !passwordeyevalue)"
-                      :label="$t('register.passwordLabel')"
+                      :label="$t('common.passwordLabel')"
                       maxlength="64"
                   ></v-text-field>
                   <v-text-field
@@ -38,7 +38,7 @@
                       counter="36"
                       required
                       :rules="customerUIDRules"
-                      :label="$t('register.uidLabel')"
+                      :label="$t('common.uidLabel')"
                       maxlength="36"
                   ></v-text-field>
                   <v-text-field
@@ -48,17 +48,7 @@
                       :rules="apiKeyRules"
                       :type="apiKeyeyevalue ? 'password' : 'text'"
                       @click:append="() => (apiKeyeyevalue = !apiKeyeyevalue)"
-                      :label="$t('register.apiKeyLabel')"
-                      maxlength="64"
-                  ></v-text-field>
-                  <v-text-field
-                      v-model="secretKey"
-                      counter="64"
-                      :append-icon="secretKeyeyevalue ? 'mdi-eye' : 'mdi-eye-off'"
-                      :rules="secretKeyRules"
-                      :type="secretKeyeyevalue ? 'password' : 'text'"
-                      @click:append="() => (secretKeyeyevalue = !secretKeyeyevalue)"
-                      :label="$t('register.secretKeyLabel')"
+                      :label="$t('common.apiKeyLabel')"
                       maxlength="64"
                   ></v-text-field>
                     <v-row justify="center">
@@ -91,7 +81,7 @@
                     :disabled="!isValid"
                     color="primary"
                     >
-                        {{$t("register.submit")}}
+                        {{$t("common.submit")}}
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -113,7 +103,7 @@
                         link
                         dense
                         >
-                            <v-col cols="4">
+                            <v-col cols="4" dense>
                                 <span class="layout align-center justify-center fill-height">{{toggle.title}}</span>
                             </v-col>
                             <v-col cols="4">
@@ -140,14 +130,14 @@
                         @click="resetToggles"
                         color="primary"
                         >
-                                {{$t("register.reset")}}
+                                {{$t("common.reset")}}
                         </v-btn>
                         <v-spacer></v-spacer>
                         <v-btn 
                         @click="saveToggles"
                         color="primary"
                         >
-                                {{$t("register.save")}}
+                                {{$t("common.save")}}
                         </v-btn>
                     </v-card-actions>
                 </v-card>
@@ -169,23 +159,29 @@ export default {
             secretKeyeyevalue:true,
             apiKeyeyevalue:true,
             username : "Admin",
-            usernameRules:[value => !!value || this.$t("register.usernameRequired"),value => value.length > 4  || this.$t("register.usernameCount")],
-            secretKey:"65750c2bf72356197925d7ce83338b871f758e4b70ec639ea2fcec61679abb60",
-            secretKeyRules:[value => !!value || this.$t("register.secretKeyRequired"),value => value.length == 64  || this.$t("register.secretKeyCount")],
+            usernameRules:[value => !!value || this.$t("common.usernameRequired"),value => value.length > 4  || this.$t("common.usernameCount")],
             password : "Admin123",
-            passwordRules:[value => !!value || this.$t("register.passwordRequired"), value => value.search(/((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,30})/g) != -1  || this.$t("register.passwordWrong")],
+            passwordRules:[value => !!value || this.$t("common.passwordRequired"), value => value.search(/((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,30})/g) != -1  || this.$t("common.passwordWrong")],
             apiKey : "84816873e95047d2a02853421a1d21deb133680b812378a82e7c32d8fdea4960",
-            apiKeyRules:[value => !!value || this.$t("register.apiKeyRequired"),value => value.length == 64  || this.$t("register.apiKeyCount")],
+            apiKeyRules:[value => !!value || this.$t("common.apiKeyRequired"),value => value.length == 64  || this.$t("common.apiKeyCount")],
             customerUID : "3b462174-7bc9-445f-b746-83decc854d92",
-            customerUIDRules:[value => !!value || this.$t("register.uidRequired"), value => value.length == 36 || this.$t("register.uidCount")],
+            customerUIDRules:[value => !!value || this.$t("common.uidRequired"), value => value.length == 36 || this.$t("common.uidCount")],
             isValid : false,
 
            toggles: [
-          {index : 1, title : this.$t("common.togglelist.line1.title"), label1 : this.$t("common.togglelist.line1.label1"),  label2 : this.$t("common.togglelist.line1.label2"), enabled1 : false, enabled2 : false},
-          {index : 2, title : this.$t("common.togglelist.line2.title"), label1 : this.$t("common.togglelist.line2.label1"),  label2 : this.$t("common.togglelist.line2.label2"), enabled1 : false, enabled2 : false},
-          {index : 3, title : this.$t("common.togglelist.line3.title"), label1 : this.$t("common.togglelist.line3.label1"),  label2 : this.$t("common.togglelist.line3.label2"), enabled1 : false, enabled2 : false},
-          {index : 4, title : this.$t("common.togglelist.line4.title"), label1 : this.$t("common.togglelist.line4.label1"),  label2 : this.$t("common.togglelist.line4.label2"), enabled1 : false, enabled2 : false},
-          {index : 5, title : this.$t("common.togglelist.line5.title"), label1 : this.$t("common.togglelist.line5.label1"),  label2 : this.$t("common.togglelist.line5.label2"), enabled1 : false, enabled2 : false},
+          {index : 1, title : this.$t("common.togglelist.line1.title"), label1 : this.$t("common.togglelist.label1"),  label2 : this.$t("common.togglelist.label2"), enabled1 : false, enabled2 : false},
+          {index : 2, title : this.$t("common.togglelist.line2.title"), label1 : this.$t("common.togglelist.label1"),  label2 : this.$t("common.togglelist.label2"), enabled1 : false, enabled2 : false},
+          {index : 3, title : this.$t("common.togglelist.line3.title"), label1 : this.$t("common.togglelist.label1"),  label2 : this.$t("common.togglelist.label2"), enabled1 : false, enabled2 : false},
+          {index : 4, title : this.$t("common.togglelist.line4.title"), label1 : this.$t("common.togglelist.label1"),  label2 : this.$t("common.togglelist.label2"), enabled1 : false, enabled2 : false},
+          {index : 5, title : this.$t("common.togglelist.line5.title"), label1 : this.$t("common.togglelist.label1"),  label2 : this.$t("common.togglelist.label2"), enabled1 : false, enabled2 : false},
+          {index : 6, title : this.$t("common.togglelist.line6.title"), label1 : this.$t("common.togglelist.label1"),  label2 : this.$t("common.togglelist.label2"), enabled1 : false, enabled2 : false},
+          {index : 7, title : this.$t("common.togglelist.line7.title"), label1 : this.$t("common.togglelist.label1"),  label2 : this.$t("common.togglelist.label2"), enabled1 : false, enabled2 : false},
+          {index : 8, title : this.$t("common.togglelist.line8.title"), label1 : this.$t("common.togglelist.label1"),  label2 : this.$t("common.togglelist.label2"), enabled1 : false, enabled2 : false},
+          {index : 9, title : this.$t("common.togglelist.line9.title"), label1 : this.$t("common.togglelist.label1"),  label2 : this.$t("common.togglelist.label2"), enabled1 : false, enabled2 : false},
+          {index : 10, title : this.$t("common.togglelist.line10.title"), label1 : this.$t("common.togglelist.label1"),  label2 : this.$t("common.togglelist.label2"), enabled1 : false, enabled2 : false},
+          {index : 11, title : this.$t("common.togglelist.line11.title"), label1 : this.$t("common.togglelist.label1"),  label2 : this.$t("common.togglelist.label2"), enabled1 : false, enabled2 : false},
+          {index : 12, title : this.$t("common.togglelist.line12.title"), label1 : this.$t("common.togglelist.label1"),  label2 : this.$t("common.togglelist.label2"), enabled1 : false, enabled2 : false},
+          {index : 13, title : this.$t("common.togglelist.line13.title"), label1 : this.$t("common.togglelist.label1"),  label2 : this.$t("common.togglelist.label2"), enabled1 : false, enabled2 : false}
         ],
         }
     },

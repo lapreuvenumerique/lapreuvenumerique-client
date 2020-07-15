@@ -20,7 +20,7 @@
                    counter="36"
                    required
                    :rules="usernameRules"
-                   :label="$t('login.usernameLabel')"
+                   :label="$t('common.usernameLabel')"
                    maxlength="36"
                 ></v-text-field>
                   <v-text-field
@@ -30,7 +30,7 @@
                       :rules="passwordRules"
                       :type="passwordeyevalue ? 'password' : 'text'"
                       @click:append="() => (passwordeyevalue = !passwordeyevalue)"
-                      :label="$t('login.passwordLabel')"
+                      :label="$t('common.passwordLabel')"
                       maxlength="64"
                   ></v-text-field>
                     <v-row justify="center">
@@ -63,7 +63,7 @@
                     :disabled="!isValid"
                     color="primary"
                     >
-                        {{$t("login.submit")}}
+                        {{$t("common.submit")}}
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -80,10 +80,10 @@ export default {
             passwordeyevalue : true,
             errorCredentials: false,
             errorServer: false,
-            password : "Admin123",
-            passwordRules:[value => !!value || this.$t("login.passwordRequired")],
-            username : "Admin",
-            usernameRules:[value => !!value || this.$t("login.usernameRequired")],
+            password : "",
+            passwordRules:[value => !!value || this.$t("common.passwordRequired")],
+            username : "",
+            usernameRules:[value => !!value || this.$t("common.usernameRequired")],
             isValid : false
         }
     },

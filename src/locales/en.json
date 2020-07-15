@@ -1,28 +1,19 @@
 {
   "login":{
     "headerInfo":"Login to your account",
-    "submit": "Submit",
     "usernameRequired": "Username required",
     "usernameLabel" : "Username",
-    "passwordRequired": "Password required",
-    "passwordLabel" : "Password",
     "errorCredentials" : "Your credentials are incorrect",
     "errorServer":"Web service unavailable, please try again later"
   },
   "register":{
     "headerInfo":"Register your new account",
-    "submit": "Submit",
     "usernameRequired": "Username required",
     "usernameLabel" : "Username",
     "passwordRequired": "Password required",
     "passwordWrong":"Password must include at least an uppercase, a lowercase letter, a number and must contain between 8 to 30 characters",
-    "passwordLabel" : "Password",
     "uidRequired": "Customer UID required",
-    "uidCount":"36 characters required",
-    "uidLabel" : "Customer UID",
     "apiKeyRequired": "API key required",
-    "apiKeyCount":"64 characters required",
-    "apiKeyLabel" : "API key",
     "secretKeyRequired": "Secret key required",
     "secretKeyCount":"64 characters required",
     "secretKeyLabel" : "Secret key",
@@ -39,35 +30,68 @@
     "integrity":"Integrity",
     "settings":"Settings",
     "dropzoneHeader":"Drop your profile picture here",
-    "dropzoneSubtitle":"...or click to browse"
+    "dropzoneSubtitle":"...or click to browse",
+    "newPassword":"New password",
+    "confirmNewPassword":"Confirm new password"
   },
   "common":{
     "togglelist":{
+      "title" : "Information needed",
+      "label1" : "Available",
+      "label2" : "Required",
       "line1":{
-        "title" : "Line 1",
-        "label1" : "Toggle 1",
-        "label2" : "Toggle 2"
+        "title" : "File"
       },
       "line2":{
-        "title" : "Line 2",
-        "label1" : "Toggle 3",
-        "label2" : "Toggle 4"
+        "title" : "Folder name"
       },
       "line3":{
-        "title" : "Line 3",
-        "label1" : "Toggle 5",
-        "label2" : "Toggle 6"
+        "title" : "Reference"
       },
       "line4":{
-        "title" : "Line 4",
-        "label1" : "Toggle 7",
-        "label2" : "Toggle 8"
+        "title" : "Customer UID"
       },
       "line5":{
-        "title" : "Line 5",
-        "label1" : "Toggle 9",
-        "label2" : "Toggle 10"
+        "title" : "Email copy"
+      },
+      "line6":{
+        "title" : "Identity"
+      },
+      "line7":{
+        "title" : "Batch number"
+      },
+      "line8":{
+        "title" : "Topic"
+      },
+      "line9":{
+        "title" : "RGPD duration"
+      },
+      "line10":{
+        "title" : "Visa"
+      },
+      "line11":{
+        "title" : "Keywords"
+      },
+      "line12":{
+        "title" : "Okkayid"
+      },
+      "line13":{
+        "title" : "File name"
       }
-    }
+    },
+    "apiKeyCount":"64 characters required",
+    "apiKeyLabel" : "API key",
+    "uidCount":"36 characters required",
+    "uidLabel" : "Customer UID",
+    "passwordLabel" : "Password",
+    "passwordRequired" : "Password required",
+    "usernameLabel" :"Username",
+    "usernameRequired" : "Username required",
+    "submit": "Submit",
+    "save": "Save",
+    "reset" : "Reset",
+    "passwordWrong" : "Password must include at least an uppercase, a lowercase letter, a number and must contain between 8 to 30 characters"
+    
+
   }
 }
