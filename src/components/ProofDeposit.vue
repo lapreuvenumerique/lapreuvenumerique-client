@@ -7,7 +7,7 @@
       </v-row>
       <v-form v-model="isValid">
         <v-row>
-          <v-col cols="6" v-if="fileUpload">
+          <v-col cols="12">
           <vue-dropzone
             ref="proofDropzone"
             id="dropzone"
@@ -53,8 +53,7 @@ export default {
         addRemoveLinks: true,
         maxFiles: 1
       },
-      isValid: false,
-      fileUpload: false
+      isValid: false
     };
   },
   components: {
@@ -75,7 +74,6 @@ export default {
         continue;
       }
       if (properties[i] == "file" && currentProperty != 0) {
-        this.fileUpload = true;
         continue;
       }
       this.inputs.push({
@@ -94,18 +92,26 @@ export default {
         return;
       }
       let formData = new FormData();
-      if (this.proofData) {
-        formData.append("file", this.proofData);
-      }
       const alertRes = await Swal.fire({
         title: this.$t("common.confirmUpload"),
         confirmButtonText: this.$t("common.confirm")
       });
       for (let i = 0; i < this.inputs.length; i++) {
         if (this.inputs[i].value) {
+          if(this.inputs[i].title == "copy"){
+            let splitValue = this.inputs[i].value.split(" ")
+            splitValue.push(this.user.email)
+            formData.append(this.inputs[i].title, splitValue);
+            continue
+          }
           formData.append(this.inputs[i].title, this.inputs[i].value);
         }
       }
+      formData.append("file", this.proofData)
+      formData.append("noDuplicate", this.user.noDuplicate)
+      formData.append("sourceApp", "electronApp")
+      formData.append("keepFile", this.user.keepFiles)
+      formData.append("email", this.user.email)
       try {
         const res = await proofService.uploadProof(formData);
         if (res.data.status == "SUCCESS") {
@@ -115,6 +121,7 @@ export default {
             icon: "success",
             confirmButtonText: "OK"
           });
+          this.$emit('update-credits')
         } else {
           Swal.fire({
             title: this.$t("common.errorUpload"),
@@ -122,7 +129,7 @@ export default {
             icon: "error",
             confirmButtonText: "OK"
           });
-          console.log(res.data);
+          
         }
       } catch (err) {
         let text = this.$t("common.dataNotUploaded") + " : " + err.message;

@@ -3,12 +3,7 @@
     <v-row style="height: 100%;">
       <v-col cols="2" style="height: 100%;">
         <v-card class="justify-right" style="height: 100%; width: 100%;">
-          <v-navigation-drawer
-            absolute
-            dark
-            width="100%"
-            permanent
-          >
+          <v-navigation-drawer absolute dark width="100%" permanent>
             <div style="position: relative; position: -webkit-relative; top:0;">
               <v-list>
                 <v-list-item>
@@ -20,6 +15,7 @@
                   ></v-img>
                   <span>{{this.user.displayName}}</span>
                 </v-list-item>
+
                 <v-list-item
                   v-for="item in items"
                   :key="item.title"
@@ -34,6 +30,11 @@
                     <v-list-item-title>{{ item.title }}</v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
+                <div style="botton: 10px;left: 10px">
+                  <h2
+                    style="position:absolute;bottom:10px;left:20px"
+                  >{{ $tc("common.credits", credits) + " : " + credits }}</h2>
+                </div>
               </v-list>
             </div>
           </v-navigation-drawer>
@@ -41,7 +42,11 @@
       </v-col>
       <v-col cols="10">
         <register-form v-if="this.pageOpened=='settings'" submitMethod="update" :user="user"></register-form>
-        <proof-deposit v-if="this.pageOpened=='proofDeposit'" :user="user"></proof-deposit>
+        <proof-deposit
+          v-if="this.pageOpened=='proofDeposit'"
+          :user="user"
+          @update-credits="updateCredits()"
+        ></proof-deposit>
         <integrity v-if="this.pageOpened=='integrity'"></integrity>
       </v-col>
     </v-row>
@@ -55,7 +60,8 @@ import "material-design-icons-iconfont/dist/material-design-icons.css";
 import dbService from "../service/db-service";
 import RegisterForm from "@/components/RegisterForm.vue";
 import ProofDeposit from "@/components/ProofDeposit.vue";
-import Integrity from '@/components/Integrity'
+import Integrity from "@/components/Integrity";
+import clientService from "@/service/client-service";
 import bcrypt from "bcryptjs";
 export default {
   icons: {
@@ -94,7 +100,8 @@ export default {
           label: "integrity"
         },
         { title: this.$t("home.settings"), icon: "mdi-cog", label: "settings" }
-      ]
+      ],
+      credits: 0
     };
   },
   components: {
@@ -114,8 +121,13 @@ export default {
       this.userPicture = res.userPicture;
     }
     this.pageOpened = "proofDeposit";
+    this.updateCredits();
   },
   methods: {
+    async updateCredits() {
+      const credit = await clientService.getCredits();
+      this.credits = credit.data.credits;
+    },
     async setPage(page) {
       if (page == this.pageOpened) return;
       if (this.pageOpened == "settings") {

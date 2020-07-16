@@ -39,10 +39,11 @@
     "proofDeposit" : "Proof deposit",
     "uploadProof": "Upload your proof",
     "uploadProofSubtitle": "Drag or click to browse",
-    "allowDuplicate" : "Allow duplicate files"
+    "noDuplicate" : "Don't allow duplicate files",
+    "keepFiles": "Allow keeping of files"
   },
   "integrity" :{
-    "dataIntergrity": "Data Integirty",
+    "dataIntergrity": "Data integrity",
     "verifyDataIntegrity" : "Verify data integrity",
     "integrityOfBlockchain": "The integrity of the blockchain with ",
     "recordIsCorrect" : "record is correct | records is correct",
@@ -105,6 +106,7 @@
     "credentialsIncorrect" : "Credentials incorrect",
     "email": "E-Mail",
     "passwordDifferentTitle": "Password error",
-    "passwordDifferent" : "Passwords are different"
+    "passwordDifferent" : "Passwords are different",
+    "credits" : "Credit | Credits"
   }
 }

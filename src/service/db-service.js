@@ -38,12 +38,12 @@ export class DbService {
      * @param {string} apiKey 
      * @param {string} customerUid 
      */
-    async register(username, password, displayName, apiKey, customerUid, properties, userPicture, email) {
+    async register(username, password, displayName, apiKey, customerUid, properties, userPicture, email, noDuplicate, keepFiles) {
         if (await this.db.users.where({ username }).count() !== 0) {
             return { status: "FAILED", message: "This username is not available" }
         }
         await this.db.users.add({
-            username, password, displayName, apiKey, customerUid, properties, userPicture, email
+            username, password, displayName, apiKey, customerUid, properties, userPicture, email, noDuplicate, keepFiles
         })
         return { status: "SUCCESS", message: "User created" }
     }
@@ -76,7 +76,7 @@ export class DbService {
      * @param {string} customerUid 
      * @param {string} properties 
      */
-    async updateUserById(id, username, displayName, apiKey, customerUid,properties, userPicture, email) {
+    async updateUserById(id, username, displayName, apiKey, customerUid,properties, userPicture, email, noDuplicate, keepFiles) {
         const userExists = await this.db.users.where({ id }).count()
         if (userExists === 0) {
             return { status: "FAILED", message: "This user does not exist" }
@@ -85,7 +85,7 @@ export class DbService {
         if(usernameExists.id !== id) {
             return { status: "FAILED", message: "This username is not available" }
         }
-        await this.db.users.where({ id }).modify({ username, displayName, apiKey, customerUid, properties, userPicture, email })
+        await this.db.users.where({ id }).modify({ username, displayName, apiKey, customerUid, properties, userPicture, email, noDuplicate , keepFiles})
         return { status: "SUCCESS", message: "Password changed" }
     }
 

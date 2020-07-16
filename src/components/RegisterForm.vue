@@ -119,7 +119,8 @@
                   :label="this.$t('common.apiKeyLabel')"
                 ></v-text-field>
               </span>
-              <v-switch inset :label="$t('proofDeposit.allowDuplicate')" v-model="allowDuplicate"></v-switch>
+              <v-switch inset :label="$t('proofDeposit.noDuplicate')" v-model="user.noDuplicate"></v-switch>
+              <v-switch inset :label="$t('proofDeposit.keepFiles')" v-model="user.keepFiles"></v-switch>
             </v-col>
           </v-row>
 
@@ -177,7 +178,6 @@ export default {
   data() {
     return {
       email: "",
-      allowDuplicate: false,
       updatingPassword: false,
       customerUIDRules: [
         value => !!value || this.$t("common.uidRequired"),
@@ -212,12 +212,6 @@ export default {
         maxFiles: 1
       },
       toggles: [
-        {
-          index: "file",
-          title: this.$t("common.togglelist.file"),
-          enabled1: false,
-          enabled2: false
-        },
         {
           index: "folderName",
           title: this.$t("common.togglelist.folderName"),
@@ -361,7 +355,9 @@ export default {
           encryptedCustomer,
           properties,
           this.user.userPicture,
-          this.user.email
+          this.user.email,
+          this.user.noDuplicate,
+          this.user.keepFiles
         );
 
         if (res.status == "SUCCESS") {
@@ -387,7 +383,9 @@ export default {
           encryptedCustomer,
           properties,
           this.user.userPicture,
-          this.user.email
+          this.user.email,
+          this.user.noDuplicate,
+          this.user.keepFiles
         );
 
         if (res.status == "SUCCESS") {
