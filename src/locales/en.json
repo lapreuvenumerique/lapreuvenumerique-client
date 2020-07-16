@@ -49,7 +49,11 @@
     "recordIsCorrect" : "record is correct | records is correct",
     "verify": "Verify",
     "waitFor": "Wait for",
-    "second" : "second | seconds"
+    "second" : "second | seconds",
+    "blockchainIntegrityIncorrect": "The integrity of the blockchain is incorrect. Please contact your administrator"
+  },
+  "fileExistence":{
+    "verifyFileExistence": "Verify existence of a proof"
   },
   "common":{
     "togglelist":{
@@ -103,6 +107,8 @@
     "dataUploaded": "Data uploaded successfully!",
     "dataNotUploaded": "Data failed to upload",
     "errorUpload" : "ERROR!",
+    "error": "ERROR!",
+    "success": "SUCCESS!",
     "credentialsIncorrect" : "Credentials incorrect",
     "email": "E-Mail",
     "passwordDifferentTitle": "Password error",

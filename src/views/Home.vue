@@ -31,9 +31,6 @@
                   </v-list-item-content>
                 </v-list-item>
                 <div style="botton: 10px;left: 10px">
-                  <h3
-                    style="position:absolute;bottom:65px;left:20px"
-                  >{{ $tc("common.credits", credits) + " : " + credits }}</h3>
                   <v-btn
                     color="primary"
                     style="position:absolute;bottom:20px;left:20px"
@@ -50,9 +47,9 @@
         <proof-deposit
           v-if="this.pageOpened=='proofDeposit'"
           :user="user"
-          @update-credits="updateCredits()"
         ></proof-deposit>
         <integrity v-if="this.pageOpened=='integrity'"></integrity>
+        <verify-file-existence v-if="this.pageOpened=='docVerify'"></verify-file-existence>
       </v-col>
     </v-row>
   </v-container>
@@ -67,6 +64,7 @@ import RegisterForm from "@/components/RegisterForm.vue";
 import ProofDeposit from "@/components/ProofDeposit.vue";
 import Integrity from "@/components/Integrity";
 import clientService from "@/service/client-service";
+import VerifyFileExistence from "@/components/VerifyFileExistence";
 import bcrypt from "bcryptjs";
 export default {
   icons: {
@@ -112,7 +110,8 @@ export default {
   components: {
     RegisterForm,
     ProofDeposit,
-    Integrity
+    Integrity,
+    VerifyFileExistence
   },
 
   async mounted() {
