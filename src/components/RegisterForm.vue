@@ -444,11 +444,8 @@ export default {
 };
 </script>
 
-<style scoped>
-body {
+<style>
+.swal2-container, .swal2-center, .swal2-backdrop-show, .swal2-popup, .swal2-modal, .swal2-show {
   font-family: Arial, Helvetica, sans-serif;
-}
-.swal2-popup {
-  font-family: Helvetica;
 }
 </style>
