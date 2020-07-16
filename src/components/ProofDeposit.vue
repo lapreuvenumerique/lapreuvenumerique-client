@@ -29,7 +29,9 @@
             ></v-text-field>
           </v-col>
         </v-row>
-        <v-btn @click="sendProof()">{{$t('common.submit')}}</v-btn>
+        <v-col cols="12" style="text-align: right;">
+          <v-btn @click="sendProof()" color="primary">{{$t('common.submit')}}</v-btn>
+        </v-col>
       </v-form>
     </v-card>
   </v-container>

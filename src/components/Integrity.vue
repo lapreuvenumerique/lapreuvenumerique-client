@@ -7,6 +7,7 @@
           <h1>{{this.$t("integrity.verifyDataIntegrity")}}</h1>
           <v-btn
             color="primary"
+            x-large
             class="ma-10"
             :loading="isLoading"
             :disabled="wait"
