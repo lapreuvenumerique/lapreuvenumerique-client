@@ -81,7 +81,6 @@ export default {
         required: currentProperty == 2
       });
     }
-    console.log(this.inputs);
   }
 };
 </script>

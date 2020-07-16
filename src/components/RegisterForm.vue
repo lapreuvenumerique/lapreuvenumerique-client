@@ -23,7 +23,7 @@
                 </div>
               </vue-dropzone>
             </v-col>
-            <v-col cols="4">
+            <v-col cols="4" v-if="this.submitMethod == 'update'">
               <v-btn
                 color="primary"
                 @click="updatingPassword = !updatingPassword"
@@ -36,7 +36,7 @@
                   :rules="passwordRules"
                   :type="passwordeyevalue ? 'password' : 'text'"
                   @click:append="() => (passwordeyevalue = !passwordeyevalue)"
-                  :label="this.submitMethod == 'update'? this.$t('home.newPassword'): this.$t('home.password')"
+                  :label="this.$t('home.newPassword')"
                 ></v-text-field>
                 <v-text-field
                   v-model="confirmPassword"
@@ -44,7 +44,7 @@
                   :rules="confirmPasswordRules"
                   :type="confirmPasswordeyevalue ? 'password' : 'text'"
                   @click:append="() => (confirmPasswordeyevalue = !confirmPasswordeyevalue)"
-                  :label="this.submitMethod == 'update'? this.$t('home.confirmNewPassword'): this.$t('home.confirmPassword')"
+                  :label="this.$t('home.confirmNewPassword')"
                 ></v-text-field>
               </div>
               <v-btn
@@ -57,6 +57,24 @@
           <v-row>
             <v-col>
               <span>
+                <v-text-field
+                  v-if="this.submitMethod == 'register'"
+                  v-model="password"
+                  :append-icon="passwordeyevalue ? 'mdi-eye' : 'mdi-eye-off'"
+                  :rules="passwordRules"
+                  :type="passwordeyevalue ? 'password' : 'text'"
+                  @click:append="() => (passwordeyevalue = !passwordeyevalue)"
+                  :label="this.submitMethod == 'update'? this.$t('home.newPassword'): this.$t('home.password')"
+                ></v-text-field>
+                <v-text-field
+                  v-if="this.submitMethod == 'register'"
+                  v-model="confirmPassword"
+                  :append-icon="confirmPasswordeyevalue ? 'mdi-eye' : 'mdi-eye-off'"
+                  :rules="confirmPasswordRules"
+                  :type="confirmPasswordeyevalue ? 'password' : 'text'"
+                  @click:append="() => (confirmPasswordeyevalue = !confirmPasswordeyevalue)"
+                  :label="this.$t('home.confirmPassword')"
+                ></v-text-field>
                 <v-alert
                   v-if="this.passwordError"
                   type="error"
@@ -103,7 +121,12 @@
                   <v-switch v-model="toggle.enabled1" class="ma-0 layout" inset></v-switch>
                 </v-col>
                 <v-col cols="3" class="d-flex justify-center">
-                  <v-switch v-if="toggle.enabled1" v-model="toggle.enabled2" inset class="ma-0 layout"></v-switch>
+                  <v-switch
+                    v-if="toggle.enabled1"
+                    v-model="toggle.enabled2"
+                    inset
+                    class="ma-0 layout"
+                  ></v-switch>
                 </v-col>
               </v-row>
             </v-col>
@@ -123,6 +146,7 @@ import swal from "sweetalert2";
 import vue2Dropzone from "vue2-dropzone";
 import dbService from "../service/db-service";
 import bcrypt from "bcryptjs";
+import VueCryptojs from "vue-cryptojs";
 export default {
   data() {
     return {
@@ -245,12 +269,25 @@ export default {
     user: Object,
     submitMethod: String
   },
-  mounted() {
+  async mounted() {
     this.syncToggles();
     const dropzone = this.$refs.imageDropzone;
     dropzone.$el.addEventListener("vdropzone-success", $event =>
       this.uploadImage($event)
     );
+    if (this.submitMethod == "update") {
+      const encryptedKey = dbService.getSecretKey();
+      const decryptedApi = this.CryptoJS.AES.decrypt(
+        this.user.apiKey,
+        encryptedKey
+      ).toString(this.CryptoJS.enc.Utf8);
+      this.user.apiKey = decryptedApi;
+      const decryptedCustomer = this.CryptoJS.AES.decrypt(
+        this.user.customerUid,
+        encryptedKey
+      ).toString(this.CryptoJS.enc.Utf8);
+      this.user.customerUid = decryptedCustomer;
+    }
   },
   components: {
     vueDropzone: vue2Dropzone
@@ -279,12 +316,21 @@ export default {
         properties[this.toggles[i].index] = val;
       }
       if (this.submitMethod == "register") {
+        const encryptedKey = dbService.getSecretKey();
+        const encryptedApiKey = this.CryptoJS.AES.encrypt(
+          this.user.apiKey,
+          encryptedKey
+        ).toString();
+        const encryptedCustomer = this.CryptoJS.AES.encrypt(
+          this.user.customerUid,
+          encryptedKey
+        ).toString();
         const res = await dbService.register(
           this.user.username,
           await bcrypt.hash(this.confirmPassword, 12),
           this.user.displayName,
-          this.user.apiKey,
-          this.user.customerUid,
+          encryptedApiKey,
+          encryptedCustomer,
           properties
         );
 
@@ -294,13 +340,22 @@ export default {
           this.errorUsername = true;
         }
       } else {
+        const encryptedKey = dbService.getSecretKey();
+        const encryptedApiKey = this.CryptoJS.AES.encrypt(
+          this.user.apiKey,
+          encryptedKey
+        ).toString();
+        const encryptedCustomer = this.CryptoJS.AES.encrypt(
+          this.user.customerUid,
+          encryptedKey
+        ).toString();
         const res = await dbService.updateUserById(
           this.$store.state.id,
           this.user.username,
           this.user.displayName,
           this.user.userPicture,
-          this.user.apiKey,
-          this.user.customerUid,
+          encryptedApiKey,
+          encryptedCustomer,
           properties
         );
 
@@ -343,14 +398,6 @@ export default {
         this.toggles[i].enabled2 =
           prop[this.toggles[i].index] == 2 ? true : false;
       }
-    },
-
-    resetToggles() {
-      for (let s = 0; s < this.toggles.length; s++) {
-        this.toggles[s].enabled1 = false;
-        this.toggles[s].enabled2 = false;
-      }
-      console.log("reset");
     }
   }
 };

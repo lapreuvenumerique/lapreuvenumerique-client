@@ -60,6 +60,11 @@ export class DbService {
         return this.db.users.where({ username: "Admin" }).delete()
     }
 
+    getSecretKey(){
+        //this key is for the encryption of api key and customer uid
+        return "LaPreuveNumerique"
+    }
+
     /**
      * 
      * @param {number} id 

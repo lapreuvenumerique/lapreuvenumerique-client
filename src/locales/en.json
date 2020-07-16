@@ -85,6 +85,8 @@
     "saveSuccess" : "SUCCESS!",
     "password": "Password",
     "enterPassword": "Enter your password",
-    "notCorrespondingPassword": "The password doesn't correspond to the one you entered"
+    "notCorrespondingPassword": "The password doesn't correspond to the one you entered",
+    "exit" : "Exit ?",
+    "exitAbandonUnsavedChanges" : "Exit and abandon unsaved changes ?"
   }
 }

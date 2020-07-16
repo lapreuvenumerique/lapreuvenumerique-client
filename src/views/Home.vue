@@ -53,8 +53,8 @@ import swal from "sweetalert2";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
 import "material-design-icons-iconfont/dist/material-design-icons.css";
 import dbService from "../service/db-service";
-import RegisterForm from "@/components/RegisterForm.vue";
-import ProofDeposit from "@/components/ProofDeposit.vue";
+import RegisterForm from "../components/RegisterForm.vue";
+import ProofDeposit from "../components/ProofDeposit.vue";
 import bcrypt from "bcryptjs";
 export default {
   icons: {
@@ -111,12 +111,17 @@ export default {
     if (res.userPicture) {
       this.userPicture = res.userPicture;
     }
-    this.pageOpened = "proofDeposit"
+    this.pageOpened = "proofDeposit";
   },
   methods: {
     async setPage(page) {
       if (page == this.pageOpened) return;
       if (this.pageOpened == "settings") {
+        const resPassword = await swal.fire({
+          title: this.$t("common.exit"),
+          text: this.$t("common.exitAbandonUnsavedChanges"),
+          confirmButtonText: "Confirm"
+        });
         const res = await dbService.getUserById(this.$store.state.id);
         if (!res) {
           return;
@@ -149,4 +154,7 @@ export default {
 </script>
 
 <style scoped>
+.swal2-popup {
+  font-family: Helvetica;
+}
 </style>
