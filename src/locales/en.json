@@ -42,7 +42,13 @@
     "allowDuplicate" : "Allow duplicate files"
   },
   "integrity" :{
-    "dataIntergrity": "Data Integirty"
+    "dataIntergrity": "Data Integirty",
+    "verifyDataIntegrity" : "Verify data integrity",
+    "integrityOfBlockchain": "The integrity of the blockchain with ",
+    "recordIsCorrect" : "record is correct | records is correct",
+    "verify": "Verify",
+    "waitFor": "Wait for",
+    "second" : "second | seconds"
   },
   "common":{
     "togglelist":{

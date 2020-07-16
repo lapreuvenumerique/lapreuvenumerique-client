@@ -6,7 +6,6 @@
           <v-navigation-drawer
             absolute
             dark
-            src="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg"
             width="100%"
             permanent
           >
@@ -43,6 +42,7 @@
       <v-col cols="10">
         <register-form v-if="this.pageOpened=='settings'" submitMethod="update" :user="user"></register-form>
         <proof-deposit v-if="this.pageOpened=='proofDeposit'" :user="user"></proof-deposit>
+        <integrity v-if="this.pageOpened=='integrity'"></integrity>
       </v-col>
     </v-row>
   </v-container>
@@ -53,8 +53,9 @@ import swal from "sweetalert2";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
 import "material-design-icons-iconfont/dist/material-design-icons.css";
 import dbService from "../service/db-service";
-import RegisterForm from "../components/RegisterForm.vue";
-import ProofDeposit from "../components/ProofDeposit.vue";
+import RegisterForm from "@/components/RegisterForm.vue";
+import ProofDeposit from "@/components/ProofDeposit.vue";
+import Integrity from '@/components/Integrity'
 import bcrypt from "bcryptjs";
 export default {
   icons: {
@@ -98,7 +99,8 @@ export default {
   },
   components: {
     RegisterForm,
-    ProofDeposit
+    ProofDeposit,
+    Integrity
   },
 
   async mounted() {
