@@ -53,7 +53,9 @@
     "blockchainIntegrityIncorrect": "The integrity of the blockchain is incorrect. Please contact your administrator"
   },
   "fileExistence":{
-    "verifyFileExistence": "Verify existence of a proof"
+    "verifyFileExistence": "Verify existence of a proof",
+    "fileExists": "File exists with id : | Files exist with ids :",
+    "noFileExists": "No file exists with this fingerprint"
   },
   "common":{
     "togglelist":{

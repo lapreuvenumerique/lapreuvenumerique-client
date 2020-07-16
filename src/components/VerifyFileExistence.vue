@@ -17,6 +17,7 @@
                 <div class="subtitle">{{this.$t("proofDeposit.uploadProofSubtitle")}}</div>
               </div>
             </vue-dropzone>
+            <v-btn color="primary" @click="sendProof()" class="mt-10">{{$t("common.submit")}}</v-btn>
           </v-col>
         </v-row>
       </v-form>
@@ -27,6 +28,7 @@
 <script>
 import proofService from "@/service/proof-service";
 import vue2Dropzone from "vue2-dropzone";
+import swal from "sweetalert2"
 export default {
   data() {
     return {
@@ -56,17 +58,26 @@ export default {
       this.proofData = file;
     },
     async sendProof() {
-      if (!this.proofData) {
-        const fingerprint = await proofService.getFingerprint({
-          file: this.proofData
-        });
-        const res = await proofService.compareFingerprints(fingerprint);
-        if (res.data.status == "SUCCESS") {
+      if (this.proofData) {
+        let formData = new FormData();
+        formData.append("file", this.proofData);
+        const res1 = await proofService.getFingerprint(formData);
+        const res2 = await proofService.compareFingerprints({fingerprint : res1.data.fingerprint});
+        if (res2.data.status == "SUCCESS") {
+          swal.fire({
+              title: this.$t("common.success"),
+              text: this.$tc("fileExistence.fileExists", {count : res2.data.ids.length}) + " " + res2.data.ids,
+              confirmButtonText: "OK!"
+          })
           return true;
-          console.log(res.data);
         } else {
+          swal.fire({
+              title: this.$t("common.error"),
+              text: this.$tc("fileExistence.noFileExists"),
+              confirmButtonText: "OK!"
+          })
+          console.log(res2.data);
           return false;
-          console.log(res.data);
         }
       }
     }
