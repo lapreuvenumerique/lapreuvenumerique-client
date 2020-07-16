@@ -30,13 +30,16 @@
                     <v-list-item-title>{{ item.title }}</v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
-                <div style="botton: 10px;left: 10px">
+                <div style="top: 10px;right: 10px">
                   <v-btn
                     color="primary"
-                    style="position:absolute;bottom:20px;left:20px"
+                    style="position:absolute;top:14px;right:25px"
                     @click="$router.push('/login')"
-                  >Disconnect</v-btn>
+                  >
+                    <v-icon class="mdi">mdi-logout</v-icon>
+                  </v-btn>
                 </div>
+                  <span style="bottom: 10px;right: 10px">{{process.env.APPLICATION_VERSION}}</span>
               </v-list>
             </div>
           </v-navigation-drawer>
@@ -44,10 +47,7 @@
       </v-col>
       <v-col cols="10">
         <register-form v-if="this.pageOpened=='settings'" submitMethod="update" :user="user"></register-form>
-        <proof-deposit
-          v-if="this.pageOpened=='proofDeposit'"
-          :user="user"
-        ></proof-deposit>
+        <proof-deposit v-if="this.pageOpened=='proofDeposit'" :user="user"></proof-deposit>
         <integrity v-if="this.pageOpened=='integrity'"></integrity>
         <verify-file-existence v-if="this.pageOpened=='docVerify'"></verify-file-existence>
       </v-col>
@@ -65,6 +65,7 @@ import ProofDeposit from "@/components/ProofDeposit.vue";
 import Integrity from "@/components/Integrity";
 import clientService from "@/service/client-service";
 import VerifyFileExistence from "@/components/VerifyFileExistence";
+import process from "process"
 import bcrypt from "bcryptjs";
 export default {
   icons: {
@@ -138,8 +139,13 @@ export default {
         const resPassword = await swal.fire({
           title: this.$t("common.exit"),
           text: this.$t("common.exitAbandonUnsavedChanges"),
-          confirmButtonText: "Confirm"
+          confirmButtonText: this.$t("common.confirm"),
+          showCancelButton: true,
+          cancelButtonText: this.$t("common.cancel")
         });
+        if (!resPassword.isConfirmed) {
+          return;
+        }
         const res = await dbService.getUserById(this.$store.state.id);
         if (!res) {
           return;
@@ -154,8 +160,13 @@ export default {
           title: this.$t("common.password"),
           text: this.$t("common.enterPassword"),
           input: "password",
-          confirmButtonText: "Confirm"
+          confirmButtonText: "Confirm",
+          showCancelButton: true,
+          cancelButtonText: this.$t("common.cancel")
         });
+        if (!resPassword.isConfirmed) {
+          return;
+        }
         if (!(await bcrypt.compare(resPassword.value, this.user.password))) {
           swal.fire({
             icon: "error",

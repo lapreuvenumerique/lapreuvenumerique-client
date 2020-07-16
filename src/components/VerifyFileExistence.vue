@@ -13,11 +13,13 @@
               @vdropzone-success="(file, response) => this.uploadProof(file)"
             >
               <div class="dropzone-custom-content">
-                <h3 class="dropzone-custom-title">{{this.$t("proofDeposit.uploadProof")}}</h3>
-                <div class="subtitle">{{this.$t("proofDeposit.uploadProofSubtitle")}}</div>
+                <h3 class="dropzone-custom-title">{{this.$t("fileExistence.uploadProof")}}</h3>
+                <div class="subtitle">{{this.$t("fileExistence.uploadProofSubtitle")}}</div>
               </div>
             </vue-dropzone>
-            <v-btn color="primary" @click="sendProof()" class="mt-10">{{$t("common.submit")}}</v-btn>
+            <div class="text-right">
+              <v-btn color="primary" @click="sendProof()" class="mt-10">{{$t("common.submit")}}</v-btn>
+            </div>
           </v-col>
         </v-row>
       </v-form>
@@ -28,7 +30,7 @@
 <script>
 import proofService from "@/service/proof-service";
 import vue2Dropzone from "vue2-dropzone";
-import swal from "sweetalert2"
+import swal from "sweetalert2";
 export default {
   data() {
     return {
@@ -62,20 +64,29 @@ export default {
         let formData = new FormData();
         formData.append("file", this.proofData);
         const res1 = await proofService.getFingerprint(formData);
-        const res2 = await proofService.compareFingerprints({fingerprint : res1.data.fingerprint});
+        const res2 = await proofService.compareFingerprints({
+          fingerprint: res1.data.fingerprint
+        });
         if (res2.data.status == "SUCCESS") {
           swal.fire({
-              title: this.$t("common.success"),
-              text: this.$tc("fileExistence.fileExists", {count : res2.data.ids.length}) + " " + res2.data.ids,
-              confirmButtonText: "OK!"
-          })
+            icon: "success",
+            title: this.$t("common.success"),
+            text:
+              this.$tc("fileExistence.fileExists", {
+                count: res2.data.ids.length
+              }) +
+              " " +
+              res2.data.ids,
+            confirmButtonText: "OK!"
+          });
           return true;
         } else {
           swal.fire({
-              title: this.$t("common.error"),
-              text: this.$tc("fileExistence.noFileExists"),
-              confirmButtonText: "OK!"
-          })
+            icon: "error",
+            title: this.$t("common.error"),
+            text: this.$tc("fileExistence.noFileExists"),
+            confirmButtonText: "OK!"
+          });
           console.log(res2.data);
           return false;
         }

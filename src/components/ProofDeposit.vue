@@ -3,7 +3,7 @@
     <v-row>
       <v-col cols="10" md="10" sm="7"></v-col>
       <v-col cols="2" md="2" sm="5">
-        <v-card class="green lighten-1 white--text" align="right">
+        <v-card :class="credits > 50? 'green':'red'" class="lighten-1 white--text" align="right">
           <v-row align="center" justify="center">
             <v-col cols="6" class="text-left px-7">
               <v-icon

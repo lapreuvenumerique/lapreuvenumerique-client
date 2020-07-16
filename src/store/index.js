@@ -7,11 +7,9 @@ Vue.use(VueCryptojs)
 
 export default new Vuex.Store({
   state: {
-
     id: "",
     apiKey: "",
     customerUid: ""
-
   },
   mutations: {
     setId(state, id) {

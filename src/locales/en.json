@@ -24,7 +24,7 @@
   "home":{
     "proofDeposit":"Proof deposit",
     "proofSearch":"Proof search",
-    "docVerify":"Verify a document",
+    "docVerify":"Verify a file",
     "integrity":"Integrity",
     "settings":"Settings",
     "dropzoneHeader":"Drop your profile picture here",
@@ -53,9 +53,11 @@
     "blockchainIntegrityIncorrect": "The integrity of the blockchain is incorrect. Please contact your administrator"
   },
   "fileExistence":{
-    "verifyFileExistence": "Verify existence of a proof",
+    "verifyFileExistence": "Verify existence of a file",
     "fileExists": "File exists with id : | Files exist with ids :",
-    "noFileExists": "No file exists with this fingerprint"
+    "noFileExists": "No file exists with this fingerprint",
+    "uploadProof": "Upload your file",
+    "uploadProofSubtitle": "Drag or click to browse"
   },
   "common":{
     "togglelist":{
@@ -89,6 +91,7 @@
     "save": "Save",
     "reset" : "Reset",
     "register" : "Register",
+    "cancel": "Cancel",
     "displayNameLabel" : "Display name",
     "uidRequired": "Customer UID required",
     "apiKeyRequired": "API key required",

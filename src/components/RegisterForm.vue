@@ -35,12 +35,7 @@
                 </vue-dropzone>
               </v-col>
               <v-col cols="4" v-if="this.submitMethod == 'update'">
-                <v-btn
-                  color="primary"
-                  @click="updatingPassword = !updatingPassword"
-                  v-if="!updatingPassword"
-                >{{this.$t("common.changePassword")}}</v-btn>
-                <div v-if="this.updatingPassword">
+                <div>
                   <v-text-field
                     v-model="password"
                     :append-icon="passwordeyevalue ? 'mdi-eye' : 'mdi-eye-off'"
@@ -60,8 +55,7 @@
                 </div>
                 <v-btn
                   color="primary"
-                  @click="changePassword(); updatingPassword = !updatingPassword"
-                  v-if="updatingPassword"
+                  @click="changePassword();"
                 >{{this.$t("common.validatePassword")}}</v-btn>
               </v-col>
             </v-row>
@@ -127,6 +121,17 @@
 
             <h4 class="mt-8">{{this.$t("common.togglelist.title")}}</h4>
             <v-row>
+              <v-col cols="6">
+                <v-row dense>
+                  <v-col cols="3"></v-col>
+                  <v-col cols="3" class="text-center">
+                    <span>{{this.$t("common.togglelist.available")}}</span>
+                  </v-col>
+                  <v-col cols="3" class="text-center">
+                    <span>{{this.$t("common.togglelist.required")}}</span>
+                  </v-col>
+                </v-row>
+              </v-col>
               <v-col cols="6">
                 <v-row dense>
                   <v-col cols="3"></v-col>
