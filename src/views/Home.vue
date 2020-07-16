@@ -31,9 +31,14 @@
                   </v-list-item-content>
                 </v-list-item>
                 <div style="botton: 10px;left: 10px">
-                  <h2
-                    style="position:absolute;bottom:10px;left:20px"
-                  >{{ $tc("common.credits", credits) + " : " + credits }}</h2>
+                  <h3
+                    style="position:absolute;bottom:65px;left:20px"
+                  >{{ $tc("common.credits", credits) + " : " + credits }}</h3>
+                  <v-btn
+                    color="primary"
+                    style="position:absolute;bottom:20px;left:20px"
+                    @click="$router.push('/login')"
+                  >Disconnect</v-btn>
                 </div>
               </v-list>
             </div>
