@@ -6,8 +6,18 @@
         <v-col>
           <v-row>
             <v-col cols="4">
-              <v-text-field v-model="user.displayName" label="Display name"></v-text-field>
-              <v-text-field v-model="user.username" label="Username"></v-text-field>
+              <v-text-field
+                v-model="user.displayName"
+                :label="$t('common.displayNameLabel')"
+                required
+                outlined
+              ></v-text-field>
+              <v-text-field
+                v-model="user.username"
+                :label="$t('common.usernameLabel')"
+                required
+                outlined
+              ></v-text-field>
             </v-col>
             <v-col v-on:vdropzone-success="uploadImage(file)" cols="4">
               <vue-dropzone
@@ -58,13 +68,22 @@
             <v-col>
               <span>
                 <v-text-field
+                  v-model="user.email"
+                  :type="email"
+                  :label="this.$t('common.email')"
+                  required
+                  outlined
+                ></v-text-field>
+                <v-text-field
+                  outlined
                   v-if="this.submitMethod == 'register'"
                   v-model="password"
                   :append-icon="passwordeyevalue ? 'mdi-eye' : 'mdi-eye-off'"
                   :rules="passwordRules"
                   :type="passwordeyevalue ? 'password' : 'text'"
                   @click:append="() => (passwordeyevalue = !passwordeyevalue)"
-                  :label="this.submitMethod == 'update'? this.$t('home.newPassword'): this.$t('home.password')"
+                  :label="this.$t('home.password')"
+                  required
                 ></v-text-field>
                 <v-text-field
                   v-if="this.submitMethod == 'register'"
@@ -74,6 +93,8 @@
                   :type="confirmPasswordeyevalue ? 'password' : 'text'"
                   @click:append="() => (confirmPasswordeyevalue = !confirmPasswordeyevalue)"
                   :label="this.$t('home.confirmPassword')"
+                  required
+                  outlined
                 ></v-text-field>
                 <v-alert
                   v-if="this.passwordError"
@@ -82,18 +103,23 @@
                 >{{$t("home.passwordDifferent")}}</v-alert>
                 <v-text-field
                   v-model="user.customerUid"
+                  outlined
                   :rules="customerUIDRules"
+                  required
                   :label="this.$t('common.uidLabel')"
                 ></v-text-field>
                 <v-text-field
                   v-model="user.apiKey"
                   :append-icon="apiKeyeyevalue ? 'mdi-eye' : 'mdi-eye-off'"
+                  outlined
                   :rules="apiKeyRules"
+                  required
                   :type="apiKeyeyevalue ? 'password' : 'text'"
                   @click:append="() => (apiKeyeyevalue = !apiKeyeyevalue)"
                   :label="this.$t('common.apiKeyLabel')"
                 ></v-text-field>
               </span>
+              <v-switch inset :label="$t('proofDeposit.allowDuplicate')" v-model="allowDuplicate"></v-switch>
             </v-col>
           </v-row>
 
@@ -150,6 +176,8 @@ import VueCryptojs from "vue-cryptojs";
 export default {
   data() {
     return {
+      email: "",
+      allowDuplicate: false,
       updatingPassword: false,
       customerUIDRules: [
         value => !!value || this.$t("common.uidRequired"),
@@ -191,8 +219,8 @@ export default {
           enabled2: false
         },
         {
-          index: "fileNumber",
-          title: this.$t("common.togglelist.fileNumber"),
+          index: "folderName",
+          title: this.$t("common.togglelist.folderName"),
           enabled1: false,
           enabled2: false
         },
@@ -331,7 +359,9 @@ export default {
           this.user.displayName,
           encryptedApiKey,
           encryptedCustomer,
-          properties
+          properties,
+          this.user.userPicture,
+          this.user.email
         );
 
         if (res.status == "SUCCESS") {
@@ -353,10 +383,11 @@ export default {
           this.$store.state.id,
           this.user.username,
           this.user.displayName,
-          this.user.userPicture,
           encryptedApiKey,
           encryptedCustomer,
-          properties
+          properties,
+          this.user.userPicture,
+          this.user.email
         );
 
         if (res.status == "SUCCESS") {
@@ -373,9 +404,19 @@ export default {
     },
 
     async changePassword() {
+      if (this.password != this.confirmPassword) {
+        swal.fire({
+          title: this.$t("common.passwordDifferentTitle"),
+          text: this.$t("common.passwordDifferent"),
+          icon: "error",
+          confirmButtonText: "OK"
+        });
+        return;
+      }
       const res = await dbService.updatePasswordById(
         this.user.id,
-        this.password.trim().length > 0
+        this.password.trim().length > 0 &&
+          this.confirmPassword.trim().length > 0
           ? await bcrypt.hash(this.confirmPassword, 12)
           : this.user.password
       );

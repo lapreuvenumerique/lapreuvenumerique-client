@@ -1,5 +1,6 @@
 import axios from 'axios';
 import * as cfg from "../config"
+import store from "../store/index"
 
 axios.defaults.baseURL = cfg.getServerUrl();
 
@@ -44,8 +45,8 @@ export class HttpService {
     }
 
     getHeaders() {
-        const headers = {'Authorization': 'Basic ' + localStorage.getItem('apiKey'),
-        'x-customeruid': localStorage.getItem("customerUID")}
+        const headers = {'Authorization': 'Basic ' + store.state.apiKey,
+        'x-customeruid': store.state.customerUid}
         return headers
     }
 

@@ -41,13 +41,16 @@
     "uploadProofSubtitle": "Drag or click to browse",
     "allowDuplicate" : "Allow duplicate files"
   },
+  "integrity" :{
+    "dataIntergrity": "Data Integirty"
+  },
   "common":{
     "togglelist":{
       "title" : "Information needed",
       "available" : "Available",
       "required" : "Required",
       "file" : "File",
-      "fileNumber" : "Folder name",
+      "folderName" : "Folder name",
       "reference" : "Reference",
       "uids" : "Linked UID",
       "copy" : "Email copy",
@@ -87,6 +90,15 @@
     "enterPassword": "Enter your password",
     "notCorrespondingPassword": "The password doesn't correspond to the one you entered",
     "exit" : "Exit ?",
-    "exitAbandonUnsavedChanges" : "Exit and abandon unsaved changes ?"
+    "exitAbandonUnsavedChanges" : "Exit and abandon unsaved changes ?",
+    "confirmUpload": "Confirm data upload ?",
+    "confirm" : "Confirm",
+    "dataUploaded": "Data uploaded successfully!",
+    "dataNotUploaded": "Data failed to upload",
+    "errorUpload" : "ERROR!",
+    "credentialsIncorrect" : "Credentials incorrect",
+    "email": "E-Mail",
+    "passwordDifferentTitle": "Password error",
+    "passwordDifferent" : "Passwords are different"
   }
 }

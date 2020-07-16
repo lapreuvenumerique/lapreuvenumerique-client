@@ -71,6 +71,19 @@ export default {
       const response = await dbService.login(this.username, this.password);
       if (response.status != "FAILED") {
         this.$store.commit("setId", response.user.id);
+        const encryptedKey = dbService.getSecretKey();
+        const decryptedApi = this.CryptoJS.AES.decrypt(
+          response.user.apiKey,
+          encryptedKey
+        ).toString(this.CryptoJS.enc.Utf8);
+        const decryptedUid = this.CryptoJS.AES.decrypt(
+          response.user.customerUid,
+          encryptedKey
+        ).toString(this.CryptoJS.enc.Utf8);
+        this.$store.commit("setCredentials", {
+          customerUid: decryptedUid,
+          apiKey: decryptedApi
+        });
         this.$router.push("/");
       } else {
         this.errorCredentials = true;

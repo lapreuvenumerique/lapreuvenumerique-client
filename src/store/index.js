@@ -9,15 +9,17 @@ export default new Vuex.Store({
   state: {
 
     id: "",
-    keyEncryptedApiKey: "LaPreuveNumerique"
+    apiKey: "",
+    customerUid: ""
 
   },
   mutations: {
     setId(state, id) {
       state.id = id
     },
-    setKey(state, key) {
-      state.encryptKeyApiKey = key
+    setCredentials(state, keys){
+      state.apiKey = keys.apiKey
+      state.customerUid = keys.customerUid
     }
   },
   actions: {

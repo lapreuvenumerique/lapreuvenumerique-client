@@ -17,7 +17,8 @@ export default {
       user: {
         customerUid: "",
         apiKey: "",
-        username: ""
+        username: "",
+        email: ""
       }
     };
   },
