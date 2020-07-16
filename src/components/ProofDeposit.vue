@@ -3,7 +3,11 @@
     <v-card class="pa-8">
       <h2 class="mb-5">{{this.$t("proofDeposit.proofDeposit")}}</h2>
       <v-row>
-        <v-col cols="6" v-if="fileUpload">
+        
+      </v-row>
+      <v-form v-model="isValid">
+        <v-row>
+          <v-col cols="6" v-if="fileUpload">
           <vue-dropzone
             ref="proofDropzone"
             id="dropzone"
@@ -17,9 +21,6 @@
             </div>
           </vue-dropzone>
         </v-col>
-      </v-row>
-      <v-form v-model="isValid">
-        <v-row>
           <v-col cols="6" v-for="input in inputs" :key="input.title">
             <v-text-field
               :label="$t(`common.togglelist.${input.title}`)"
