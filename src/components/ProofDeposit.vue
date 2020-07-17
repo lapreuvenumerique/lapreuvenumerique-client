@@ -121,8 +121,14 @@ export default {
       let formData = new FormData();
       const alertRes = await Swal.fire({
         title: this.$t("common.confirmUpload"),
+        text: this.$t("proofDeposit.price") + " : " + "???",
+        showCancelButton: true,
+        cancelButtonText: this.$t("common.cancel"),
         confirmButtonText: this.$t("common.confirm")
       });
+      if(!alertRes.isConfirmed){
+        return
+      }
       for (let i = 0; i < this.inputs.length; i++) {
         if (this.inputs[i].value) {
           if (this.inputs[i].title == "copy") {
