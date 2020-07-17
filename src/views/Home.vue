@@ -116,7 +116,7 @@ export default {
   },
 
   async mounted() {
-    this.version = process.env.VUE_APP_APPLICATION_VERSION
+    this.version = VUE_APP_APPLICATION_VERSION
     const res = await dbService.getUserById(this.$store.state.id);
     if (!res) {
       return;
