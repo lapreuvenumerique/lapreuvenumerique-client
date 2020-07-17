@@ -31,7 +31,6 @@ export default {
     };
   },
   props: {
-    waitSeconds: Number
   },
   methods: {
     async verifyIntegrity() {
