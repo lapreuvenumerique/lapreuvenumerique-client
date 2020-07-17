@@ -2,11 +2,12 @@
   <v-container>
     <v-card class="pa-8">
       <h2 class="mb-5">{{this.$t("home.settings") + " :"}}</h2>
-      <v-form v-model="isValid">
-        <v-row>
-          <v-col>
-            <v-row>
-              <v-col cols="4">
+
+      <v-row>
+        <v-col>
+          <v-row>
+            <v-col cols="4">
+              <v-form v-model="isValid">
                 <v-text-field
                   v-model="user.displayName"
                   :label="$t('common.displayNameLabel')"
@@ -19,8 +20,9 @@
                   required
                   outlined
                 ></v-text-field>
-              </v-col>
-              <v-col v-on:vdropzone-success="uploadImage(file)" cols="4">
+              </v-form>
+            </v-col>
+            <v-col v-on:vdropzone-success="uploadImage(file)" cols="4">
                 <vue-dropzone
                   ref="imageDropzone"
                   id="dropzone"
@@ -33,32 +35,31 @@
                     <div class="subtitle">{{this.$t("home.dropzoneSubtitle")}}</div>
                   </div>
                 </vue-dropzone>
-              </v-col>
-              <v-col cols="4" v-if="this.submitMethod == 'update'">
-                <div>
-                  <v-text-field
-                    v-model="password"
-                    :append-icon="passwordeyevalue ? 'mdi-eye' : 'mdi-eye-off'"
-                    :rules="passwordRules"
-                    :type="passwordeyevalue ? 'password' : 'text'"
-                    @click:append="() => (passwordeyevalue = !passwordeyevalue)"
-                    :label="this.$t('home.newPassword')"
-                  ></v-text-field>
-                  <v-text-field
-                    v-model="confirmPassword"
-                    :append-icon="confirmPasswordeyevalue ? 'mdi-eye' : 'mdi-eye-off'"
-                    :rules="confirmPasswordRules"
-                    :type="confirmPasswordeyevalue ? 'password' : 'text'"
-                    @click:append="() => (confirmPasswordeyevalue = !confirmPasswordeyevalue)"
-                    :label="this.$t('home.confirmNewPassword')"
-                  ></v-text-field>
-                </div>
-                <v-btn
-                  color="primary"
-                  @click="changePassword();"
-                >{{this.$t("common.validatePassword")}}</v-btn>
-              </v-col>
-            </v-row>
+            </v-col>
+            <v-col cols="auto" v-if="this.submitMethod == 'update'">
+              <v-text-field
+                v-model="password"
+                :append-icon="passwordeyevalue ? 'mdi-eye' : 'mdi-eye-off'"
+                :rules="passwordRules"
+                :type="passwordeyevalue ? 'password' : 'text'"
+                @click:append="() => (passwordeyevalue = !passwordeyevalue)"
+                :label="this.$t('home.newPassword')"
+              ></v-text-field>
+              <v-text-field
+                v-model="confirmPassword"
+                :append-icon="confirmPasswordeyevalue ? 'mdi-eye' : 'mdi-eye-off'"
+                :rules="confirmPasswordRules"
+                :type="confirmPasswordeyevalue ? 'password' : 'text'"
+                @click:append="() => (confirmPasswordeyevalue = !confirmPasswordeyevalue)"
+                :label="this.$t('home.confirmNewPassword')"
+              ></v-text-field>
+              <v-btn
+                color="primary"
+                @click="changePassword();"
+              >{{this.$t("common.validatePassword")}}</v-btn>
+            </v-col>
+          </v-row>
+          <v-form v-model="isValid2">
             <v-row>
               <v-col>
                 <span>
@@ -164,9 +165,9 @@
                 </v-row>
               </v-col>
             </v-row>
-          </v-col>
-        </v-row>
-      </v-form>
+          </v-form>
+        </v-col>
+      </v-row>
       <v-row>
         <v-col class="text-right">
           <v-btn @click="register" color="primary">{{$t("register.save")}}</v-btn>
@@ -198,7 +199,7 @@ export default {
       passwordeyevalue: true,
       password: "",
       passwordRules: [
-        value => !!value || this.$t("common.passwordRequired"),
+        value => !!value || this.$t("common.uidRequired"),
         value =>
           value.search(/((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,30})/g) != -1 ||
           this.$t("common.passwordWrong")
@@ -207,7 +208,7 @@ export default {
       confirmPassword: "",
       passwordError: false,
       confirmPasswordRules: [
-        value => !!value || this.$t("common.passwordRequired"),
+        value => !!value || this.$t("common.uidRequired"),
         value =>
           value.search(/((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,30})/g) != -1 ||
           this.$t("common.passwordWrong")
@@ -292,7 +293,8 @@ export default {
           enabled2: false
         }
       ],
-      isValid: false
+      isValid: false,
+      isValid2: false
     };
   },
   props: {
@@ -327,7 +329,9 @@ export default {
       this.user.userPicture = file.dataURL;
     },
     async register() {
-      if (this.isValid) {
+      console.log(this.isValid)
+      console.log(this.isValid2)
+      if (this.isValid && this.isValid2) {
         if (this.submitMethod == "register") {
           if (this.password != this.confirmPassword) {
             this.passwordError = true;

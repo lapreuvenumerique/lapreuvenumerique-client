@@ -109,6 +109,7 @@ export default {
     async updateCredits() {
       const credit = await clientService.getCredits();
       this.credits = credit.data.credits;
+      console.log(this.credits)
     },
     uploadProof(file) {
       this.proofData = file;

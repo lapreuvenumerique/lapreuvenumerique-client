@@ -39,7 +39,7 @@
                     <v-icon class="mdi">mdi-logout</v-icon>
                   </v-btn>
                 </div>
-                  <span style="bottom: 10px;right: 10px">{{process.env.APPLICATION_VERSION}}</span>
+                  <b style="position:absolute;bottom: 10px;right: 15px;font-size:10px">v{{version}}</b>
               </v-list>
             </div>
           </v-navigation-drawer>
@@ -65,7 +65,6 @@ import ProofDeposit from "@/components/ProofDeposit.vue";
 import Integrity from "@/components/Integrity";
 import clientService from "@/service/client-service";
 import VerifyFileExistence from "@/components/VerifyFileExistence";
-import process from "process"
 import bcrypt from "bcryptjs";
 export default {
   icons: {
@@ -105,7 +104,8 @@ export default {
         },
         { title: this.$t("home.settings"), icon: "mdi-cog", label: "settings" }
       ],
-      credits: 0
+      credits: 0,
+      version: ""
     };
   },
   components: {
@@ -116,6 +116,7 @@ export default {
   },
 
   async mounted() {
+    this.version = process.env.VUE_APP_APPLICATION_VERSION
     const res = await dbService.getUserById(this.$store.state.id);
     if (!res) {
       return;
