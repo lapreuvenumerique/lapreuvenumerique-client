@@ -245,12 +245,6 @@ export default {
           enabled2: false
         },
         {
-          index: "identity",
-          title: this.$t("common.togglelist.identity"),
-          enabled1: true,
-          enabled2: false
-        },
-        {
           index: "batchNumber",
           title: this.$t("common.togglelist.batchNumber"),
           enabled1: true,
@@ -269,26 +263,8 @@ export default {
           enabled2: false
         },
         {
-          index: "visa",
-          title: this.$t("common.togglelist.visa"),
-          enabled1: true,
-          enabled2: false
-        },
-        {
           index: "keywords",
           title: this.$t("common.togglelist.keywords"),
-          enabled1: true,
-          enabled2: false
-        },
-        {
-          index: "okkayId",
-          title: this.$t("common.togglelist.okkayId"),
-          enabled1: true,
-          enabled2: false
-        },
-        {
-          index: "filename",
-          title: this.$t("common.togglelist.filename"),
           enabled1: true,
           enabled2: false
         }
@@ -380,8 +356,14 @@ export default {
             this.user.noDuplicate,
             this.user.keepFiles
           );
-
+          let successAlert = swal.fire({
+          title: this.$t("common.success"),
+          text: this.$t("register.accountCreated"),
+          icon: "success",
+          showConfirmButton: true,
+        });
           if (res.status == "SUCCESS") {
+
             this.$router.push("/login");
           } else {
             this.errorUsername = true;

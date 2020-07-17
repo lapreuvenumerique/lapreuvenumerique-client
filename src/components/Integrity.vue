@@ -30,6 +30,9 @@ export default {
       result: ""
     };
   },
+  props: {
+    waitSeconds: Number
+  },
   methods: {
     async verifyIntegrity() {
       this.isLoading = true;
@@ -60,7 +63,8 @@ export default {
         " " +
         this.$tc("integrity.recordIsCorrect", { count: res.data.number });
       this.isLoading = false;
-      this.waitForSeconds(20);
+      this.waitSeconds = 20;
+      this.waitForSeconds();
       swal.fire({
         icon: "success",
         title: this.$t("common.success"),
@@ -73,15 +77,16 @@ export default {
         confirmButtonText: "OK!"
       });
     },
-    waitForSeconds(index) {
-      if (index == 0) {
+    waitForSeconds() {
+      if (this.waitSeconds == 0) {
         this.wait = false;
         this.btnText = this.$t("integrity.verify");
         return;
       } else {
-        this.btnText = this.$t("integrity.waitFor") + " " + index;
-        +" " + this.$tc("integrity.second", { count: index });
-        setTimeout(() => this.waitForSeconds(index - 1), 1000);
+        this.btnText = this.$t("integrity.waitFor") + " " + this.waitSeconds;
+        +" " + this.$tc("integrity.second", { count: this.waitSeconds });
+        this.waitSeconds--;
+        setTimeout(() => this.waitForSeconds(), 1000);
       }
     }
   }

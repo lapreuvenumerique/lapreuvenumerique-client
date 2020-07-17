@@ -13,7 +13,7 @@
               >mdi-currency-usd-circle-outline</v-icon>
             </v-col>
             <v-col cols="6" class="text-right px-7">
-              <span style="font-size:15px; font-weight: 300;">{{ $tc("common.credits", credits)}}</span>
+              <span style="font-size:15px; font-weight: 300;">{{ $tc("common.creditMaj", credits)}}</span>
               <br />
               <b style="font-size:25px;">{{credits}}</b>
             </v-col>
@@ -48,6 +48,28 @@
               v-model="input.value"
             ></v-text-field>
           </v-col>
+          <v-col v-for="chipinput in chipsinputs" :key="chipinput.title" cols="6">
+            <v-combobox
+              v-model="chipinput.value"
+              chips
+              clearable
+              :label="$t(`common.togglelist.${chipinput.title}`)"
+              multiple
+              solo
+            >
+              <template v-slot:selection="{ attrs, item, select, selected }">
+                <v-chip
+                  v-bind="attrs"
+                  :input-value="selected"
+                  close
+                  @click="select"
+                  @click:close="remove(chipinput, item)"
+                >
+                  <strong>{{ item }}</strong>
+                </v-chip>
+              </template>
+            </v-combobox>
+          </v-col>
         </v-row>
         <v-col cols="12" style="text-align: right;">
           <v-btn @click="sendProof()" color="primary">{{$t('common.submit')}}</v-btn>
@@ -67,6 +89,7 @@ export default {
     return {
       proofData: String,
       inputs: [],
+      chipsinputs: [],
       credits: 0,
       dropzoneOptions: {
         url: "https://httpbin.org/post",
@@ -101,6 +124,14 @@ export default {
       if (properties[i] == "file" && currentProperty != 0) {
         continue;
       }
+      if (properties[i] == "copy" || properties[i] == "keywords") {
+        this.chipsinputs.push({
+          title: properties[i],
+          required: currentProperty == 2,
+          value: ""
+        });
+        continue;
+      }
       this.inputs.push({
         title: properties[i],
         required: currentProperty == 2,
@@ -126,42 +157,51 @@ export default {
     }
   },
   methods: {
+    remove(input, item) {
+      input.value.splice(input.value.indexOf(item), 1);
+      input.value = [...input.value];
+    },
     async updateCredits() {
       const credit = await clientService.getCredits();
       this.credits = credit.data.credits;
     },
     uploadProof(file) {
       this.proofData = file;
-      let rgpdDuration = this.inputs[7].value
-      if(!rgpdDuration){
-        rgpdDuration = 2
-      }
-      this.creditCost = this.handleCreditCost(
-        file.size / 1024,
-        rgpdDuration,
-        this.clientInfo
-      );
     },
-    handleCreditCost(filesize, rgpdDuration, client) {
+
+    handleCreditCost() {
+      const file = this.proofData;
+      let rgpdDuration = this.inputs[7].value;
+      if (!rgpdDuration) {
+        rgpdDuration = 2;
+      }
       const cost =
-        Math.ceil(filesize / client.creditSizeKo) *
+        Math.ceil(file.size / 1024 / this.clientInfo.creditSizeKo) *
         rgpdDuration *
-        client.creditFile;
-      console.log(cost);
-      return cost;
+        this.clientInfo.creditFile;
+      this.creditCost = cost;
+      return;
     },
     async sendProof() {
       if (!this.isValid) {
         return;
       }
       let formData = new FormData();
+      this.handleCreditCost();
+      console.log(this.$tc("common.credit", { count: 1 }));
       const alertRes = await Swal.fire({
         title: this.$t("common.confirmUpload"),
-        text: this.$t("proofDeposit.price") + " : " + this.creditCost + this.$tc("common.credits", {count : this.creditCost}),
+        text:
+          this.$t("proofDeposit.price") +
+          " : " +
+          this.creditCost +
+          " " +
+          this.$tc("common.credit", { count: parseInt(this.creditCost, 10) }),
         showCancelButton: true,
         cancelButtonText: this.$t("common.cancel"),
         confirmButtonText: this.$t("common.confirm")
       });
+
       if (!alertRes.isConfirmed) {
         return;
       }
@@ -178,9 +218,9 @@ export default {
       }
       formData.append("file", this.proofData);
       formData.append("noDuplicate", this.user.noDuplicate);
-      formData.append("sourceApp", "electronApp");
       formData.append("keepFile", this.user.keepFiles);
       formData.append("email", this.user.email);
+      formData.append("identity", this.user.username);
       try {
         let waitAlert = Swal.fire({
           title: this.$t("common.wait"),

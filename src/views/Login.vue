@@ -67,7 +67,6 @@ export default {
       this.$router.push("/register");
     },
     async login() {
-      //console.log(await dbService.resetDB())
       const response = await dbService.login(this.username, this.password);
       if (response.status != "FAILED") {
         this.$store.commit("setId", response.user.id);

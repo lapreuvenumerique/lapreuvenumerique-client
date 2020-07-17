@@ -39,7 +39,7 @@
                     <v-icon class="mdi">mdi-logout</v-icon>
                   </v-btn>
                 </div>
-                  <b style="position:absolute;bottom: 10px;right: 15px;font-size:10px">v{{version}}</b>
+                <b style="position:absolute;bottom: 10px;right: 15px;font-size:10px">v{{version}}</b>
               </v-list>
             </div>
           </v-navigation-drawer>
@@ -48,8 +48,9 @@
       <v-col cols="10">
         <register-form v-if="this.pageOpened=='settings'" submitMethod="update" :user="user"></register-form>
         <proof-deposit v-if="this.pageOpened=='proofDeposit'" :user="user"></proof-deposit>
-        <integrity v-if="this.pageOpened=='integrity'"></integrity>
+        <integrity v-if="this.pageOpened=='integrity'" waitSeconds="20"></integrity>
         <verify-file-existence v-if="this.pageOpened=='docVerify'"></verify-file-existence>
+        <query-proof v-if="this.pageOpened == 'proofSearch'"></query-proof>
       </v-col>
     </v-row>
   </v-container>
@@ -65,6 +66,8 @@ import ProofDeposit from "@/components/ProofDeposit.vue";
 import Integrity from "@/components/Integrity";
 import clientService from "@/service/client-service";
 import VerifyFileExistence from "@/components/VerifyFileExistence";
+import QueryProof from "@/components/QueryProof.vue";
+import * as cfg from "../config";
 import bcrypt from "bcryptjs";
 export default {
   icons: {
@@ -112,11 +115,12 @@ export default {
     RegisterForm,
     ProofDeposit,
     Integrity,
-    VerifyFileExistence
+    VerifyFileExistence,
+    QueryProof
   },
 
   async mounted() {
-    this.version = VUE_APP_APPLICATION_VERSION
+    this.version = cfg.getAppVersion();
     const res = await dbService.getUserById(this.$store.state.id);
     if (!res) {
       return;

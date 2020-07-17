@@ -19,7 +19,11 @@
     "errorServer":"Web service unavailable, please try again later",
     "permissionsInfo":"Set the permissions of the account",
     "save": "Save",
-    "reset": "Reset"
+    "reset": "Reset",
+    "accountCreated": "Account successfully created"
+  },
+  "proofQuery":{
+    "noResponse": "No response to your request"
   },
   "home":{
     "proofDeposit":"Proof deposit",
@@ -42,7 +46,8 @@
     "noDuplicate" : "Don't allow duplicate files",
     "keepFiles": "Allow keeping of files",
     "price" : "Price",
-    "maxSize" : "Max size"
+    "maxSize" : "Max size",
+    "dividedSpaces": "(divided by spaces)"
   },
   "integrity" :{
     "dataIntergrity": "Data integrity",
@@ -67,7 +72,7 @@
       "available" : "Available",
       "required" : "Required",
       "file" : "File",
-      "folderName" : "Folder name",
+      "folderName" : "Folder",
       "reference" : "Reference",
       "uids" : "Linked UID",
       "copy" : "Email copy",
@@ -120,8 +125,10 @@
     "email": "E-Mail",
     "passwordDifferentTitle": "Password error",
     "passwordDifferent" : "Passwords are different",
-    "credits" : "Credit | Credits",
+    "credit" : "credit | credits",
+    "creditMaj" : "Credit | Credits",
     "wait": "Wait",
-    "uploadingData": "Uploading your data..."
+    "uploadingData": "Uploading your data...",
+    "search": "Search"
   }
 }
