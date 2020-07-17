@@ -23,7 +23,7 @@
     </v-row>
     <v-card class="pa-8">
       <h2 class="mb-5">{{this.$t("proofDeposit.proofDeposit")}}</h2>
-      <v-row></v-row>
+      <b style="font-size:25px;">{{$t("proofDeposit.maxSize") + " : " + maxSize}}</b>
       <v-form v-model="isValid">
         <v-row>
           <v-col cols="12">
@@ -74,7 +74,10 @@ export default {
         addRemoveLinks: true,
         maxFiles: 1
       },
-      isValid: false
+      isValid: false,
+      maxSize: "1000ko",
+      clientInfo: {},
+      creditCost: 0
     };
   },
   components: {
@@ -104,15 +107,48 @@ export default {
         value: ""
       });
     }
+    try {
+      const clientInforequest = await clientService.getInfo();
+      this.clientInfo = clientInforequest.data;
+      let resmaxSize = clientInforequest.data.maxSize;
+      let suffix = "Ko";
+      if (resmaxSize > 1024000) {
+        resmaxSize /= 1024000;
+        suffix = "Go";
+      } else if (resmaxSize > 1024) {
+        resmaxSize /= 1024;
+        suffix = "Mo";
+      }
+      resmaxSize = Math.round(resmaxSize);
+      this.maxSize = resmaxSize + suffix;
+    } catch (err) {
+      console.log(err);
+    }
   },
   methods: {
     async updateCredits() {
       const credit = await clientService.getCredits();
       this.credits = credit.data.credits;
-      console.log(this.credits)
     },
     uploadProof(file) {
       this.proofData = file;
+      let rgpdDuration = this.inputs[7].value
+      if(!rgpdDuration){
+        rgpdDuration = 2
+      }
+      this.creditCost = this.handleCreditCost(
+        file.size / 1024,
+        rgpdDuration,
+        this.clientInfo
+      );
+    },
+    handleCreditCost(filesize, rgpdDuration, client) {
+      const cost =
+        Math.ceil(filesize / client.creditSizeKo) *
+        rgpdDuration *
+        client.creditFile;
+      console.log(cost);
+      return cost;
     },
     async sendProof() {
       if (!this.isValid) {
@@ -121,13 +157,13 @@ export default {
       let formData = new FormData();
       const alertRes = await Swal.fire({
         title: this.$t("common.confirmUpload"),
-        text: this.$t("proofDeposit.price") + " : " + "???",
+        text: this.$t("proofDeposit.price") + " : " + this.creditCost + this.$tc("common.credits", {count : this.creditCost}),
         showCancelButton: true,
         cancelButtonText: this.$t("common.cancel"),
         confirmButtonText: this.$t("common.confirm")
       });
-      if(!alertRes.isConfirmed){
-        return
+      if (!alertRes.isConfirmed) {
+        return;
       }
       for (let i = 0; i < this.inputs.length; i++) {
         if (this.inputs[i].value) {
@@ -146,7 +182,15 @@ export default {
       formData.append("keepFile", this.user.keepFiles);
       formData.append("email", this.user.email);
       try {
+        let waitAlert = Swal.fire({
+          title: this.$t("common.wait"),
+          text: this.$t("common.uploadingData"),
+          icon: "info",
+          showConfirmButton: false,
+          allowOutsideClick: false
+        });
         const res = await proofService.uploadProof(formData);
+        await this.updateCredits();
         if (res.data.status == "SUCCESS") {
           Swal.fire({
             title: this.$t("common.saveSuccess"),

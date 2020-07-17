@@ -23,18 +23,18 @@
               </v-form>
             </v-col>
             <v-col v-on:vdropzone-success="uploadImage(file)" cols="4">
-                <vue-dropzone
-                  ref="imageDropzone"
-                  id="dropzone"
-                  :options="dropzoneOptions"
-                  :useCustomSlot="true"
-                  @vdropzone-success="(file, response) => this.uploadImage(file)"
-                >
-                  <div class="dropzone-custom-content">
-                    <h3 class="dropzone-custom-title">{{this.$t("home.dropzoneHeader")}}</h3>
-                    <div class="subtitle">{{this.$t("home.dropzoneSubtitle")}}</div>
-                  </div>
-                </vue-dropzone>
+              <vue-dropzone
+                ref="imageDropzone"
+                id="dropzone"
+                :options="dropzoneOptions"
+                :useCustomSlot="true"
+                @vdropzone-success="(file, response) => this.uploadImage(file)"
+              >
+                <div class="dropzone-custom-content">
+                  <h3 class="dropzone-custom-title">{{this.$t("home.dropzoneHeader")}}</h3>
+                  <div class="subtitle">{{this.$t("home.dropzoneSubtitle")}}</div>
+                </div>
+              </vue-dropzone>
             </v-col>
             <v-col cols="auto" v-if="this.submitMethod == 'update'">
               <v-text-field
@@ -329,8 +329,8 @@ export default {
       this.user.userPicture = file.dataURL;
     },
     async register() {
-      console.log(this.isValid)
-      console.log(this.isValid2)
+      console.log(this.isValid);
+      console.log(this.isValid2);
       if (this.isValid && this.isValid2) {
         if (this.submitMethod == "register") {
           if (this.password != this.confirmPassword) {
@@ -350,6 +350,14 @@ export default {
           }
           properties[this.toggles[i].index] = val;
         }
+        
+        let waitAlert = swal.fire({
+          title: this.$t("common.wait"),
+          text: this.$t("common.uploadingData"),
+          icon: "info",
+          showConfirmButton: false,
+          allowOutsideClick: false
+        });
         if (this.submitMethod == "register") {
           const encryptedKey = dbService.getSecretKey();
           const encryptedApiKey = this.CryptoJS.AES.encrypt(

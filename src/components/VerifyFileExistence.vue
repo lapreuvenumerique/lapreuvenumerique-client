@@ -63,6 +63,13 @@ export default {
       if (this.proofData) {
         let formData = new FormData();
         formData.append("file", this.proofData);
+        let waitAlert = swal.fire({
+          title: this.$t("common.wait"),
+          text: this.$t("common.uploadingData"),
+          icon: "info",
+          showConfirmButton: false,
+          allowOutsideClick: false
+        });
         const res1 = await proofService.getFingerprint(formData);
         const res2 = await proofService.compareFingerprints({
           fingerprint: res1.data.fingerprint

@@ -34,12 +34,19 @@ export default {
     async verifyIntegrity() {
       this.isLoading = true;
       this.wait = true;
+      let waitAlert = swal.fire({
+        title: this.$t("common.wait"),
+        text: this.$t("common.uploadingData"),
+        icon: "info",
+        showConfirmButton: false,
+        allowOutsideClick: false
+      });
       const res = await integrityService.verifyIntegrity();
       if (res.data.status == "FAILED") {
         this.result = res.data.message;
         this.isLoading = false;
         swal.fire({
-          icon:"error",
+          icon: "error",
           title: this.$t("common.error"),
           text: this.$t("integrity.blockchainIntegrityIncorrect"),
           confirmButtonText: "OK!"
@@ -55,7 +62,7 @@ export default {
       this.isLoading = false;
       this.waitForSeconds(20);
       swal.fire({
-        icon:"success",
+        icon: "success",
         title: this.$t("common.success"),
         text:
           this.$t("integrity.integrityOfBlockchain") +

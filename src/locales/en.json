@@ -40,7 +40,9 @@
     "uploadProof": "Upload your proof",
     "uploadProofSubtitle": "Drag or click to browse",
     "noDuplicate" : "Don't allow duplicate files",
-    "keepFiles": "Allow keeping of files"
+    "keepFiles": "Allow keeping of files",
+    "price" : "Price",
+    "maxSize" : "Max size"
   },
   "integrity" :{
     "dataIntergrity": "Data integrity",
@@ -118,6 +120,8 @@
     "email": "E-Mail",
     "passwordDifferentTitle": "Password error",
     "passwordDifferent" : "Passwords are different",
-    "credits" : "Credit | Credits"
+    "credits" : "Credit | Credits",
+    "wait": "Wait",
+    "uploadingData": "Uploading your data..."
   }
 }
