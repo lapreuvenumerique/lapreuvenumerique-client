@@ -48,6 +48,9 @@
               v-model="input.value"
             ></v-text-field>
           </v-col>
+          <v-col cols="6">
+            <v-select :items="topics" label="Topic" v-model="topic" dense outlined></v-select>
+          </v-col>
           <v-col v-for="chipinput in chipsinputs" :key="chipinput.title" cols="6">
             <v-combobox
               v-model="chipinput.value"
@@ -100,13 +103,16 @@ export default {
       isValid: false,
       maxSize: "1000ko",
       clientInfo: {},
-      creditCost: 0
+      creditCost: 0,
+      topics: [],
+      topic: []
     };
   },
   components: {
     vueDropzone: vue2Dropzone
   },
   async mounted() {
+    this.loadTopics();
     this.updateCredits();
     const dropzone = this.$refs.proofDropzone;
     if (dropzone) {
@@ -130,6 +136,9 @@ export default {
           required: currentProperty == 2,
           value: ""
         });
+        continue;
+      }
+      if (properties[i] == "topic") {
         continue;
       }
       this.inputs.push({
@@ -157,6 +166,19 @@ export default {
     }
   },
   methods: {
+    async loadTopics() {
+      try {
+        const res = await clientService.getTopics();
+        console.log(res.data.topics);
+        for (let i = 0; i < res.data.topics.length; i++) {
+          console.log(res.data.topics[i].name)
+          this.topics.push(res.data.topics[i].name);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
     remove(input, item) {
       input.value.splice(input.value.indexOf(item), 1);
       input.value = [...input.value];
@@ -171,9 +193,12 @@ export default {
 
     handleCreditCost() {
       const file = this.proofData;
-      let rgpdDuration = this.inputs[7].value;
-      if (!rgpdDuration) {
-        rgpdDuration = 2;
+      console.log();
+      let rgpdDuration = 2;
+      for (let i = 0; i < this.inputs.length; i++) {
+        if (this.inputs[i].title == "rgpdDuration" && this.inputs[i].value) {
+          let rgpdDuration = this.inputs[8].value;
+        }
       }
       const cost =
         Math.ceil(file.size / 1024 / this.clientInfo.creditSizeKo) *
@@ -206,20 +231,22 @@ export default {
         return;
       }
       for (let i = 0; i < this.inputs.length; i++) {
-        if (this.inputs[i].value) {
-          if (this.inputs[i].title == "copy") {
-            let splitValue = this.inputs[i].value.split(" ");
-            splitValue.push(this.user.email);
-            formData.append(this.inputs[i].title, splitValue);
-            continue;
-          }
+        console.log(this.inputs[i].value);
+        if (this.inputs[i].value != "") {
           formData.append(this.inputs[i].title, this.inputs[i].value);
+        }
+      }
+      for (let i = 0; i < this.chipsinputs.length; i++) {
+        console.log(this.chipsinputs[i].value);
+        if (this.chipsinputs[i].value != "") {
+          formData.append(this.chipsinputs[i].title, this.chipsinputs[i].value);
         }
       }
       formData.append("file", this.proofData);
       formData.append("noDuplicate", this.user.noDuplicate);
       formData.append("keepFile", this.user.keepFiles);
       formData.append("email", this.user.email);
+      formData.append("topic", this.topic);
       formData.append("identity", this.user.username);
       try {
         let waitAlert = Swal.fire({

@@ -456,3 +456,9 @@ export default {
   font-family: Arial, Helvetica, sans-serif;
 }
 </style>
+
+<style scoped>
+.v-input--selection-controls__input div {
+  color: #FF6666;
+}
+</style>
