@@ -6,13 +6,14 @@
       <v-row>
         <v-col>
           <v-row>
-            <v-col cols="4">
+            <v-col :cols="submitMethod == 'update'? 4: 6">
               <v-form v-model="isValid">
                 <v-text-field
                   v-model="user.displayName"
                   :label="$t('common.displayNameLabel')"
                   required
                   outlined
+                  autofocus
                 ></v-text-field>
                 <v-text-field
                   v-model="user.username"
@@ -22,7 +23,7 @@
                 ></v-text-field>
               </v-form>
             </v-col>
-            <v-col v-on:vdropzone-success="uploadImage(file)" cols="4">
+            <v-col v-on:vdropzone-success="uploadImage(file)" :cols="submitMethod == 'update'? 4: 6">
               <vue-dropzone
                 ref="imageDropzone"
                 id="dropzone"
@@ -36,7 +37,7 @@
                 </div>
               </vue-dropzone>
             </v-col>
-            <v-col cols="auto" v-if="this.submitMethod == 'update'">
+            <v-col cols="4" v-if="this.submitMethod == 'update'">
               <v-text-field
                 v-model="password"
                 :append-icon="passwordeyevalue ? 'mdi-eye' : 'mdi-eye-off'"
@@ -169,8 +170,18 @@
         </v-col>
       </v-row>
       <v-row>
+        <v-col>
+          <v-btn
+            @click="$router.push('/login')"
+            color="primary"
+            v-if="submitMethod== 'register'"
+          >{{ $t("common.cancel")}}</v-btn>
+        </v-col>
         <v-col class="text-right">
-          <v-btn @click="register" color="primary">{{$t("register.save")}}</v-btn>
+          <v-btn
+            @click="register"
+            color="primary"
+          >{{ this.submitMethod== "register"? $t("common.register"):$t("register.save")}}</v-btn>
         </v-col>
       </v-row>
     </v-card>
@@ -305,8 +316,6 @@ export default {
       this.user.userPicture = file.dataURL;
     },
     async register() {
-      console.log(this.isValid);
-      console.log(this.isValid2);
       if (this.isValid && this.isValid2) {
         if (this.submitMethod == "register") {
           if (this.password != this.confirmPassword) {
@@ -326,7 +335,7 @@ export default {
           }
           properties[this.toggles[i].index] = val;
         }
-        
+
         let waitAlert = swal.fire({
           title: this.$t("common.wait"),
           text: this.$t("common.uploadingData"),
@@ -357,13 +366,12 @@ export default {
             this.user.keepFiles
           );
           let successAlert = swal.fire({
-          title: this.$t("common.success"),
-          text: this.$t("register.accountCreated"),
-          icon: "success",
-          showConfirmButton: true,
-        });
+            title: this.$t("common.success"),
+            text: this.$t("register.accountCreated"),
+            icon: "success",
+            showConfirmButton: true
+          });
           if (res.status == "SUCCESS") {
-
             this.$router.push("/login");
           } else {
             this.errorUsername = true;
@@ -459,6 +467,6 @@ export default {
 
 <style scoped>
 .v-input--selection-controls__input div {
-  color: #FF6666;
+  color: #ff6666;
 }
 </style>

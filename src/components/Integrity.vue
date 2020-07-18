@@ -2,9 +2,9 @@
   <v-container>
     <v-card class="pa-8">
       <h2 class="mb-5">{{this.$t("integrity.dataIntergrity")}}</h2>
-      <v-row class="mt-5">
-        <v-col cols="12" class="text-center mt-10">
-          <h1 class="mb-10">{{this.$t("integrity.verifyDataIntegrity")}}</h1>
+      <v-row>
+        <v-col cols="12" class="text-center">
+          <h1>{{this.$t("integrity.verifyDataIntegrity")}}</h1>
           <v-btn
             color="primary"
             x-large

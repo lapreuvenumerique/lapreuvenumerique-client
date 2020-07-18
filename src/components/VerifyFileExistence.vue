@@ -94,7 +94,6 @@ export default {
             text: this.$tc("fileExistence.noFileExists"),
             confirmButtonText: "OK!"
           });
-          console.log(res2.data);
           return false;
         }
       }

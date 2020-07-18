@@ -23,13 +23,22 @@
     "accountCreated": "Account successfully created"
   },
   "proofQuery":{
-    "noResponse": "No response to your request"
+    "noResponse": "No response to your request",
+    "proofCount" : "Proof count",
+    "value" : "Value",
+    "field" : "Field",
+    "id": "ID",
+    "date": "Date",
+    "fingerprint": "Fingerprint",
+    "actions": "Actions",
+    "requestSuccessful": "Request successful!",
+    "searchingDB": "Searching database for your request..."
   },
   "home":{
     "proofDeposit":"Proof deposit",
     "proofSearch":"Proof search",
     "docVerify":"Verify a file",
-    "integrity":"Integrity",
+    "integrity":"Blockchain integrity",
     "settings":"Settings",
     "dropzoneHeader":"Drop your profile picture here",
     "dropzoneSubtitle":"...or click to browse",
@@ -47,11 +56,13 @@
     "keepFiles": "Allow keeping of files",
     "price" : "Price",
     "maxSize" : "Max size",
-    "dividedSpaces": "(divided by spaces)"
+    "dividedSpaces": "(divided by spaces)",
+    "noFile": "No proof",
+    "noFileProvided": "No proof was provided"
   },
   "integrity" :{
-    "dataIntergrity": "Data integrity",
-    "verifyDataIntegrity" : "Verify data integrity",
+    "dataIntergrity": "Blockchain integrity",
+    "verifyDataIntegrity" : "Verify blockchain integrity",
     "integrityOfBlockchain": "The integrity of the blockchain with ",
     "recordIsCorrect" : "record is correct | records is correct",
     "verify": "Verify",

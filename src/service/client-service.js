@@ -18,6 +18,9 @@ export class ClientService {
     downloadProof(id){
         return this.httpService.get("/1.0/prooffiledownload/" + id, true)
     }
+    downloadReceipt(id){
+        return this.httpService.get("/1.0/proofreceiptdownload/" + id, true)
+    }
     getTopics(){
         return this.httpService.get("/1.0/topics")
     }

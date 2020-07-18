@@ -1,29 +1,31 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col cols="10" md="10" sm="7"></v-col>
-      <v-col cols="2" md="2" sm="5">
-        <v-card :class="credits > 50? 'green':'red'" class="lighten-1 white--text" align="right">
-          <v-row align="center" justify="center">
-            <v-col cols="6" class="text-left px-7">
-              <v-icon
-                class="mdi full-width full-height"
-                color="white"
-                size="60"
-              >mdi-currency-usd-circle-outline</v-icon>
-            </v-col>
-            <v-col cols="6" class="text-right px-7">
-              <span style="font-size:15px; font-weight: 300;">{{ $tc("common.creditMaj", credits)}}</span>
-              <br />
-              <b style="font-size:25px;">{{credits}}</b>
-            </v-col>
-          </v-row>
-        </v-card>
-      </v-col>
-    </v-row>
     <v-card class="pa-8">
+      <v-card
+        :class="credits > 50? 'green':'red'"
+        class="lighten-1 white--text"
+        align="right"
+        style="position: absolute; z-index: 5; right:50px; top:30px"
+      >
+        <v-row align="center" justify="center">
+          <v-col cols="6" class="text-left px-7">
+            <v-icon
+              class="mdi full-width full-height"
+              color="white"
+              size="60"
+            >mdi-currency-usd-circle-outline</v-icon>
+          </v-col>
+          <v-col cols="6" class="text-right px-7">
+            <span
+              style="font-size:15px; font-weight: 300;"
+            >{{ capitalizeFLetter($tc("common.credit", credits))}}</span>
+            <br />
+            <b style="font-size:25px;white-space: nowrap;">{{formatNumber(credits)}}</b>
+          </v-col>
+        </v-row>
+      </v-card>
       <h2 class="mb-5">{{this.$t("proofDeposit.proofDeposit")}}</h2>
-      <b style="font-size:25px;">{{$t("proofDeposit.maxSize") + " : " + maxSize}}</b>
+      <b style="font-size:20px;">{{$t("proofDeposit.maxSize") + " : " + maxSize}}</b>
       <v-form v-model="isValid">
         <v-row>
           <v-col cols="12">
@@ -33,6 +35,7 @@
               :options="dropzoneOptions"
               :useCustomSlot="true"
               @vdropzone-success="(file, response) => this.uploadProof(file)"
+              @vdropzone-removed-file="(file, err ,response) => this.removeProof()"
             >
               <div class="dropzone-custom-content">
                 <h3 class="dropzone-custom-title">{{this.$t("proofDeposit.uploadProof")}}</h3>
@@ -49,7 +52,7 @@
             ></v-text-field>
           </v-col>
           <v-col cols="6">
-            <v-select :items="topics" label="Topic" v-model="topic" dense outlined></v-select>
+            <v-select :items="topics" label="Topic" v-model="topic.value" v-if="topic.isActive"></v-select>
           </v-col>
           <v-col v-for="chipinput in chipsinputs" :key="chipinput.title" cols="6">
             <v-combobox
@@ -58,7 +61,6 @@
               clearable
               :label="$t(`common.togglelist.${chipinput.title}`)"
               multiple
-              solo
             >
               <template v-slot:selection="{ attrs, item, select, selected }">
                 <v-chip
@@ -87,6 +89,7 @@ import dbService from "../service/db-service";
 import Swal from "sweetalert2";
 import clientService from "@/service/client-service";
 import proofService from "@/service/proof-service";
+import numeral from "numeral";
 export default {
   data() {
     return {
@@ -105,7 +108,7 @@ export default {
       clientInfo: {},
       creditCost: 0,
       topics: [],
-      topic: []
+      topic: { isActive: false, value: "Default" }
     };
   },
   components: {
@@ -114,13 +117,7 @@ export default {
   async mounted() {
     this.loadTopics();
     this.updateCredits();
-    const dropzone = this.$refs.proofDropzone;
-    if (dropzone) {
-      dropzone.$el.addEventListener("vdropzone-success", $event =>
-        this.uploadProof($event)
-      );
-    }
-
+    this.proofData = ""
     let properties = Object.keys(this.user.properties);
     for (let i = 0; i < properties.length; i++) {
       let currentProperty = this.user.properties[properties[i]];
@@ -139,6 +136,7 @@ export default {
         continue;
       }
       if (properties[i] == "topic") {
+        this.topic.isActive = properties[i] != 0;
         continue;
       }
       this.inputs.push({
@@ -164,19 +162,29 @@ export default {
     } catch (err) {
       console.log(err);
     }
+    for (let i = 0; i < this.inputs.length; i++) {
+      if (this.inputs[i].title == "rgpdDuration") {
+        console.log(this.inputs.rgpdDuration);
+        this.inputs[i].value = 1;
+      }
+    }
   },
   methods: {
+    capitalizeFLetter(value) {
+      return value[0].toUpperCase() + value.slice(1);
+    },
     async loadTopics() {
       try {
         const res = await clientService.getTopics();
-        console.log(res.data.topics);
         for (let i = 0; i < res.data.topics.length; i++) {
-          console.log(res.data.topics[i].name)
           this.topics.push(res.data.topics[i].name);
         }
       } catch (err) {
         console.log(err);
       }
+    },
+    formatNumber(number) {
+      return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     },
 
     remove(input, item) {
@@ -190,14 +198,16 @@ export default {
     uploadProof(file) {
       this.proofData = file;
     },
+    removeProof(){
+      this.proofData = ""
+    },
 
     handleCreditCost() {
       const file = this.proofData;
-      console.log();
-      let rgpdDuration = 2;
+      let rgpdDuration = 1;
       for (let i = 0; i < this.inputs.length; i++) {
         if (this.inputs[i].title == "rgpdDuration" && this.inputs[i].value) {
-          let rgpdDuration = this.inputs[8].value;
+          let rgpdDuration = this.inputs[i].value;
         }
       }
       const cost =
@@ -211,9 +221,18 @@ export default {
       if (!this.isValid) {
         return;
       }
+      console.log(this.proofData.dataURL)
+      if (!this.proofData) {
+        await Swal.fire({
+          icon: "error",
+          title: this.$t("proofDeposit.noFile"),
+          text: this.$t("proofDeposit.noFileProvided"),
+          confirmButtonText: "OK!"
+        });
+        return
+      }
       let formData = new FormData();
       this.handleCreditCost();
-      console.log(this.$tc("common.credit", { count: 1 }));
       const alertRes = await Swal.fire({
         title: this.$t("common.confirmUpload"),
         text:
@@ -223,21 +242,19 @@ export default {
           " " +
           this.$tc("common.credit", { count: parseInt(this.creditCost, 10) }),
         showCancelButton: true,
-        cancelButtonText: this.$t("common.cancel"),
-        confirmButtonText: this.$t("common.confirm")
+        confirmButtonText: this.$t("common.confirm"),
+        cancelButtonText: this.$t("common.cancel")
       });
 
       if (!alertRes.isConfirmed) {
         return;
       }
       for (let i = 0; i < this.inputs.length; i++) {
-        console.log(this.inputs[i].value);
         if (this.inputs[i].value != "") {
           formData.append(this.inputs[i].title, this.inputs[i].value);
         }
       }
       for (let i = 0; i < this.chipsinputs.length; i++) {
-        console.log(this.chipsinputs[i].value);
         if (this.chipsinputs[i].value != "") {
           formData.append(this.chipsinputs[i].title, this.chipsinputs[i].value);
         }
@@ -246,7 +263,7 @@ export default {
       formData.append("noDuplicate", this.user.noDuplicate);
       formData.append("keepFile", this.user.keepFiles);
       formData.append("email", this.user.email);
-      formData.append("topic", this.topic);
+      formData.append("topic", this.topic.value);
       formData.append("identity", this.user.username);
       try {
         let waitAlert = Swal.fire({
