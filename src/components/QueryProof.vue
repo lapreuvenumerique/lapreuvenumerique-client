@@ -107,9 +107,18 @@
             class="mr-2"
             small
           >mdi-download-lock</v-icon>
+          <v-icon
+            @click="pdfPreview(fields.indexOf(field), item.filename)"
+            v-if="item.filename.split('.')[1].toLowerCase() == 'pdf'"
+            class="mr-2"
+            small
+          >mdi-eye</v-icon>
           <v-icon @click="showfingerprint(fields.indexOf(field))" small>mdi-fingerprint</v-icon>
         </template>
       </v-data-table>
+      <template>
+        <pdf src="" ref="pdfViewer"></pdf>
+      </template>
     </v-card>
   </v-container>
 </template>
@@ -119,7 +128,11 @@ import swal from "sweetalert2";
 import fileDownload from "js-file-download";
 import moment from "moment";
 import numeral from "numeral";
+import pdf from "vue-pdf";
 export default {
+  components: {
+    pdf
+  },
   data() {
     return {
       field: "",
@@ -218,6 +231,10 @@ export default {
     this.loadTopics();
   },
   methods: {
+    pdfPreview(id, name) {
+      console.log(proofs[id].dataURL);
+      this.$refs.pdfViewer.src = proofs[id].dataURL;
+    },
     async loadTopics() {
       try {
         const res = await clientService.getTopics();
@@ -254,9 +271,9 @@ export default {
     },
     showfingerprint(index) {
       if (!this.proofs[index]) {
-        this.proofs[index] = this.fingerprintProofs[index];
+        this.proofs[index].fingerprint = this.fingerprintProofs[index];
       } else {
-        this.proofs[index] = "";
+        this.proofs[index].fingerprint = "";
       }
     },
     async searchQuery(field, value) {
