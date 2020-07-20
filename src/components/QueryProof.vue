@@ -113,7 +113,9 @@
           <v-icon @click="expand(!isExpanded)">mdi-fingerprint</v-icon>
         </template>
         <template v-slot:expanded-item="{ headers, item }">
-          <td :colspan="headers.length">{{$t("common.togglelist.fingerprint") + " : " + proofs[proofs.indexOf(item)].fingerprint}}</td>
+          <td
+            :colspan="headers.length"
+          >{{$t("common.togglelist.fingerprint") + " : " + proofs[proofs.indexOf(item)].fingerprint}}</td>
         </template>
       </v-data-table>
     </v-card>
@@ -268,13 +270,12 @@ export default {
       let data = {};
       for (let i = 0; i < this.fields.length; i++) {
         let value = this.fields[i].value;
-        data[this.fields[i].field] = value;
+        if (value) {
+          data[this.fields[i].field] = value;
+        }
       }
       try {
         waitAlert.close();
-        if (!data["id"]) {
-          data["id"] = null;
-        }
         const res = await clientService.getQuery(data);
         this.user = res;
         this.proofs = res.data.files;

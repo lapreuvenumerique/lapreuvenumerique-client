@@ -100,7 +100,6 @@ export default {
       credits: 0,
       dropzoneOptions: {
         url: "https://httpbin.org/post",
-        thumbnailWidth: 500,
         addRemoveLinks: true
       },
       isValid: false,
@@ -232,30 +231,35 @@ export default {
       this.proofData.push(file);
     },
     removeProof(file) {
-      this.proofData.remove(file);
+      const index = this.proofData.indexOf(file);
+      if (index > -1) {
+        this.proofData.splice(index, 1);
+      }
     },
 
     handleCreditCost() {
-      const file = this.proofData;
-      let rgpdDuration = 1;
-      for (let i = 0; i < this.inputs.length; i++) {
-        if (this.inputs[i].title == "rgpdDuration" && this.inputs[i].value) {
-          let rgpdDuration = this.inputs[i].value;
+      this.creditCost = 0;
+      for (let s = 0; s < this.proofData.length; s++) {
+        const file = this.proofData[s];
+        let rgpdDuration = 1;
+        for (let i = 0; i < this.inputs.length; i++) {
+          if (this.inputs[i].title == "rgpdDuration" && this.inputs[i].value) {
+            let rgpdDuration = this.inputs[i].value;
+          }
         }
+        const cost =
+          Math.ceil(file.size / 1024 / this.clientInfo.creditSizeKo) *
+          rgpdDuration *
+          this.clientInfo.creditFile;
+        this.creditCost += cost;
       }
-      const cost =
-        Math.ceil(file.size / 1024 / this.clientInfo.creditSizeKo) *
-        rgpdDuration *
-        this.clientInfo.creditFile;
-      this.creditCost = cost;
       return;
     },
     async sendProof() {
       if (!this.isValid) {
         return;
       }
-      console.log(this.proofData.dataURL);
-      if (!this.proofData) {
+      if (this.proofData.length == 0) {
         await Swal.fire({
           icon: "error",
           title: this.$t("proofDeposit.noFile"),
@@ -305,7 +309,7 @@ export default {
           showConfirmButton: false,
           allowOutsideClick: false
         });
-        const res = await proofService.uploadProof(formData);
+        const res = await proofService.uploadProofs(this.proofData, formData);
         await this.updateCredits();
         if (res.data.status == "SUCCESS") {
           Swal.fire({
@@ -323,6 +327,7 @@ export default {
           });
         }
       } catch (err) {
+        console.log(err)
         let text =
           this.$t("common.dataNotUploaded") + " : " + err.response.message;
         switch (err.response.status) {

@@ -1,7 +1,9 @@
 <template style="font-family: Helvetica;">
   <v-container>
     <v-card class="pa-8">
-      <h2 class="mb-5">{{submitMethod == 'update'? this.$t("home.settings"): this.$t("common.register") + " :"}}</h2>
+      <h2
+        class="mb-5"
+      >{{submitMethod == 'update'? this.$t("home.settings"): this.$t("common.register") + " :"}}</h2>
 
       <v-row>
         <v-col>
@@ -306,7 +308,6 @@ export default {
       ).toString(this.CryptoJS.enc.Utf8);
       this.user.customerUid = decryptedCustomer;
     }
-    
   },
   components: {
     vueDropzone: vue2Dropzone

@@ -13,14 +13,15 @@ export class ProofService {
     compareFingerprints(fingerprint) {
         return this.httpService.post("1.0/proofexists", fingerprint)
     }
-    beginUpload() {
-
-    }
-    uploadProofs(files, formData) {
+    async uploadProofs(files, formData) {
+        this.httpService.post("1.0/massdeposit", {state: 'begin', batchNumber : formData.get("batchNumber")})
+        formData.append("file", null)
+        formData.append("state", 'upload')
         for (let i = 0; i < files.length; i++) {
-            formData.append("file", files[i])
-            return this.httpService.put("1.0/", formData)
+            formData.set("file", files[i])
+            await this.httpService.post("1.0/massdeposit", formData)
         }
+        return this.httpService.post("1.0/massdeposit", {state: 'end', batchNumber : formData.get("batchNumber")})
     }
 
 }

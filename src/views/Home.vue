@@ -69,8 +69,9 @@ import clientService from "@/service/client-service";
 import VerifyFileExistence from "@/components/VerifyFileExistence";
 import QueryProof from "@/components/QueryProof.vue";
 import * as cfg from "../config";
+import MassDeposit from "@/components/MassDeposit";
 import bcrypt from "bcryptjs";
-import MassDeposit from '@/components/MassDeposit'
+import VueCryptojs from "vue-cryptojs";
 export default {
   icons: {
     iconfont: "md"
@@ -137,7 +138,7 @@ export default {
     this.user.displayName = res.displayName;
     if (res.userPicture) {
       this.userPicture = res.userPicture;
-      this.user.userPicture = res.userPicture
+      this.user.userPicture = res.userPicture;
     }
     this.pageOpened = "proofDeposit";
     this.updateCredits();
@@ -149,8 +150,31 @@ export default {
     },
     async setPage(page) {
       if (page == this.pageOpened) return;
+      const res = await dbService.getUserById(this.$store.state.id);
       if (this.pageOpened == "settings") {
-        if (RegisterForm.props.user != this.user) {
+        const encryptedKey = dbService.getSecretKey();
+        const decryptedCustomer = this.CryptoJS.AES.decrypt(
+          res.customerUid,
+          encryptedKey
+        ).toString(this.CryptoJS.enc.Utf8);
+        const decryptedApiKey = this.CryptoJS.AES.decrypt(
+          res.apiKey,
+          encryptedKey
+        ).toString(this.CryptoJS.enc.Utf8);
+
+        const newres = JSON.stringify(res.properties);
+
+        const oldres = JSON.stringify(this.user.properties);
+        if (
+          res.username != this.user.username ||
+          res.displayName != this.user.displayName ||
+          decryptedCustomer != this.user.customerUid ||
+          decryptedApiKey != this.user.apiKey ||
+          res.noDuplicate != this.user.noDuplicate ||
+          res.keepFiles != this.user.keepFiles ||
+          res.userPicture != this.user.userPicture ||
+          newres != oldres
+        ) {
           const resExit = await swal.fire({
             title: this.$t("common.exit"),
             text: this.$t("common.exitAbandonUnsavedChanges"),
@@ -162,7 +186,6 @@ export default {
             return;
           }
         }
-        const res = await dbService.getUserById(this.$store.state.id);
         if (!res) {
           return;
         }
