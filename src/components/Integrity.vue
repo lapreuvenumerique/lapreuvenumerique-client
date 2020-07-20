@@ -10,7 +10,6 @@
             x-large
             class="ma-10"
             :loading="isLoading"
-            :disabled="wait"
             @click="verifyIntegrity"
           >{{this.btnText}}</v-btn>
         </v-col>

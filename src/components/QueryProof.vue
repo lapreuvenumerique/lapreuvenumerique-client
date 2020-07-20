@@ -101,19 +101,13 @@
         :search="search"
       >
         <template v-slot:item.actions="{ item }">
-          <v-icon small @click="downloadFile(item.id, item.filename)" class="mr-2">mdi-download</v-icon>
+          <v-icon small @click="downloadFile(item.id, item.fileName)" class="mr-2">mdi-download</v-icon>
           <v-icon
-            @click="downloadReceipt(item.id, 'receipt-' + item.filename)"
+            @click="downloadReceipt(item.id, 'receipt-' + item.fileName)"
             class="mr-2"
             small
           >mdi-download-lock</v-icon>
-          <v-icon
-            @click="pdfPreview(fields.indexOf(field), item.filename)"
-            v-if="item.filename.split('.')[1].toLowerCase() == 'pdf'"
-            class="mr-2"
-            small
-          >mdi-eye</v-icon>
-          <v-icon @click="showfingerprint(fields.indexOf(field))" small>mdi-fingerprint</v-icon>
+          <v-icon @click="showfingerprint(proofs.indexOf(item))" small>mdi-fingerprint</v-icon>
         </template>
       </v-data-table>
       <template>
@@ -165,7 +159,6 @@ export default {
       ],
       proofs: [],
       topics: [],
-      topicValue: "",
       fields: [
         {
           field: "id",
@@ -200,12 +193,12 @@ export default {
         {
           field: "topic",
           title: this.$t("common.togglelist.topic"),
-          value: "Default"
+          value: ""
         },
         {
           field: "rgpdDuration",
           title: this.$t("common.togglelist.rgpdDuration"),
-          value: "1"
+          value: null
         },
         {
           field: "keywords",
@@ -223,7 +216,8 @@ export default {
           value: null
         }
       ],
-      fingerprintProofs: []
+      fingerprintProofs: [],
+      user: Object
     };
   },
   mounted() {
@@ -231,14 +225,10 @@ export default {
     this.loadTopics();
   },
   methods: {
-    pdfPreview(id, name) {
-      console.log(proofs[id].dataURL);
-      this.$refs.pdfViewer.src = proofs[id].dataURL;
-    },
     async loadTopics() {
       try {
         const res = await clientService.getTopics();
-        this.topicValue = res.data.topics[0].name;
+        this.topics.push("")
         for (let i = 0; i < res.data.topics.length; i++) {
           this.topics.push(res.data.topics[i].name);
         }
@@ -290,7 +280,12 @@ export default {
         data[this.fields[i].field] = value;
       }
       try {
+        waitAlert.close()
+        if(!data['id']){
+          data['id'] = null
+        }
         const res = await clientService.getQuery(data);
+        this.user = res
         this.proofs = res.data.files;
         for (let i = 0; i < this.proofs.length; i++) {
           this.proofs[i].uploaddate = moment(this.proofs[i].uploaddate).format(
