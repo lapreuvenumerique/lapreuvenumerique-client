@@ -17,7 +17,7 @@
           </v-col>
         </v-row>
       </v-card>
-en      <h2 class="mb-10">{{this.$t("proofDeposit.proofDeposit")}}</h2>
+      <h2 class="mb-10">{{this.$t("proofDeposit.proofDeposit")}}</h2>
       <h3 class="mt-10 mb-4">{{this.$t("proofQuery.searchFields")}} :</h3>
       <v-row>
         <v-expansion-panels>
@@ -26,7 +26,7 @@ en      <h2 class="mb-10">{{this.$t("proofDeposit.proofDeposit")}}</h2>
             <v-expansion-panel-content>
               <v-row class="d-flex align-center">
                 <v-col
-                  cols="5"
+                  cols="6"
                   class="d-flex align-center"
                   v-for="field in fields"
                   :key="field.field"
@@ -104,8 +104,10 @@ en      <h2 class="mb-10">{{this.$t("proofDeposit.proofDeposit")}}</h2>
           <v-icon small @click="downloadFile(item.id, item.filename)" class="mr-2">mdi-download</v-icon>
           <v-icon
             @click="downloadReceipt(item.id, 'receipt-' + item.filename)"
+            class="mr-2"
             small
           >mdi-download-lock</v-icon>
+          <v-icon @click="showfingerprint(fields.indexOf(field))" small>mdi-fingerprint</v-icon>
         </template>
       </v-data-table>
     </v-card>
@@ -127,48 +129,26 @@ export default {
       proofCount: 0,
       headers: [
         { text: this.$t("proofQuery.id"), value: "id" },
-        { text: this.$t("common.togglelist.filename"), value: "filename" },
-        { text: this.$t("common.togglelist.folderName"), value: "foldername" },
+        { text: this.$t("common.togglelist.filename"), value: "fileName" },
+        { text: this.$t("common.togglelist.folderName"), value: "folderName" },
         { text: this.$t("common.togglelist.reference"), value: "reference" },
-        { text: this.$t("common.togglelist.uids"), value: "uids" },
+        { text: this.$t("proofQuery.date"), value: "uploadDate" },
         { text: this.$t("common.togglelist.identity"), value: "identity" },
         {
           text: this.$t("common.togglelist.batchNumber"),
-          value: "batchnumber"
+          value: "batchNumber"
         },
         { text: this.$t("common.togglelist.topic"), value: "topic" },
         {
           text: this.$t("common.togglelist.rgpdDuration"),
-          value: "rgpdduration"
+          value: "rgpdDuration"
         },
-        { text: this.$t("common.togglelist.keywords"), value: "keywords" },
-        { text: this.$t("proofQuery.date"), value: "uploaddate" },
         { text: this.$t("proofQuery.fingerprint"), value: "fingerprint" },
         {
           text: this.$t("proofQuery.actions"),
           value: "actions",
           sortable: false
         }
-      ],
-      headersSelect: [
-        { text: this.$t("proofQuery.id"), value: "id" },
-        { text: this.$t("common.togglelist.filename"), value: "filename" },
-        { text: this.$t("common.togglelist.folderName"), value: "foldername" },
-        { text: this.$t("common.togglelist.reference"), value: "reference" },
-        { text: this.$t("common.togglelist.uids"), value: "uids" },
-        { text: this.$t("common.togglelist.identity"), value: "identity" },
-        {
-          text: this.$t("common.togglelist.batchNumber"),
-          value: "batchnumber"
-        },
-        { text: this.$t("common.togglelist.topic"), value: "topic" },
-        {
-          text: this.$t("common.togglelist.rgpdDuration"),
-          value: "rgpdduration"
-        },
-        { text: this.$t("common.togglelist.keywords"), value: "keywords" },
-        { text: this.$t("proofQuery.date"), value: "uploaddate" },
-        { text: this.$t("proofQuery.fingerprint"), value: "fingerprint" }
       ],
       proofs: [],
       topics: [],
@@ -177,37 +157,32 @@ export default {
         {
           field: "id",
           title: this.$t("common.togglelist.id"),
-          value: ""
+          value: null
         },
         {
           field: "fileName",
           title: this.$t("common.togglelist.filename"),
-          value: ""
+          value: null
         },
         {
           field: "folderName",
           title: this.$t("common.togglelist.folderName"),
-          value: ""
+          value: null
         },
         {
           field: "reference",
           title: this.$t("common.togglelist.reference"),
-          value: ""
-        },
-        {
-          field: "uids",
-          title: this.$t("common.togglelist.uids"),
-          value: ""
+          value: null
         },
         {
           field: "identity",
           title: this.$t("common.togglelist.identity"),
-          value: ""
+          value: null
         },
         {
           field: "batchNumber",
           title: this.$t("common.togglelist.batchNumber"),
-          value: ""
+          value: null
         },
         {
           field: "topic",
@@ -222,19 +197,20 @@ export default {
         {
           field: "keywords",
           title: this.$t("common.togglelist.keywords"),
-          value: ""
+          value: null
         },
         {
-          field: "date",
+          field: "uploadDate",
           title: this.$t("common.togglelist.date"),
-          value: ""
+          value: null
         },
         {
           field: "fingerprint",
           title: this.$t("common.togglelist.fingerprint"),
-          value: ""
+          value: null
         }
-      ]
+      ],
+      fingerprintProofs: []
     };
   },
   mounted() {
@@ -276,6 +252,13 @@ export default {
     formatNumber(number) {
       return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     },
+    showfingerprint(index) {
+      if (!this.proofs[index]) {
+        this.proofs[index] = this.fingerprintProofs[index];
+      } else {
+        this.proofs[index] = "";
+      }
+    },
     async searchQuery(field, value) {
       let waitAlert = swal.fire({
         title: this.$t("common.wait"),
@@ -287,14 +270,8 @@ export default {
       let data = {};
       for (let i = 0; i < this.fields.length; i++) {
         let value = this.fields[i].value;
-        if (this.fields[i].field == "id") {
-          if(!value){
-            value = undefined
-          }
-        }
         data[this.fields[i].field] = value;
       }
-      console.log(data);
       try {
         const res = await clientService.getQuery(data);
         this.proofs = res.data.files;
@@ -302,12 +279,9 @@ export default {
           this.proofs[i].uploaddate = moment(this.proofs[i].uploaddate).format(
             "L"
           );
+          this.fingerprintProofs[i] = this.proofs[i].fingerprint;
+          this.proofs[i].fingerprint = "";
         }
-        let successRes = await swal.fire({
-          title: this.$t("common.success"),
-          text: this.$t("proofQuery.requestSuccessful"),
-          icon: "success"
-        });
       } catch (err) {
         console.log(err);
         let errorRes = await swal.fire({

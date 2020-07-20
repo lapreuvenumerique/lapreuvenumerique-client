@@ -22,6 +22,7 @@
     "js-file-download": "^0.4.12",
     "moment": "^2.27.0",
     "numeral": "^2.0.6",
+    "pdfvuer": "^1.6.1",
     "sweetalert2": "^9.17.0",
     "vue": "^2.6.11",
     "vue-cryptojs": "^2.1.4",
