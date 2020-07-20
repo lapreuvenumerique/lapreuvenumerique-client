@@ -17,9 +17,6 @@
                 <div class="subtitle">{{this.$t("fileExistence.uploadProofSubtitle")}}</div>
               </div>
             </vue-dropzone>
-            <div class="text-right">
-              <v-btn color="primary" @click="sendProof()" class="mt-10">{{$t("common.submit")}}</v-btn>
-            </div>
           </v-col>
         </v-row>
       </v-form>
@@ -30,7 +27,7 @@
 <script>
 import proofService from "@/service/proof-service";
 import vue2Dropzone from "vue2-dropzone";
-import swal from "sweetalert2";
+import Swal from 'sweetalert2';
 export default {
   data() {
     return {
@@ -58,12 +55,13 @@ export default {
   methods: {
     uploadProof(file) {
       this.proofData = file;
+       this.sendProof()
     },
     async sendProof() {
       if (this.proofData) {
         let formData = new FormData();
         formData.append("file", this.proofData);
-        let waitAlert = swal.fire({
+        let waitAlert = Swal.fire({
           title: this.$t("common.wait"),
           text: this.$t("common.uploadingData"),
           icon: "info",
@@ -75,7 +73,7 @@ export default {
           fingerprint: res1.data.fingerprint
         });
         if (res2.data.status == "SUCCESS") {
-          swal.fire({
+          Swal.fire({
             icon: "success",
             title: this.$t("common.success"),
             text:
@@ -88,7 +86,7 @@ export default {
           });
           return true;
         } else {
-          swal.fire({
+          Swal.fire({
             icon: "error",
             title: this.$t("common.error"),
             text: this.$tc("fileExistence.noFileExists"),
@@ -96,6 +94,13 @@ export default {
           });
           return false;
         }
+      }else{
+        Swal.fire({
+          title: this.$t("common.error"),
+          text: this.$t("fileExistence.noFileProvided"),
+          icon: "error",
+          confirmButtonText: "OK"
+        })
       }
     }
   }

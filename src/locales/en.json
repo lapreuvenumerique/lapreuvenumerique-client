@@ -32,7 +32,9 @@
     "fingerprint": "Fingerprint",
     "actions": "Actions",
     "requestSuccessful": "Request successful!",
-    "searchingDB": "Searching database for your request..."
+    "searchingDB": "Searching database for your request...",
+    "searchValues": "Search in values",
+    "searchFields": "Search fields"
   },
   "home":{
     "proofDeposit":"Proof deposit",
@@ -74,8 +76,10 @@
     "verifyFileExistence": "Verify existence of a file",
     "fileExists": "File exists with id : | Files exist with ids :",
     "noFileExists": "No file exists with this fingerprint",
+    "noFileProvided": "No file was provided",
     "uploadProof": "Upload your file",
-    "uploadProofSubtitle": "Drag or click to browse"
+    "uploadProofSubtitle": "Drag or click to browse",
+    "verify": "Verify"
   },
   "common":{
     "togglelist":{
@@ -94,7 +98,10 @@
       "visa" : "Visa",
       "keywords" : "Keywords",
       "okkayId" : "Okkayid",
-      "filename" : "File name"
+      "filename" : "File name",
+      "id": "ID",
+      "date": "Date",
+      "fingerprint": "Fingerprint"
       },
     "apiKeyCount":"64 characters required",
     "apiKeyLabel" : "API key",
@@ -140,6 +147,8 @@
     "creditMaj" : "Credit | Credits",
     "wait": "Wait",
     "uploadingData": "Uploading your data...",
-    "search": "Search"
+    "search": "Search",
+    "keyRevokedDisabled": "Your key got revoked or disabled",
+    "fields": "Fields"
   }
 }

@@ -1,9 +1,9 @@
 <template>
-  <v-container fluid style="height: 100%;background:white;">
-    <v-row style="height: 100%;">
-      <v-col cols="2" style="height: 100%;">
-        <v-card class="justify-right" style="height: 100%; width: 100%;">
-          <v-navigation-drawer absolute dark width="100%" permanent>
+  <v-container fluid style="height: 100%;background:white;" class="pa-0">
+    <v-row style="height: 100%;" class="pa-0">
+      <v-col cols="2" style="height: 100%;" class="pa-0">
+        <v-card style="width: 100%; height: 100%; left: 0px; up: 0px;">
+          <v-navigation-drawer dark style="width: 100%; left: 0px; up: 0px;" class="pa-0" permanent>
             <div style="position: relative; position: -webkit-relative; top:0;">
               <v-list>
                 <v-list-item>
@@ -69,6 +69,7 @@ import VerifyFileExistence from "@/components/VerifyFileExistence";
 import QueryProof from "@/components/QueryProof.vue";
 import * as cfg from "../config";
 import bcrypt from "bcryptjs";
+import RegisterFormVue from '../components/RegisterForm.vue';
 export default {
   icons: {
     iconfont: "md"
@@ -129,6 +130,7 @@ export default {
     this.user.displayName = res.displayName;
     if (res.userPicture) {
       this.userPicture = res.userPicture;
+      this.user.userPicture = res.userPicture
     }
     this.pageOpened = "proofDeposit";
     this.updateCredits();
@@ -141,15 +143,18 @@ export default {
     async setPage(page) {
       if (page == this.pageOpened) return;
       if (this.pageOpened == "settings") {
-        const resPassword = await swal.fire({
-          title: this.$t("common.exit"),
-          text: this.$t("common.exitAbandonUnsavedChanges"),
-          confirmButtonText: this.$t("common.confirm"),
-          showCancelButton: true,
-          cancelButtonText: this.$t("common.cancel")
-        });
-        if (!resPassword.isConfirmed) {
-          return;
+        console.log(RegisterFormVue.props.user.username)
+        if (RegisterFormVue.props.user != this.user) {
+          const resExit = await swal.fire({
+            title: this.$t("common.exit"),
+            text: this.$t("common.exitAbandonUnsavedChanges"),
+            confirmButtonText: this.$t("common.confirm"),
+            showCancelButton: true,
+            cancelButtonText: this.$t("common.cancel")
+          });
+          if (!resExit.isConfirmed) {
+            return;
+          }
         }
         const res = await dbService.getUserById(this.$store.state.id);
         if (!res) {

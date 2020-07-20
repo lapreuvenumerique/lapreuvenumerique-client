@@ -23,7 +23,10 @@
                 ></v-text-field>
               </v-form>
             </v-col>
-            <v-col v-on:vdropzone-success="uploadImage(file)" :cols="submitMethod == 'update'? 4: 6">
+            <v-col
+              v-on:vdropzone-success="uploadImage(file)"
+              :cols="submitMethod == 'update'? 4: 6"
+            >
               <vue-dropzone
                 ref="imageDropzone"
                 id="dropzone"
@@ -289,6 +292,8 @@ export default {
     submitMethod: String
   },
   async mounted() {
+    this.user.noDuplicate = false;
+    this.user.keepFiles = true;
     this.syncToggles();
     const dropzone = this.$refs.imageDropzone;
     dropzone.$el.addEventListener("vdropzone-success", $event =>
@@ -307,6 +312,7 @@ export default {
       ).toString(this.CryptoJS.enc.Utf8);
       this.user.customerUid = decryptedCustomer;
     }
+    
   },
   components: {
     vueDropzone: vue2Dropzone

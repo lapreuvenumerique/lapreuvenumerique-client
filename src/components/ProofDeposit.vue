@@ -117,7 +117,7 @@ export default {
   async mounted() {
     this.loadTopics();
     this.updateCredits();
-    this.proofData = ""
+    this.proofData = "";
     let properties = Object.keys(this.user.properties);
     for (let i = 0; i < properties.length; i++) {
       let currentProperty = this.user.properties[properties[i]];
@@ -160,11 +160,18 @@ export default {
       resmaxSize = Math.round(resmaxSize);
       this.maxSize = resmaxSize + suffix;
     } catch (err) {
+      if (err.response.status == 401) {
+        const alertErr = await Swal.fire({
+          icon: "error",
+          title: this.$t("common.error"),
+          text: this.$t("common.keyRevokedDisabled")
+        });
+        this.$router.push("/login");
+      }
       console.log(err);
     }
     for (let i = 0; i < this.inputs.length; i++) {
       if (this.inputs[i].title == "rgpdDuration") {
-        console.log(this.inputs.rgpdDuration);
         this.inputs[i].value = 1;
       }
     }
@@ -180,6 +187,15 @@ export default {
           this.topics.push(res.data.topics[i].name);
         }
       } catch (err) {
+        console.log(err.response.status);
+        if (err.status == 401) {
+          const alertErr = await Swal.fire({
+            icon: "error",
+            title: this.$t("common.error"),
+            text: this.$t("common.keyRevokedDisabled")
+          });
+          this.$router.push("/login");
+        }
         console.log(err);
       }
     },
@@ -198,8 +214,8 @@ export default {
     uploadProof(file) {
       this.proofData = file;
     },
-    removeProof(){
-      this.proofData = ""
+    removeProof() {
+      this.proofData = "";
     },
 
     handleCreditCost() {
@@ -221,7 +237,7 @@ export default {
       if (!this.isValid) {
         return;
       }
-      console.log(this.proofData.dataURL)
+      console.log(this.proofData.dataURL);
       if (!this.proofData) {
         await Swal.fire({
           icon: "error",
@@ -229,7 +245,7 @@ export default {
           text: this.$t("proofDeposit.noFileProvided"),
           confirmButtonText: "OK!"
         });
-        return
+        return;
       }
       let formData = new FormData();
       this.handleCreditCost();

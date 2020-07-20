@@ -17,49 +17,67 @@
           </v-col>
         </v-row>
       </v-card>
-      <h2 class="mb-5">{{this.$t("proofDeposit.proofDeposit")}}</h2>
+en      <h2 class="mb-10">{{this.$t("proofDeposit.proofDeposit")}}</h2>
+      <h3 class="mt-10 mb-4">{{this.$t("proofQuery.searchFields")}} :</h3>
       <v-row>
-        <v-col cols="3" class="d-flex align-center">
-          <v-select
-            :items="headersSelect"
-            :label="$t('proofQuery.field')"
-            v-model="field"
-            dense
-            outlined
-          ></v-select>
-        </v-col>
-        <v-col cols="3" class="d-flex align-center">
-          <v-text-field
-            :label="$t('proofQuery.value')"
-            outlined
-            v-model="value"
-            v-if="field != 'keywords' && field != 'topic'"
-            dense
-            autofocus
-          ></v-text-field>
-          <v-combobox v-model="value" chips clearable multiple solo v-if="field == 'keywords'">
-            <template v-slot:selection="{ attrs, item, select, selected }">
-              <v-chip
-                v-bind="attrs"
-                :input-value="selected"
-                close
-                @click="select"
-                @click:close="remove(value, item)"
-              >
-                <strong>{{ item }}</strong>
-              </v-chip>
-            </template>
-          </v-combobox>
-          <v-select
-            :items="topics"
-            :label="$t('common.togglelist.topic')"
-            v-model="topicValue"
-            dense
-            outlined
-            v-if="field == 'topic'"
-          ></v-select>
-        </v-col>
-        <v-col cols="3" class>
+        <v-expansion-panels>
+          <v-expansion-panel>
+            <v-expansion-panel-header>{{$t("common.fields")}}</v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-row class="d-flex align-center">
+                <v-col
+                  cols="5"
+                  class="d-flex align-center"
+                  v-for="field in fields"
+                  :key="field.field"
+                >
+                  <v-text-field
+                    :label="field.title"
+                    outlined
+                    v-model="field.value"
+                    v-if="field.field != 'keywords' && field.field != 'topic'"
+                    dense
+                    required
+                    autofocus
+                  ></v-text-field>
+                  <v-combobox
+                    v-model="field.value"
+                    chips
+                    clearable
+                    multiple
+                    outlined
+                    dense
+                    :label="field.title"
+                    v-if="field.field == 'keywords'"
+                  >
+                    <template v-slot:selection="{ attrs, item, select, selected }">
+                      <v-chip
+                        v-bind="attrs"
+                        :input-value="selected"
+                        close
+                        @click="select"
+                        @click:close="remove(field.value, item)"
+                        required
+                      >
+                        <strong>{{ item }}</strong>
+                      </v-chip>
+                    </template>
+                  </v-combobox>
+                  <v-select
+                    :label="field.title"
+                    :items="topics"
+                    v-model="field.value"
+                    dense
+                    outlined
+                    required
+                    v-if="field.field == 'topic'"
+                  ></v-select>
+                </v-col>
+              </v-row>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+        <v-col cols="12" class="text-right">
           <v-btn color="primary" @click="searchQuery(field, value)">{{$t("common.search")}}</v-btn>
         </v-col>
       </v-row>
@@ -69,7 +87,7 @@
             append-icon="mdi-magnify"
             single-line
             hide-details
-            label="Search in values"
+            :label="$t('proofQuery.searchValues')"
             v-model="search"
           ></v-text-field>
         </v-col>
@@ -84,7 +102,10 @@
       >
         <template v-slot:item.actions="{ item }">
           <v-icon small @click="downloadFile(item.id, item.filename)" class="mr-2">mdi-download</v-icon>
-          <v-icon @click="downloadReceipt(item.id, item.filename)" small>mdi-download-lock</v-icon>
+          <v-icon
+            @click="downloadReceipt(item.id, 'receipt-' + item.filename)"
+            small
+          >mdi-download-lock</v-icon>
         </template>
       </v-data-table>
     </v-card>
@@ -151,7 +172,69 @@ export default {
       ],
       proofs: [],
       topics: [],
-      topicValue: ""
+      topicValue: "",
+      fields: [
+        {
+          field: "id",
+          title: this.$t("common.togglelist.id"),
+          value: ""
+        },
+        {
+          field: "fileName",
+          title: this.$t("common.togglelist.filename"),
+          value: ""
+        },
+        {
+          field: "folderName",
+          title: this.$t("common.togglelist.folderName"),
+          value: ""
+        },
+        {
+          field: "reference",
+          title: this.$t("common.togglelist.reference"),
+          value: ""
+        },
+        {
+          field: "uids",
+          title: this.$t("common.togglelist.uids"),
+          value: ""
+        },
+        {
+          field: "identity",
+          title: this.$t("common.togglelist.identity"),
+          value: ""
+        },
+        {
+          field: "batchNumber",
+          title: this.$t("common.togglelist.batchNumber"),
+          value: ""
+        },
+        {
+          field: "topic",
+          title: this.$t("common.togglelist.topic"),
+          value: "Default"
+        },
+        {
+          field: "rgpdDuration",
+          title: this.$t("common.togglelist.rgpdDuration"),
+          value: "1"
+        },
+        {
+          field: "keywords",
+          title: this.$t("common.togglelist.keywords"),
+          value: ""
+        },
+        {
+          field: "date",
+          title: this.$t("common.togglelist.date"),
+          value: ""
+        },
+        {
+          field: "fingerprint",
+          title: this.$t("common.togglelist.fingerprint"),
+          value: ""
+        }
+      ]
     };
   },
   mounted() {
@@ -201,15 +284,19 @@ export default {
         showConfirmButton: false,
         allowOutsideClick: false
       });
-      if (field == "topic") {
-        console.log(this.topicValue);
-        value = this.topicValue;
+      let data = {};
+      for (let i = 0; i < this.fields.length; i++) {
+        let value = this.fields[i].value;
+        if (this.fields[i].field == "id") {
+          if(!value){
+            value = undefined
+          }
+        }
+        data[this.fields[i].field] = value;
       }
-      if (field == "id") {
-        value = parseInt(value, 10);
-      }
+      console.log(data);
       try {
-        const res = await clientService.getQuery({ field, value });
+        const res = await clientService.getQuery(data);
         this.proofs = res.data.files;
         for (let i = 0; i < this.proofs.length; i++) {
           this.proofs[i].uploaddate = moment(this.proofs[i].uploaddate).format(
@@ -233,3 +320,8 @@ export default {
   }
 };
 </script>
+<style>
+.v-text-field__details {
+  display: none;
+}
+</style>
