@@ -150,8 +150,8 @@ export default {
         },
         { text: this.$t("common.togglelist.topic"), value: "topic" },
         {
-          text: this.$t("common.togglelist.rgpdDuration"),
-          value: "rgpdDuration"
+          text: this.$t("common.togglelist.deadline"),
+          value: "deadline"
         },
         {
           text: this.$t("proofQuery.actions"),
@@ -198,8 +198,8 @@ export default {
           value: ""
         },
         {
-          field: "rgpdDuration",
-          title: this.$t("common.togglelist.rgpdDuration"),
+          field: "deadline",
+          title: this.$t("common.togglelist.deadline"),
           value: null
         },
         {

@@ -91,6 +91,7 @@
   },
   "common":{
     "togglelist":{
+      "deadline": "Deadline",
       "title" : "Information needed",
       "available" : "Available",
       "required" : "Required",
