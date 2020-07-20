@@ -98,6 +98,8 @@
         :items="proofs"
         item-key="id"
         class="elevation-1"
+        :expanded.sync="expanded"
+        show-expand
         :search="search"
       >
         <template v-slot:item.actions="{ item }">
@@ -107,7 +109,12 @@
             class="mr-2"
             small
           >mdi-download-lock</v-icon>
-          <v-icon @click="showfingerprint(proofs.indexOf(item))" small>mdi-fingerprint</v-icon>
+        </template>
+        <template v-slot:item.data-table-expand="{ expand, isExpanded }">
+          <v-icon @click="expand(!isExpanded)">mdi-fingerprint</v-icon>
+        </template>
+        <template v-slot:expanded-item="{ headers, item }">
+          <td :colspan="headers.length">{{$t("common.togglelist.fingerprint") + " : " + proofs[proofs.indexOf(item)].fingerprint}}</td>
         </template>
       </v-data-table>
     </v-card>
@@ -123,6 +130,7 @@ export default {
   components: {},
   data() {
     return {
+      expanded: [],
       field: "",
       value: "",
       search: "",
@@ -144,7 +152,6 @@ export default {
           text: this.$t("common.togglelist.rgpdDuration"),
           value: "rgpdDuration"
         },
-        { text: this.$t("proofQuery.fingerprint"), value: "fingerprint" },
         {
           text: this.$t("proofQuery.actions"),
           value: "actions",
@@ -209,9 +216,7 @@ export default {
           title: this.$t("common.togglelist.fingerprint"),
           value: null
         }
-      ],
-      fingerprintProofs: [],
-      user: Object
+      ]
     };
   },
   mounted() {
@@ -253,13 +258,6 @@ export default {
     formatNumber(number) {
       return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     },
-    showfingerprint(index) {
-      if (!this.proofs[index]) {
-        this.proofs[index].fingerprint = this.fingerprintProofs[index];
-      } else {
-        this.proofs[index].fingerprint = "";
-      }
-    },
     async searchQuery(field, value) {
       let waitAlert = swal.fire({
         title: this.$t("common.wait"),
@@ -285,8 +283,6 @@ export default {
           this.proofs[i].uploaddate = moment(this.proofs[i].uploaddate).format(
             "L"
           );
-          this.fingerprintProofs[i] = this.proofs[i].fingerprint;
-          this.proofs[i].fingerprint = "";
         }
       } catch (err) {
         console.log(err);
