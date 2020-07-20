@@ -106,7 +106,6 @@
           <v-icon small @click="downloadFile(item.id, item.fileName)" class="mr-2">mdi-download</v-icon>
           <v-icon
             @click="downloadReceipt(item.id, 'receipt-' + item.fileName)"
-            class="mr-2"
             small
           >mdi-download-lock</v-icon>
         </template>

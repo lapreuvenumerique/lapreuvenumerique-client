@@ -48,7 +48,7 @@
       <v-col cols="10">
         <register-form v-if="this.pageOpened=='settings'" submitMethod="update" :user="user"></register-form>
         <proof-deposit v-if="this.pageOpened=='proofDeposit'" :user="user"></proof-deposit>
-        <integrity v-show="this.pageOpened=='integrity'"></integrity>
+        <integrity v-if="this.pageOpened=='integrity'"></integrity>
         <verify-file-existence v-if="this.pageOpened=='docVerify'"></verify-file-existence>
         <query-proof v-if="this.pageOpened == 'proofSearch'"></query-proof>
       </v-col>
@@ -143,7 +143,6 @@ export default {
     async setPage(page) {
       if (page == this.pageOpened) return;
       if (this.pageOpened == "settings") {
-        console.log(RegisterFormVue.props.user.username)
         if (RegisterFormVue.props.user != this.user) {
           const resExit = await swal.fire({
             title: this.$t("common.exit"),
@@ -170,7 +169,7 @@ export default {
           title: this.$t("common.password"),
           text: this.$t("common.enterPassword"),
           input: "password",
-          confirmButtonText: "Confirm",
+          confirmButtonText: this.$t("common.confirm"),
           showCancelButton: true,
           cancelButtonText: this.$t("common.cancel")
         });

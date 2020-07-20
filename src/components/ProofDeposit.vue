@@ -127,7 +127,7 @@ export default {
       if (properties[i] == "file" && currentProperty != 0) {
         continue;
       }
-      if (properties[i] == "copy" || properties[i] == "keywords") {
+      if ((properties[i] == "copy" || properties[i] == "keywords") && currentProperty != 0) {
         this.chipsinputs.push({
           title: properties[i],
           required: currentProperty == 2,

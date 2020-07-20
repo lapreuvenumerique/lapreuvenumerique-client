@@ -9,7 +9,6 @@
             color="primary"
             x-large
             class="ma-10"
-            :loading="isLoading"
             @click="verifyIntegrity"
           >{{this.btnText}}</v-btn>
         </v-col>
@@ -23,8 +22,6 @@ import swal from "sweetalert2";
 export default {
   data() {
     return {
-      isLoading: false,
-      wait: false,
       btnText: this.$t("integrity.verify"),
       result: ""
     };
@@ -33,8 +30,6 @@ export default {
   },
   methods: {
     async verifyIntegrity() {
-      this.isLoading = true;
-      this.wait = true;
       let waitAlert = swal.fire({
         title: this.$t("common.wait"),
         text: this.$t("common.uploadingData"),
@@ -45,7 +40,6 @@ export default {
       const res = await integrityService.verifyIntegrity();
       if (res.data.status == "FAILED") {
         this.result = res.data.message;
-        this.isLoading = false;
         swal.fire({
           icon: "error",
           title: this.$t("common.error"),
@@ -60,9 +54,6 @@ export default {
         res.data.number +
         " " +
         this.$tc("integrity.recordIsCorrect", { count: res.data.number });
-      this.isLoading = false;
-      this.waitSeconds = 20;
-      this.waitForSeconds();
       swal.fire({
         icon: "success",
         title: this.$t("common.success"),
@@ -75,18 +66,6 @@ export default {
         confirmButtonText: "OK!"
       });
     },
-    waitForSeconds() {
-      if (this.waitSeconds == 0) {
-        this.wait = false;
-        this.btnText = this.$t("integrity.verify");
-        return;
-      } else {
-        this.btnText = this.$t("integrity.waitFor") + " " + this.waitSeconds;
-        +" " + this.$tc("integrity.second", { count: this.waitSeconds });
-        this.waitSeconds--;
-        setTimeout(() => this.waitForSeconds(), 1000);
-      }
-    }
   }
 };
 </script>

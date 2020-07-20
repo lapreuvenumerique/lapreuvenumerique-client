@@ -247,12 +247,6 @@ export default {
           enabled2: false
         },
         {
-          index: "uids",
-          title: this.$t("common.togglelist.uids"),
-          enabled1: true,
-          enabled2: false
-        },
-        {
           index: "copy",
           title: this.$t("common.togglelist.copy"),
           enabled1: true,
