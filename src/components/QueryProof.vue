@@ -110,9 +110,6 @@
           <v-icon @click="showfingerprint(proofs.indexOf(item))" small>mdi-fingerprint</v-icon>
         </template>
       </v-data-table>
-      <template>
-        <pdf src="" ref="pdfViewer"></pdf>
-      </template>
     </v-card>
   </v-container>
 </template>
@@ -122,11 +119,8 @@ import swal from "sweetalert2";
 import fileDownload from "js-file-download";
 import moment from "moment";
 import numeral from "numeral";
-import pdf from "vue-pdf";
 export default {
-  components: {
-    pdf
-  },
+  components: {},
   data() {
     return {
       field: "",
@@ -228,7 +222,7 @@ export default {
     async loadTopics() {
       try {
         const res = await clientService.getTopics();
-        this.topics.push("")
+        this.topics.push("");
         for (let i = 0; i < res.data.topics.length; i++) {
           this.topics.push(res.data.topics[i].name);
         }
@@ -280,12 +274,12 @@ export default {
         data[this.fields[i].field] = value;
       }
       try {
-        waitAlert.close()
-        if(!data['id']){
-          data['id'] = null
+        waitAlert.close();
+        if (!data["id"]) {
+          data["id"] = null;
         }
         const res = await clientService.getQuery(data);
-        this.user = res
+        this.user = res;
         this.proofs = res.data.files;
         for (let i = 0; i < this.proofs.length; i++) {
           this.proofs[i].uploaddate = moment(this.proofs[i].uploaddate).format(
