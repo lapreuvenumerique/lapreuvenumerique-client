@@ -37,6 +37,7 @@
     "searchFields": "Search fields"
   },
   "home":{
+    "massDeposit": "Mass deposit",
     "proofDeposit":"Proof deposit",
     "proofSearch":"Proof search",
     "docVerify":"Verify a file",
@@ -80,6 +81,13 @@
     "uploadProof": "Upload your file",
     "uploadProofSubtitle": "Drag or click to browse",
     "verify": "Verify"
+  },
+  "massdeposit":{
+    "massdeposit": "Mass deposit",
+    "proofsDeposit" : "Proofs deposit",
+    "uploadProofs": "Upload your proofs",
+    "uploadProofsSubtitle": "Drag or click to browse",
+    "maxSizePerFile": "Max size per file"
   },
   "common":{
     "togglelist":{

@@ -46,11 +46,12 @@
         </v-card>
       </v-col>
       <v-col cols="10">
-        <register-form v-if="this.pageOpened=='settings'" submitMethod="update" :user="user"></register-form>
         <proof-deposit v-if="this.pageOpened=='proofDeposit'" :user="user"></proof-deposit>
+        <mass-deposit v-if="this.pageOpened=='massDeposit'" :user="user"></mass-deposit>
         <integrity v-if="this.pageOpened=='integrity'"></integrity>
         <verify-file-existence v-if="this.pageOpened=='docVerify'"></verify-file-existence>
         <query-proof v-if="this.pageOpened == 'proofSearch'"></query-proof>
+        <register-form v-if="this.pageOpened=='settings'" submitMethod="update" :user="user"></register-form>
       </v-col>
     </v-row>
   </v-container>
@@ -69,7 +70,7 @@ import VerifyFileExistence from "@/components/VerifyFileExistence";
 import QueryProof from "@/components/QueryProof.vue";
 import * as cfg from "../config";
 import bcrypt from "bcryptjs";
-import RegisterFormVue from '../components/RegisterForm.vue';
+import MassDeposit from '@/components/MassDeposit'
 export default {
   icons: {
     iconfont: "md"
@@ -90,6 +91,11 @@ export default {
           title: this.$t("home.proofDeposit"),
           icon: "mdi-upload",
           label: "proofDeposit"
+        },
+        {
+          title: this.$t("home.massDeposit"),
+          icon: "mdi-upload-multiple",
+          label: "massDeposit"
         },
         {
           title: this.$t("home.proofSearch"),
@@ -117,7 +123,8 @@ export default {
     ProofDeposit,
     Integrity,
     VerifyFileExistence,
-    QueryProof
+    QueryProof,
+    MassDeposit
   },
 
   async mounted() {
@@ -143,7 +150,7 @@ export default {
     async setPage(page) {
       if (page == this.pageOpened) return;
       if (this.pageOpened == "settings") {
-        if (RegisterFormVue.props.user != this.user) {
+        if (RegisterForm.props.user != this.user) {
           const resExit = await swal.fire({
             title: this.$t("common.exit"),
             text: this.$t("common.exitAbandonUnsavedChanges"),
