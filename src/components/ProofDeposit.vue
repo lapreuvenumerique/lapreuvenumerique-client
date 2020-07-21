@@ -181,7 +181,7 @@ export default {
     }
     for (let i = 0; i < this.inputs.length; i++) {
       if (this.inputs[i].title == "rgpdDuration") {
-        this.inputs[i].value = 1;
+        this.inputs[i].value = 2;
       }
     }
   },

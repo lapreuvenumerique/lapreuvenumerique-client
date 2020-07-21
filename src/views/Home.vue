@@ -32,7 +32,6 @@
                 </v-list-item>
                 <div style="top: 10px;right: 10px">
                   <v-btn
-                    color="primary"
                     style="position:absolute;top:14px;right:25px"
                     @click="$router.push('/login')"
                   >

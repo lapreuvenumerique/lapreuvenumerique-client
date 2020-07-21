@@ -2,30 +2,32 @@
   <v-container>
     <v-card class="pa-8">
       <v-card
-        :class="credits > 50? 'green':'red'"
+        :class="credits > 50 ? 'green' : 'red'"
         class="lighten-1 white--text"
         align="right"
         style="position: absolute; z-index: 5; right:50px; top:30px"
       >
         <v-row align="center" justify="center">
           <v-col cols="6" class="text-left px-7">
-            <v-icon
-              class="mdi full-width full-height"
-              color="white"
-              size="60"
-            >mdi-currency-usd-circle-outline</v-icon>
+            <v-icon class="mdi full-width full-height" color="white" size="60"
+              >mdi-currency-usd-circle-outline</v-icon
+            >
           </v-col>
           <v-col cols="6" class="text-right px-7">
-            <span
-              style="font-size:15px; font-weight: 300;"
-            >{{ capitalizeFLetter($tc("common.credit", credits))}}</span>
+            <span style="font-size:15px; font-weight: 300;">{{
+              capitalizeFLetter($tc("common.credit", credits))
+            }}</span>
             <br />
-            <b style="font-size:25px;white-space: nowrap;">{{formatNumber(credits)}}</b>
+            <b style="font-size:25px;white-space: nowrap;">{{
+              formatNumber(credits)
+            }}</b>
           </v-col>
         </v-row>
       </v-card>
-      <h2 class="mb-5">{{this.$t("massdeposit.massdeposit")}}</h2>
-      <b style="font-size:20px;">{{$t("massdeposit.maxSizePerFile") + " : " + maxSize}}</b>
+      <h2 class="mb-5">{{ this.$t("massdeposit.massdeposit") }}</h2>
+      <b style="font-size:20px;">{{
+        $t("massdeposit.maxSizePerFile") + " : " + maxSize
+      }}</b>
       <v-form v-model="isValid">
         <v-row>
           <v-col cols="12">
@@ -35,26 +37,47 @@
               :options="dropzoneOptions"
               :useCustomSlot="true"
               @vdropzone-success="(file, response) => this.uploadProof(file)"
-              @vdropzone-removed-file="(file, err ,response) => this.removeProof(file)"
+              @vdropzone-removed-file="
+                (file, err, response) => this.removeProof(file)
+              "
             >
               <div class="dropzone-custom-content">
-                <h3 class="dropzone-custom-title">{{this.$t("massdeposit.uploadProofs")}}</h3>
-                <div class="subtitle">{{this.$t("massdeposit.uploadProofsSubtitle")}}</div>
+                <h3 class="dropzone-custom-title">
+                  {{ this.$t("massdeposit.uploadProofs") }}
+                </h3>
+                <div class="subtitle">
+                  {{ this.$t("massdeposit.uploadProofsSubtitle") }}
+                </div>
               </div>
             </vue-dropzone>
           </v-col>
           <v-col cols="6" v-for="input in inputs" :key="input.title">
             <v-text-field
               :label="$t(`common.togglelist.${input.title}`)"
-              :rules="input.title != 'batchNumber'? (input.required? [value => !!value || 'required']: []):([value => !!value || 'required'])"
+              :rules="
+                input.title != 'batchNumber'
+                  ? input.required
+                    ? [(value) => !!value || 'required']
+                    : []
+                  : [(value) => !!value || 'required']
+              "
               :outlined="input.required"
               v-model="input.value"
             ></v-text-field>
           </v-col>
           <v-col cols="6">
-            <v-select :items="topics" :label="$t('common.togglelist.topic')" v-model="topic.value" v-if="topic.isActive"></v-select>
+            <v-select
+              :items="topics"
+              :label="$t('common.togglelist.topic')"
+              v-model="topic.value"
+              v-if="topic.isActive"
+            ></v-select>
           </v-col>
-          <v-col v-for="chipinput in chipsinputs" :key="chipinput.title" cols="6">
+          <v-col
+            v-for="chipinput in chipsinputs"
+            :key="chipinput.title"
+            cols="6"
+          >
             <v-combobox
               v-model="chipinput.value"
               chips
@@ -78,7 +101,9 @@
           </v-col>
         </v-row>
         <v-col cols="12" style="text-align: right;">
-          <v-btn @click="sendProof()" color="primary">{{$t('common.submit')}}</v-btn>
+          <v-btn @click="sendProof()" color="primary">{{
+            $t("common.submit")
+          }}</v-btn>
         </v-col>
       </v-form>
     </v-card>
@@ -101,21 +126,21 @@ export default {
       credits: 0,
       dropzoneOptions: {
         url: "https://httpbin.org/post",
-        addRemoveLinks: true
+        addRemoveLinks: true,
       },
       isValid: false,
       maxSize: "1000ko",
       clientInfo: {},
       creditCost: 0,
       topics: [],
-      topic: { isActive: false, value: "Default" }
+      topic: { isActive: false, value: "Default" },
     };
   },
   components: {
-    vueDropzone: vue2Dropzone
+    vueDropzone: vue2Dropzone,
   },
   props: {
-    user: Object
+    user: Object,
   },
   async mounted() {
     this.loadTopics();
@@ -138,7 +163,7 @@ export default {
         this.chipsinputs.push({
           title: properties[i],
           required: currentProperty == 2,
-          value: ""
+          value: "",
         });
         continue;
       }
@@ -151,14 +176,14 @@ export default {
         this.inputs[0] = {
           title: properties[i],
           required: currentProperty == 2,
-          value: ""
+          value: "",
         };
         this.inputs.push(temp);
       } else {
         this.inputs.push({
           title: properties[i],
           required: currentProperty == 2,
-          value: ""
+          value: "",
         });
       }
     }
@@ -181,7 +206,7 @@ export default {
         const alertErr = await Swal.fire({
           icon: "error",
           title: this.$t("common.error"),
-          text: this.$t("common.keyRevokedDisabled")
+          text: this.$t("common.keyRevokedDisabled"),
         });
         this.$router.push("/login");
       }
@@ -189,7 +214,7 @@ export default {
     }
     for (let i = 0; i < this.inputs.length; i++) {
       if (this.inputs[i].title == "rgpdDuration") {
-        this.inputs[i].value = 1;
+        this.inputs[i].value = 2;
       }
     }
   },
@@ -209,7 +234,7 @@ export default {
           const alertErr = await Swal.fire({
             icon: "error",
             title: this.$t("common.error"),
-            text: this.$t("common.keyRevokedDisabled")
+            text: this.$t("common.keyRevokedDisabled"),
           });
           this.$router.push("/login");
         }
@@ -243,14 +268,14 @@ export default {
 
     handleCreditCost() {
       this.creditCost = 0;
+      let rgpdDuration = 2
+      for (let i = 0; i < this.inputs.length; i++) {
+        if (this.inputs[i].title == "rgpdDuration" && this.inputs[i].value) {
+          rgpdDuration = this.inputs[i].value;
+        }
+      }
       for (let s = 0; s < this.proofData.length; s++) {
         const file = this.proofData[s];
-        let rgpdDuration = 1;
-        for (let i = 0; i < this.inputs.length; i++) {
-          if (this.inputs[i].title == "rgpdDuration" && this.inputs[i].value) {
-            let rgpdDuration = this.inputs[i].value;
-          }
-        }
         const cost =
           Math.ceil(file.size / 1024 / this.clientInfo.creditSizeKo) *
           rgpdDuration *
@@ -268,7 +293,7 @@ export default {
           icon: "error",
           title: this.$t("proofDeposit.noFile"),
           text: this.$t("proofDeposit.noFileProvided"),
-          confirmButtonText: "OK!"
+          confirmButtonText: "OK!",
         });
         return;
       }
@@ -284,7 +309,7 @@ export default {
           this.$tc("common.credit", parseInt(this.creditCost, 10)),
         showCancelButton: true,
         confirmButtonText: this.$t("common.confirm"),
-        cancelButtonText: this.$t("common.cancel")
+        cancelButtonText: this.$t("common.cancel"),
       });
 
       if (!alertRes.isConfirmed) {
@@ -311,26 +336,17 @@ export default {
           text: this.$t("common.uploadingData"),
           icon: "info",
           showConfirmButton: false,
-          allowOutsideClick: false
+          allowOutsideClick: false,
         });
         const res = await proofService.uploadProofs(this.proofData, formData);
         await this.updateCredits();
-        if (res.data.status == "SUCCESS") {
-          this.reset();
-          Swal.fire({
-            title: this.$t("common.saveSuccess"),
-            text: this.$t("common.dataUploaded"),
-            icon: "success",
-            confirmButtonText: "OK"
-          });
-        } else {
-          Swal.fire({
-            title: this.$t("common.errorUpload"),
-            text: this.$t("common.dataNotUploaded") + " : " + res.data.message,
-            icon: "error",
-            confirmButtonText: "OK"
-          });
-        }
+        this.reset();
+        Swal.fire({
+          title: this.$t("common.saveSuccess"),
+          text: this.$t("common.dataUploaded"),
+          icon: "success",
+          confirmButtonText: "OK",
+        });
       } catch (err) {
         console.log(err);
         let text =
@@ -354,10 +370,10 @@ export default {
           title: this.$t("common.errorUpload"),
           text,
           icon: "error",
-          confirmButtonText: "OK"
+          confirmButtonText: "OK",
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>

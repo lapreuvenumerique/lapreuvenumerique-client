@@ -22,6 +22,7 @@ export class ProofService {
             await this.httpService.put("1.0/massdeposit", formData)
         }
         await this.httpService.post("1.0/endmassdeposit", { transactionId: beginRes.data.transactionId })
+        return
     }
 
 }
