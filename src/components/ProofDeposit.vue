@@ -52,7 +52,7 @@
             ></v-text-field>
           </v-col>
           <v-col cols="6">
-            <v-select :items="topics" label="Topic" v-model="topic.value" v-if="topic.isActive"></v-select>
+            <v-select :items="topics" :label="$t('common.togglelist.topic')" v-model="topic.value" v-if="topic.isActive"></v-select>
           </v-col>
           <v-col v-for="chipinput in chipsinputs" :key="chipinput.title" cols="6">
             <v-combobox
