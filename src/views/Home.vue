@@ -45,13 +45,18 @@
           </v-navigation-drawer>
         </v-card>
       </v-col>
-      <v-col cols="10">
-        <proof-deposit v-if="this.pageOpened=='proofDeposit'" :user="user"></proof-deposit>
-        <mass-deposit v-if="this.pageOpened=='massDeposit'" :user="user"></mass-deposit>
+      <v-col cols="10" :key="keyReload">
+        <proof-deposit v-if="this.pageOpened=='proofDeposit'" :user="user" v-on:reset="reset"></proof-deposit>
+        <mass-deposit v-if="this.pageOpened=='massDeposit'" :user="user" v-on:reset="reset"></mass-deposit>
         <integrity v-if="this.pageOpened=='integrity'"></integrity>
-        <verify-file-existence v-if="this.pageOpened=='docVerify'"></verify-file-existence>
+        <verify-file-existence v-if="this.pageOpened=='docVerify'" v-on:reset="reset"></verify-file-existence>
         <query-proof v-if="this.pageOpened == 'proofSearch'"></query-proof>
-        <register-form v-if="this.pageOpened=='settings'" submitMethod="update" :user="user"></register-form>
+        <register-form
+          v-if="this.pageOpened=='settings'"
+          submitMethod="update"
+          :user="user"
+          v-on:reset="reset"
+        ></register-form>
       </v-col>
     </v-row>
   </v-container>
@@ -79,6 +84,7 @@ export default {
 
   data() {
     return {
+      keyReload: 0,
       pageOpened: "",
       userPicture:
         "https://alumni.crg.eu/sites/default/files/default_images/default-picture_0_0.png",
@@ -144,6 +150,9 @@ export default {
     this.updateCredits();
   },
   methods: {
+    reset() {
+      this.keyReload++;
+    },
     async updateCredits() {
       const credit = await clientService.getCredits();
       this.credits = credit.data.credits;

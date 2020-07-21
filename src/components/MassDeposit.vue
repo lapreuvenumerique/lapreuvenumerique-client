@@ -59,6 +59,7 @@
               v-model="chipinput.value"
               chips
               clearable
+              dense
               :label="$t(`common.togglelist.${chipinput.title}`)"
               multiple
             >
@@ -236,6 +237,9 @@ export default {
         this.proofData.splice(index, 1);
       }
     },
+    reset() {
+      this.$emit("reset");
+    },
 
     handleCreditCost() {
       this.creditCost = 0;
@@ -312,6 +316,7 @@ export default {
         const res = await proofService.uploadProofs(this.proofData, formData);
         await this.updateCredits();
         if (res.data.status == "SUCCESS") {
+          this.reset();
           Swal.fire({
             title: this.$t("common.saveSuccess"),
             text: this.$t("common.dataUploaded"),
@@ -327,7 +332,7 @@ export default {
           });
         }
       } catch (err) {
-        console.log(err)
+        console.log(err);
         let text =
           this.$t("common.dataNotUploaded") + " : " + err.response.message;
         switch (err.response.status) {
@@ -339,6 +344,7 @@ export default {
             break;
           }
           case 500: {
+            text = this.$t("common.serverError");
             break;
           }
           default: {

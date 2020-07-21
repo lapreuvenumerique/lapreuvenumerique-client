@@ -13,16 +13,16 @@ export class HttpService {
     }
 
     post(url, data) {
-        return axios.post(url, data, { 
-            headers: this.getHeaders(), 
-            responseType: 'json' 
+        return axios.post(url, data, {
+            headers: this.getHeaders(),
+            responseType: 'json'
         })
     }
 
     put(url, data) {
-        return axios.put(url, data, { 
-            headers: this.getHeaders(), 
-            responseType: 'json' 
+        return axios.put(url, data, {
+            headers: this.getHeaders(),
+            responseType: 'json'
         })
     }
 
@@ -39,14 +39,16 @@ export class HttpService {
     }
 
     delete(url) {
-        return axios.delete(url, { 
-            headers: this.getHeaders() 
+        return axios.delete(url, {
+            headers: this.getHeaders()
         })
     }
 
     getHeaders() {
-        const headers = {'Authorization': 'Basic ' + store.state.apiKey,
-        'x-customeruid': store.state.customerUid}
+        const headers = {
+            'Authorization': 'Basic ' + store.state.apiKey,
+            'x-customeruid': store.state.customerUid
+        }
         return headers
     }
 

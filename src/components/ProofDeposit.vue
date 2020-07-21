@@ -59,6 +59,7 @@
               v-model="chipinput.value"
               chips
               clearable
+              dense
               :label="$t(`common.togglelist.${chipinput.title}`)"
               multiple
             >
@@ -127,7 +128,10 @@ export default {
       if (properties[i] == "file" && currentProperty != 0) {
         continue;
       }
-      if ((properties[i] == "copy" || properties[i] == "keywords") && currentProperty != 0) {
+      if (
+        (properties[i] == "copy" || properties[i] == "keywords") &&
+        currentProperty != 0
+      ) {
         this.chipsinputs.push({
           title: properties[i],
           required: currentProperty == 2,
@@ -217,6 +221,9 @@ export default {
     removeProof() {
       this.proofData = "";
     },
+    reset() {
+      this.$emit("reset");
+    },
 
     handleCreditCost() {
       const file = this.proofData;
@@ -292,6 +299,7 @@ export default {
         const res = await proofService.uploadProof(formData);
         await this.updateCredits();
         if (res.data.status == "SUCCESS") {
+          this.reset();
           Swal.fire({
             title: this.$t("common.saveSuccess"),
             text: this.$t("common.dataUploaded"),
@@ -307,9 +315,9 @@ export default {
           });
         }
       } catch (err) {
-        let text =
-          this.$t("common.dataNotUploaded") + " : " + err.response.message;
-        switch (err.response.status) {
+        console.log(err);
+        let text = this.$t("common.dataNotUploaded") + " : " + err.data.message;
+        switch (err.data.status) {
           case 401: {
             text = this.$t("common.credentialsIncorrect");
             break;
@@ -318,6 +326,7 @@ export default {
             break;
           }
           case 500: {
+            text = this.$t("common.serverError");
             break;
           }
           default: {

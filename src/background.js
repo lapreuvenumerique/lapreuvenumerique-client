@@ -3,8 +3,6 @@
 import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
-import { initSplashScreen, OfficeTemplate } from 'electron-splashscreen';
-import { resolve } from 'app-root-path';
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -27,23 +25,6 @@ function createWindow() {
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION
     }
   })
-
-  const hideSplashscreen = initSplashScreen({
-    win,
-    icon: isDevelopment ? resolve('assets/icon.ico') : undefined,
-    url: OfficeTemplate,
-    width: 500,
-    height: 300,
-    brand: 'La Preuve Numérique',
-    productName: 'LPN',
-    logo: resolve('assets/logo.png'),
-    website: 'www.lpn.com',
-    text: 'Initializing ...'
-  });
-  win.once('ready-to-show', () => {
-    win.show();
-    hideSplashscreen();
-  });
   // Quit when all windows are closed.
   app.on('window-all-closed', () => {
     // On macOS it is common for applications and their menu bar

@@ -6,22 +6,22 @@ export class ClientService {
     getCredits() {
         return this.httpService.get("/1.0/credits")
     }
-    getInfo(){
+    getInfo() {
         return this.httpService.get("/1.0/client")
     }
-    getQuery(data){
+    getQuery(data) {
         return this.httpService.post("/1.0/proofsquery", data)
     }
-    getProofCount(){
+    getProofCount() {
         return this.httpService.get("/1.0/proofscount")
     }
-    downloadProof(id){
+    downloadProof(id) {
         return this.httpService.get("/1.0/prooffiledownload/" + id, true)
     }
-    downloadReceipt(id){
+    downloadReceipt(id) {
         return this.httpService.get("/1.0/proofreceiptdownload/" + id, true)
     }
-    getTopics(){
+    getTopics() {
         return this.httpService.get("/1.0/topics")
     }
 

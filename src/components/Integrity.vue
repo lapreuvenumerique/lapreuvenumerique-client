@@ -5,12 +5,7 @@
       <v-row>
         <v-col cols="12" class="text-center">
           <h1>{{this.$t("integrity.verifyDataIntegrity")}}</h1>
-          <v-btn
-            color="primary"
-            x-large
-            class="ma-10"
-            @click="verifyIntegrity"
-          >{{this.btnText}}</v-btn>
+          <v-btn color="primary" x-large class="ma-10" @click="verifyIntegrity">{{this.btnText}}</v-btn>
         </v-col>
       </v-row>
     </v-card>
@@ -26,8 +21,7 @@ export default {
       result: ""
     };
   },
-  props: {
-  },
+  props: {},
   methods: {
     async verifyIntegrity() {
       let waitAlert = swal.fire({
@@ -65,7 +59,7 @@ export default {
           this.$tc("integrity.recordIsCorrect", { count: res.data.number }),
         confirmButtonText: "OK!"
       });
-    },
+    }
   }
 };
 </script>

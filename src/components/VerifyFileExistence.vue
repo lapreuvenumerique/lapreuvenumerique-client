@@ -27,7 +27,7 @@
 <script>
 import proofService from "@/service/proof-service";
 import vue2Dropzone from "vue2-dropzone";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 export default {
   data() {
     return {
@@ -55,7 +55,10 @@ export default {
   methods: {
     uploadProof(file) {
       this.proofData = file;
-       this.sendProof()
+      this.sendProof();
+    },
+    reset() {
+      this.$emit("reset");
     },
     async sendProof() {
       if (this.proofData) {
@@ -73,6 +76,7 @@ export default {
           fingerprint: res1.data.fingerprint
         });
         if (res2.data.status == "SUCCESS") {
+          this.reset();
           Swal.fire({
             icon: "success",
             title: this.$t("common.success"),
@@ -94,13 +98,13 @@ export default {
           });
           return false;
         }
-      }else{
+      } else {
         Swal.fire({
           title: this.$t("common.error"),
           text: this.$t("fileExistence.noFileProvided"),
           icon: "error",
           confirmButtonText: "OK"
-        })
+        });
       }
     }
   }
