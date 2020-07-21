@@ -71,25 +71,23 @@ export default {
           showConfirmButton: false,
           allowOutsideClick: false
         });
-        const res1 = await proofService.getFingerprint(formData);
-        const res2 = await proofService.compareFingerprints({
-          fingerprint: res1.data.fingerprint
-        });
-        if (res2.data.status == "SUCCESS") {
+        try {
+          const res1 = await proofService.getFingerprint(formData);
+          const res2 = await proofService.compareFingerprints({
+            fingerprint: res1.data.fingerprint
+          });
           this.reset();
           Swal.fire({
             icon: "success",
             title: this.$t("common.success"),
             text:
-              this.$tc("fileExistence.fileExists", {
-                count: res2.data.ids.length
-              }) +
+              this.$tc("fileExistence.fileExists", res2.data.ids.length) +
               " " +
               res2.data.ids,
             confirmButtonText: "OK!"
           });
           return true;
-        } else {
+        } catch (err) {
           Swal.fire({
             icon: "error",
             title: this.$t("common.error"),

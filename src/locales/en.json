@@ -125,6 +125,7 @@
     "save": "Save",
     "reset": "Reset",
     "register": "Register",
+    "login": "Login",
     "cancel": "Cancel",
     "displayNameLabel": "Display name",
     "uidRequired": "Customer UID required",
@@ -159,6 +160,7 @@
     "search": "Search",
     "keyRevokedDisabled": "Your key got revoked or disabled",
     "fields": "Fields",
-    "serverError": "Server error"
+    "serverError": "Server error",
+    "errorOccured": "An error occured"
   }
 }

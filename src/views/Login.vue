@@ -39,7 +39,7 @@
           <v-card-actions>
             <v-btn @click="gotoRegister()" color="primary">{{$t("common.register")}}</v-btn>
             <v-spacer></v-spacer>
-            <v-btn @click="login" :disabled="!isValid" color="primary">{{$t("common.submit")}}</v-btn>
+            <v-btn @click="login" :disabled="!isValid" color="primary">{{$t("common.login")}}</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>

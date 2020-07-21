@@ -9,6 +9,9 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 // be closed automatically when the JavaScript object is garbage collected.
 let win
 
+let splash
+
+
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
@@ -17,14 +20,11 @@ protocol.registerSchemesAsPrivileged([
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
+    titleBarStyle: 'hidden',
     width: 1920,
     height: 1080,
-    webPreferences: {
-      // Use pluginOptions.nodeIntegration, leave this alone
-      // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
-      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION
-    }
-  })
+    show: false // don't show the main window
+  });
   // Quit when all windows are closed.
   app.on('window-all-closed', () => {
     // On macOS it is common for applications and their menu bar
@@ -46,17 +46,24 @@ function createWindow() {
   win.on('closed', () => {
     win = null
   })
+
+
 }
 
+app.on('ready', () => {
+  // create main browser window
 
+  createWindow()
+  // create a new `splash`-Window 
+  splash = new BrowserWindow({ width: 552, height: 422, frame: false, alwaysOnTop: true });
+  splash.loadURL('app://./lpnlogo.html')
 
-app.on('activate', () => {
-  // On macOS it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (win === null) {
-    createWindow()
-  }
-})
+  // if main window is ready to show, then destroy the splash window and show up the main window
+  win.once('ready-to-show', () => {
+
+    setTimeout(function () { splash.destroy(); win.show(); }, 2000)
+  });
+});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

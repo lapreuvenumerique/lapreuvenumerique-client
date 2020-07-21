@@ -300,4 +300,7 @@ export default {
 .v-text-field__details {
   display: none;
 }
+tbody tr:nth-of-type(even) {
+  background-color: rgba(255, 214, 92, 1);
+}
 </style>

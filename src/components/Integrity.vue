@@ -31,34 +31,34 @@ export default {
         showConfirmButton: false,
         allowOutsideClick: false
       });
-      const res = await integrityService.verifyIntegrity();
-      if (res.data.status == "FAILED") {
-        this.result = res.data.message;
-        swal.fire({
-          icon: "error",
-          title: this.$t("common.error"),
-          text: this.$t("integrity.blockchainIntegrityIncorrect"),
-          confirmButtonText: "OK!"
-        });
-        return;
-      }
-      this.result =
-        this.$t("integrity.integrityOfBlockchain") +
-        " " +
-        res.data.number +
-        " " +
-        this.$tc("integrity.recordIsCorrect", { count: res.data.number });
-      swal.fire({
-        icon: "success",
-        title: this.$t("common.success"),
-        text:
+      try {
+        const res = await integrityService.verifyIntegrity();
+        this.result =
           this.$t("integrity.integrityOfBlockchain") +
           " " +
           res.data.number +
           " " +
-          this.$tc("integrity.recordIsCorrect", { count: res.data.number }),
-        confirmButtonText: "OK!"
-      });
+          this.$tc("integrity.recordIsCorrect", res.data.number);
+        swal.fire({
+          icon: "success",
+          title: this.$t("common.success"),
+          text: this.result,
+          confirmButtonText: "OK!"
+        });
+      } catch (err) {
+        switch (err.response?.status) {
+          case 456: {
+            this.result = err.response?.message || this.$t("common.errorOccured");
+            swal.fire({
+              icon: "error",
+              title: this.$t("common.error"),
+              text: this.$t("integrity.blockchainIntegrityIncorrect") + " : " + this.result,
+              confirmButtonText: "OK!"
+            });
+            break;
+          }
+        }
+      }
     }
   }
 };

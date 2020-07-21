@@ -281,7 +281,7 @@ export default {
           " : " +
           this.creditCost +
           " " +
-          this.$tc("common.credit", { count: parseInt(this.creditCost, 10) }),
+          this.$tc("common.credit", parseInt(this.creditCost, 10)),
         showCancelButton: true,
         confirmButtonText: this.$t("common.confirm"),
         cancelButtonText: this.$t("common.cancel")

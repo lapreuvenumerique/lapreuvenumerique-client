@@ -34,8 +34,8 @@
     "searchFields": "Chercher dans les champs"
   },
   "home": {
-    "massDeposit": "Dépot de masse",
-    "proofDeposit": "Dépot de preuve",
+    "massDeposit": "Dépôt de masse",
+    "proofDeposit": "Dépôt de preuve",
     "proofSearch": "Recherche de preuve",
     "docVerify": "Vérifier l'existence d'un fichier",
     "integrity": "Intégrité de la blockchain",
@@ -49,7 +49,7 @@
     "passwordDifferent": "Les mots de passe sont différents"
   },
   "proofDeposit": {
-    "proofDeposit": "Dépot de preuve",
+    "proofDeposit": "Dépôt de preuve",
     "uploadProof": "Envoyez votre preuve",
     "uploadProofSubtitle": "Glissez votre preuve ici ou cliquez pour rechercher",
     "noDuplicate": "Ne pas autoriser les preuves en double",
@@ -63,21 +63,21 @@
     "dataIntergrity": "Intégrité de la blockchain",
     "verifyDataIntegrity": "Vérifier l'intégrité de la blockchain",
     "integrityOfBlockchain": "L'intégrité de la blockchain avec ",
-    "recordIsCorrect": "preuve est correcte | preuves est correcte",
+    "recordIsCorrect": "preuves est correcte | preuve est correcte | preuves est correcte",
     "verify": "Vérifier",
     "blockchainIntegrityIncorrect": "L'intégrité de la blockchain est incorrect, merci de contactez votre administrateur"
   },
   "fileExistence": {
     "verifyFileExistence": "Verifier l'existence d'une preuve",
-    "fileExists": "Une preuve existe avec cette id: | Des preuves existent avec ces ids:",
+    "fileExists": "Aucune preuve n'existe | Une preuve existe avec cette id: | Des preuves existent avec ces ids:",
     "noFileExists": "Aucune preuve n'existe avec cette empreinte numérique",
     "uploadProof": "Envoyez votre preuve",
     "uploadProofSubtitle": "Glissez votre preuve ici ou cliquez pour rechercher",
     "verify": "Vérifier"
   },
   "massdeposit": {
-    "massdeposit": "Dépoot de preuves de masse",
-    "proofsDeposit": "Dépot de preuves",
+    "massdeposit": "Dépôt de preuves de masse",
+    "proofsDeposit": "Dépôt de preuves",
     "uploadProofs": "Envoyez vos preuves",
     "uploadProofsSubtitle": "Glissez votre preuve ici ou cliquez pour rechercher",
     "maxSizePerFile": "Taille maximale par preuve"
@@ -90,7 +90,7 @@
       "required": "Requis",
       "file": "Fichier",
       "folderName": "Dossier",
-      "reference": "Reference",
+      "reference": "Réference",
       "uids": "UID reliée",
       "copy": "Copie d'E-Mail",
       "identity": "Identité",
@@ -118,6 +118,7 @@
     "save": "Enregistrer",
     "reset": "Réinitialiser",
     "register": "Inscription",
+    "login": "Se connecter",
     "cancel": "Annuler",
     "displayNameLabel": "Nom d'affichage",
     "uidRequired": "UID de client obligatoire",
@@ -152,6 +153,7 @@
     "search": "Rechercher",
     "keyRevokedDisabled": "Votre clé d'api a été révoquée ou est temporairement désactivée",
     "fields": "Champs",
-    "serverError": "Erreur serveur"
+    "serverError": "Erreur serveur",
+    "errorOccured": "Une erreur est survenue"
   }
 }

@@ -424,19 +424,22 @@ export default {
         });
         return;
       }
-      const res = await dbService.updatePasswordById(
-        this.user.id,
-        this.password.trim().length > 0 &&
-          this.confirmPassword.trim().length > 0
-          ? await bcrypt.hash(this.confirmPassword, 12)
-          : this.user.password
-      );
-      swal.fire({
-        title: this.$t("common.passwordSuccess"),
-        text: this.$t("common.passwordChanged"),
-        icon: "success",
-        confirmButtonText: "OK"
-      });
+      try {
+        const res = await dbService.updatePasswordById(
+          this.user.id,
+          this.password.trim().length > 0 &&
+            this.confirmPassword.trim().length > 0
+            ? await bcrypt.hash(this.confirmPassword, 12)
+            : this.user.password
+        );
+
+        swal.fire({
+          title: this.$t("common.passwordSuccess"),
+          text: this.$t("common.passwordChanged"),
+          icon: "success",
+          confirmButtonText: "OK"
+        });
+      } catch (err) {}
     },
 
     syncToggles() {

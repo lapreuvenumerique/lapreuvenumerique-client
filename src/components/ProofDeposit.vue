@@ -52,7 +52,12 @@
             ></v-text-field>
           </v-col>
           <v-col cols="6">
-            <v-select :items="topics" :label="$t('common.togglelist.topic')" v-model="topic.value" v-if="topic.isActive"></v-select>
+            <v-select
+              :items="topics"
+              :label="$t('common.togglelist.topic')"
+              v-model="topic.value"
+              v-if="topic.isActive"
+            ></v-select>
           </v-col>
           <v-col v-for="chipinput in chipsinputs" :key="chipinput.title" cols="6">
             <v-combobox
@@ -263,7 +268,7 @@ export default {
           " : " +
           this.creditCost +
           " " +
-          this.$tc("common.credit", { count: parseInt(this.creditCost, 10) }),
+          this.$tc("common.credit", parseInt(this.creditCost, 10)),
         showCancelButton: true,
         confirmButtonText: this.$t("common.confirm"),
         cancelButtonText: this.$t("common.cancel")
@@ -296,9 +301,8 @@ export default {
           showConfirmButton: false,
           allowOutsideClick: false
         });
-        const res = await proofService.uploadProof(formData);
-        await this.updateCredits();
-        if (res.data.status == "SUCCESS") {
+        try {
+          const res = await proofService.uploadProof(formData);
           this.reset();
           Swal.fire({
             title: this.$t("common.saveSuccess"),
@@ -306,7 +310,8 @@ export default {
             icon: "success",
             confirmButtonText: "OK"
           });
-        } else {
+          await this.updateCredits();
+        } catch (err) {
           Swal.fire({
             title: this.$t("common.errorUpload"),
             text: this.$t("common.dataNotUploaded") + " : " + res.data.message,
