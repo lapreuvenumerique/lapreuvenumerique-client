@@ -1,5 +1,6 @@
 {
   "name": "la_preuve_numerique_client",
+  "productName": "La Preuve Numérique Client",
   "version": "0.1.0",
   "private": true,
   "scripts": {
