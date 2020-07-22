@@ -6,7 +6,7 @@
         :class="credits > 50 ? 'green' : 'red'"
         class="lighten-1 white--text"
         align="right"
-        style="position: absolute; z-index: 5; right:50px; top:30px"
+        style="position: absolute; z-index: 5; right:34px; top:30px"
       >
         <v-row align="center" justify="center">
           <v-col cols="6" class="text-left px-7">
@@ -14,12 +14,12 @@
               >mdi-currency-usd-circle-outline</v-icon
             >
           </v-col>
-          <v-col cols="6" class="text-right pr-5 pa-0">
-            <span style="font-size:15px; font-weight: 300;">{{
+          <v-col cols="6" class="text-right">
+            <span style="font-size:15px; font-weight: 300;" class="mr-5">{{
               capitalizeFLetter($tc("common.credit", credits))
             }}</span>
             <br />
-            <b style="font-size:25px;white-space: nowrap;" class="">{{
+            <b style="font-size:25px;white-space: nowrap;" class="mr-5">{{
               formatNumber(credits)
             }}</b>
           </v-col>

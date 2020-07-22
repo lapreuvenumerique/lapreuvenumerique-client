@@ -9,8 +9,8 @@
             class="pa-0"
             permanent
           >
-            <div style="position: relative; position: -webkit-relative; top:0;">
-              <v-list>
+            <div style="position: relative; position: -webkit-relative; top:0;" width="100%">
+              <v-list width="100%">
                 <div style="top: 10px;right: 10px">
                   <v-btn
                     style="position:absolute;top:14px;right:25px;z-index: 50"
@@ -35,11 +35,11 @@
                   link
                   @click="setPage(item.label)"
                 >
-                  <v-list-item-icon>
+                  <v-list-item-icon class="mr-2">
                     <v-icon class="mdi">{{ item.icon }}</v-icon>
                   </v-list-item-icon>
 
-                  <v-list-item-content>
+                  <v-list-item-content class="ml-2">
                     <v-list-item-title>{{ item.title }}</v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
@@ -47,14 +47,15 @@
                 <v-list-item
                   href="https://www.lapreuvenumerique.com"
                   target="_blank"
-                  style="bottom: 0px; position:absolute;"
+                  link
+                  style="bottom: 20px; position:absolute; right:0; left:0;"
                   width="100%"
                 >
-                  <v-list-item-icon>
+                  <v-list-item-icon class="mr-2">
                     <v-icon> mdi-open-in-new </v-icon>
                   </v-list-item-icon>
 
-                  <v-list-item-content>
+                  <v-list-item-content class="ml-2">
                     <v-list-item-title>{{
                       $t("home.website")
                     }}</v-list-item-title>
