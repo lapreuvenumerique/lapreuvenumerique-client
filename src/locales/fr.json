@@ -81,7 +81,10 @@
     "proofsDeposit": "Dépôt de preuves",
     "uploadProofs": "Envoyez vos preuves",
     "uploadProofsSubtitle": "Glissez votre preuve ici ou cliquez pour rechercher",
-    "maxSizePerFile": "Taille maximale par preuve"
+    "maxSizePerFile": "Taille maximale par preuve",
+    "formError": "L'information donnée n'est pas valide",
+    "batchNumberRequired": "Notez que le numéro de lot est requis",
+    "noFileProvidedMoreOne": "Pas assez de preuves n'ont été déposées pour utiliser le dépôt de masse"
   },
   "common": {
     "togglelist": {

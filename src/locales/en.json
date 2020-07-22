@@ -88,7 +88,10 @@
     "proofsDeposit": "Proofs deposit",
     "uploadProofs": "Upload your proofs",
     "uploadProofsSubtitle": "Drag or click to browse",
-    "maxSizePerFile": "Max size per file"
+    "maxSizePerFile": "Max size per file",
+    "formError": "Information entered contains an error",
+    "batchNumberRequired": "Note that the batch number is required",
+    "noFileProvidedMoreOne": "Not enough proof was provided to use mass deposit"
   },
   "common": {
     "togglelist": {

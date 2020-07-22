@@ -53,6 +53,7 @@
           </v-col>
           <v-col cols="6" v-for="input in inputs" :key="input.title">
             <v-text-field
+              :type="input.title == 'rgpdDuration'? 'number':''"
               :label="$t(`common.togglelist.${input.title}`)"
               :rules="
                 input.title != 'batchNumber'
@@ -287,13 +288,19 @@ export default {
     },
     async sendProof() {
       if (!this.isValid) {
+        await Swal.fire({
+          icon: "error",
+          title: this.$t("massdeposit.formError"),
+          text: this.$t("massdeposit.batchNumberRequired"),
+          confirmButtonText: "OK!",
+        });
         return;
       }
-      if (this.proofData.length == 0) {
+      if (this.proofData.length <= 1) {
         await Swal.fire({
           icon: "error",
           title: this.$t("proofDeposit.noFile"),
-          text: this.$t("proofDeposit.noFileProvided"),
+          text: this.$t("massdeposit.noFileProvidedMoreOne"),
           confirmButtonText: "OK!",
         });
         return;
@@ -359,6 +366,7 @@ export default {
           }
           case 422: {
             text = this.$t("common.infoNotValid");
+            break;
           }
           case 500: {
             text = this.$t("common.serverError");
