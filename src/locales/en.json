@@ -49,7 +49,8 @@
     "confirmNewPassword": "Confirm new password",
     "password": "Password",
     "confirmPassword": "Confirm password",
-    "passwordDifferent": "Passwords are different"
+    "passwordDifferent": "Passwords are different",
+    "website": "Visit lapreuvenumerique.com"
   },
   "proofDeposit": {
     "proofDeposit": "Proof deposit",
@@ -161,6 +162,8 @@
     "keyRevokedDisabled": "Your key got revoked or disabled",
     "fields": "Fields",
     "serverError": "Server error",
-    "errorOccured": "An error occured"
+    "errorOccured": "An error occured",
+    "infoNotValid": "Information provided is not valid",
+    "loadmore": "Load more"
   }
 }

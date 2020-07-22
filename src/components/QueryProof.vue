@@ -8,21 +8,29 @@
       >
         <v-row align="center" justify="center">
           <v-col cols="3" class="text-left px-7">
-            <v-icon class="mdi full-width full-height" color="white" size="60">mdi-database</v-icon>
+            <v-icon class="mdi full-width full-height" color="white" size="60"
+              >mdi-database</v-icon
+            >
           </v-col>
           <v-col cols="9" class="text-right px-7">
-            <span style="font-size:15px; font-weight: 300;">{{$t("proofQuery.proofCount")}}</span>
+            <span style="font-size:15px; font-weight: 300;">{{
+              $t("proofQuery.proofCount")
+            }}</span>
             <br />
-            <b style="font-size:25px;white-space: nowrap;">{{formatNumber(proofCount)}}</b>
+            <b style="font-size:25px;white-space: nowrap;">{{
+              formatNumber(proofCount)
+            }}</b>
           </v-col>
         </v-row>
       </v-card>
-      <h2 class="mb-10">{{this.$t("proofDeposit.proofDeposit")}}</h2>
-      <h3 class="mt-10 mb-4">{{this.$t("proofQuery.searchFields")}} :</h3>
+      <h2 class="mb-10">{{ this.$t("proofDeposit.proofDeposit") }}</h2>
+      <h3 class="mt-10 mb-4">{{ this.$t("proofQuery.searchFields") }} :</h3>
       <v-row>
         <v-expansion-panels>
           <v-expansion-panel>
-            <v-expansion-panel-header>{{$t("common.fields")}}</v-expansion-panel-header>
+            <v-expansion-panel-header>{{
+              $t("common.fields")
+            }}</v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-row class="d-flex align-center">
                 <v-col
@@ -50,7 +58,9 @@
                     :label="field.title"
                     v-if="field.field == 'keywords'"
                   >
-                    <template v-slot:selection="{ attrs, item, select, selected }">
+                    <template
+                      v-slot:selection="{ attrs, item, select, selected }"
+                    >
                       <v-chip
                         v-bind="attrs"
                         :input-value="selected"
@@ -78,7 +88,27 @@
           </v-expansion-panel>
         </v-expansion-panels>
         <v-col cols="12" class="text-right">
-          <v-btn color="primary" @click="searchQuery(field, value)">{{$t("common.search")}}</v-btn>
+          <v-btn
+            color="primary"
+            @click="
+              getDataFromApi(queryPage ++).then((data) => {
+                proofs = data.items;
+                searchProofCount = data.total;
+              })"
+            v-if="dataOnSearch == fields"
+            class="mr-5"
+            >{{ $t("common.loadmore") }}</v-btn
+          >
+          <v-btn
+            color="primary"
+            @click="
+              getDataFromApi(queryPage = 1).then((data) => {
+                proofs = data.items;
+                searchProofCount = data.total;
+              })
+            "
+            >{{ $t("common.search") }}</v-btn
+          >
         </v-col>
       </v-row>
       <v-row>
@@ -98,26 +128,46 @@
         :items="proofs"
         item-key="id"
         class="elevation-1"
+        :server-items-length="searchProofCount"
         :expanded.sync="expanded"
         show-expand
         :search="search"
+        :footer-props="footerProps"
       >
         <template v-slot:item.actions="{ item }">
-          <v-icon small @click="downloadFile(item.id, item.fileName)" class="mr-2">mdi-download</v-icon>
           <v-icon
-            @click="downloadReceipt(item.id, 'receipt-' + item.fileName)"
             small
-          >mdi-download-lock</v-icon>
+            @click="downloadFile(item.id, item.fileName)"
+            class="mr-2"
+            >mdi-download</v-icon
+          >
+          <v-icon
+            @click="
+              downloadReceipt(item.id, 'receipt-' + item.fileName + '.pdf')
+            "
+            small
+            >mdi-download-lock</v-icon
+          >
         </template>
         <template v-slot:item.data-table-expand="{ expand, isExpanded }">
           <v-icon @click="expand(!isExpanded)">mdi-fingerprint</v-icon>
         </template>
         <template v-slot:expanded-item="{ headers, item }">
-          <td
-            :colspan="headers.length"
-          >{{$t("common.togglelist.fingerprint") + " : " + proofs[proofs.indexOf(item)].fingerprint}}</td>
+          <td :colspan="headers.length">
+            {{
+              $t("common.togglelist.fingerprint") +
+                " : " +
+                proofs[proofs.indexOf(item)].fingerprint
+            }}
+          </td>
         </template>
       </v-data-table>
+      <div class="text-center pt-2">
+        <v-pagination
+          v-model="queryPage"
+          :length="Math.ceil(proofCount / 50)"
+        ></v-pagination>
+      </div>
     </v-card>
   </v-container>
 </template>
@@ -129,11 +179,23 @@ import moment from "moment";
 import numeral from "numeral";
 export default {
   components: {},
+  watch: {
+    options: {
+      handler() {
+        this.getDataFromApi(queryPage).then((data) => {
+          this.desserts = data.items;
+          this.totalDesserts = data.total;
+        });
+      },
+      deep: true,
+    },
+  },
   data() {
     return {
+      footerProps: {
+        "items-per-page-options": [50],
+      },
       expanded: [],
-      field: "",
-      value: "",
       search: "",
       finishedLoading: false,
       proofCount: 0,
@@ -146,18 +208,18 @@ export default {
         { text: this.$t("common.togglelist.identity"), value: "identity" },
         {
           text: this.$t("common.togglelist.batchNumber"),
-          value: "batchNumber"
+          value: "batchNumber",
         },
         { text: this.$t("common.togglelist.topic"), value: "topic" },
         {
           text: this.$t("common.togglelist.deadline"),
-          value: "deadline"
+          value: "deadline",
         },
         {
           text: this.$t("proofQuery.actions"),
           value: "actions",
-          sortable: false
-        }
+          sortable: false,
+        },
       ],
       proofs: [],
       topics: [],
@@ -165,66 +227,133 @@ export default {
         {
           field: "id",
           title: this.$t("common.togglelist.id"),
-          value: null
+          value: null,
         },
         {
           field: "fileName",
           title: this.$t("common.togglelist.filename"),
-          value: null
+          value: null,
         },
         {
           field: "folderName",
           title: this.$t("common.togglelist.folderName"),
-          value: null
+          value: null,
         },
         {
           field: "reference",
           title: this.$t("common.togglelist.reference"),
-          value: null
+          value: null,
         },
         {
           field: "identity",
           title: this.$t("common.togglelist.identity"),
-          value: null
+          value: null,
         },
         {
           field: "batchNumber",
           title: this.$t("common.togglelist.batchNumber"),
-          value: null
+          value: null,
         },
         {
           field: "topic",
           title: this.$t("common.togglelist.topic"),
-          value: ""
+          value: "",
         },
         {
           field: "deadline",
           title: this.$t("common.togglelist.deadline"),
-          value: null
+          value: null,
         },
         {
           field: "keywords",
           title: this.$t("common.togglelist.keywords"),
-          value: null
+          value: null,
         },
         {
           field: "uploadDate",
           title: this.$t("common.togglelist.date"),
-          value: null
+          value: null,
         },
         {
           field: "fingerprint",
           title: this.$t("common.togglelist.fingerprint"),
-          value: null
-        }
-      ]
+          value: null,
+        },
+      ],
+      dataOnSearch: [],
+      showLoadMore: false,
+      queryPage: 1,
+      options: {},
+      searchProofCount: 0,
     };
   },
   mounted() {
     this.loadProofCount();
     this.loadTopics();
   },
+  watch: {
+    options: {
+      handler() {
+        this.getDataFromApi(queryPage).then((data) => {
+          this.proofs = data.items;
+          this.searchProofCount = data.total;
+        });
+      },
+      deep: true,
+    },
+  },
   methods: {
+    async getDataFromApi(queryPage) {
+      this.loading = true;
+      const { page, itemsPerPage } = this.options;
+
+      let waitAlert = swal.fire({
+        title: this.$t("common.wait"),
+        text: this.$t("proofQuery.searchingDB"),
+        icon: "info",
+        showConfirmButton: false,
+        allowOutsideClick: false,
+      });
+      let data = {};
+      for (let i = 0; i < this.fields.length; i++) {
+        const value = this.fields[i].value;
+        if (value) {
+          data[this.fields[i].field] = value;
+        }
+      }
+      data["page"] = queryPage;
+      try {
+        const res = await clientService.getQuery(data);
+        waitAlert.close();
+        this.dataOnSearch = this.fields;
+        this.user = res;
+        console.log(res.data.files)
+        this.proofs = res.data.files;
+        for (let i = 0; i < this.proofs.length; i++) {
+          this.proofs[i].uploaddate = moment(this.proofs[i].uploaddate).format(
+            "L"
+          );
+        }
+        const items = this.fields;
+        const total = items.length;
+
+        if (itemsPerPage > 0) {
+          items = items.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+        }
+        return {
+          items,
+          total,
+        };
+      } catch (err) {
+        console.log(err);
+        let errorRes = await swal.fire({
+          title: this.$t("common.error"),
+          text: this.$t("proofQuery.noResponse"),
+          icon: "error",
+        });
+        return;
+      }
+    },
     async loadTopics() {
       try {
         const res = await clientService.getTopics();
@@ -259,24 +388,26 @@ export default {
     formatNumber(number) {
       return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     },
-    async searchQuery(field, value) {
+    async searchQuery(count) {
       let waitAlert = swal.fire({
         title: this.$t("common.wait"),
         text: this.$t("proofQuery.searchingDB"),
         icon: "info",
         showConfirmButton: false,
-        allowOutsideClick: false
+        allowOutsideClick: false,
       });
       let data = {};
       for (let i = 0; i < this.fields.length; i++) {
-        let value = this.fields[i].value;
+        const value = this.fields[i].value;
         if (value) {
           data[this.fields[i].field] = value;
         }
       }
+      data["page"] = this.queryPage;
       try {
-        waitAlert.close();
         const res = await clientService.getQuery(data);
+        waitAlert.close();
+        this.dataOnSearch = this.fields;
         this.user = res;
         this.proofs = res.data.files;
         for (let i = 0; i < this.proofs.length; i++) {
@@ -289,11 +420,11 @@ export default {
         let errorRes = await swal.fire({
           title: this.$t("common.error"),
           text: this.$t("proofQuery.noResponse"),
-          icon: "error"
+          icon: "error",
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

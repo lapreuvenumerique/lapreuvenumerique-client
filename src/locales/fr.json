@@ -46,7 +46,8 @@
     "confirmNewPassword": "Confirmer votre nouveau mot de passe",
     "password": "Mot de passe",
     "confirmPassword": "Confirmer votre mot de passe",
-    "passwordDifferent": "Les mots de passe sont différents"
+    "passwordDifferent": "Les mots de passe sont différents",
+    "website": "Visitez lapreuvenumerique.com"
   },
   "proofDeposit": {
     "proofDeposit": "Dépôt de preuve",
@@ -154,6 +155,8 @@
     "keyRevokedDisabled": "Votre clé d'api a été révoquée ou est temporairement désactivée",
     "fields": "Champs",
     "serverError": "Erreur serveur",
-    "errorOccured": "Une erreur est survenue"
+    "errorOccured": "Une erreur est survenue",
+    "infoNotValid": "Information entrée non valide",
+    "loadmore": "Charger plus"
   }
 }

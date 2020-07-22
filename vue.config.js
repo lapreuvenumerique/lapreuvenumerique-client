@@ -24,8 +24,8 @@ module.exports = {
     electronBuilder: {
       builderOptions: {
         nsis: {
-          perMachine: true,
-          oneClick: false
+          perMachine: false,
+          oneClick: false,
         },
         appId: "lapreuvenumerique.com",
         win: {

@@ -67,6 +67,7 @@
           </v-col>
           <v-col cols="6">
             <v-select
+              dense
               :items="topics"
               :label="$t('common.togglelist.topic')"
               v-model="topic.value"
@@ -356,8 +357,8 @@ export default {
             text = this.$t("common.credentialsIncorrect");
             break;
           }
-          case 403: {
-            break;
+          case 422: {
+            text = this.$t("common.infoNotValid");
           }
           case 500: {
             text = this.$t("common.serverError");

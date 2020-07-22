@@ -3,9 +3,22 @@
     <v-row style="height: 100%;" class="pa-0">
       <v-col cols="2" style="height: 100%;" class="pa-0">
         <v-card style="width: 100%; height: 100%; left: 0px; up: 0px;">
-          <v-navigation-drawer dark style="width: 100%; left: 0px; up: 0px;" class="pa-0" permanent>
+          <v-navigation-drawer
+            dark
+            style="width: 100%; left: 0px; up: 0px;"
+            class="pa-0"
+            permanent
+          >
             <div style="position: relative; position: -webkit-relative; top:0;">
               <v-list>
+                <div style="top: 10px;right: 10px">
+                  <v-btn
+                    style="position:absolute;top:14px;right:25px"
+                    @click="$router.push('/login')"
+                  >
+                    <v-icon class="mdi">mdi-logout</v-icon>
+                  </v-btn>
+                </div>
                 <v-list-item>
                   <v-img
                     max-width="40"
@@ -13,7 +26,7 @@
                     class="mr-4 rounded-circle"
                     :src="userPicture"
                   ></v-img>
-                  <span>{{this.user.displayName}}</span>
+                  <span>{{ this.user.displayName }}</span>
                 </v-list-item>
 
                 <v-list-item
@@ -23,35 +36,58 @@
                   @click="setPage(item.label)"
                 >
                   <v-list-item-icon>
-                    <v-icon>{{ item.icon }}</v-icon>
+                    <v-icon class="mdi">{{ item.icon }}</v-icon>
                   </v-list-item-icon>
 
                   <v-list-item-content>
                     <v-list-item-title>{{ item.title }}</v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
-                <div style="top: 10px;right: 10px">
-                  <v-btn
-                    style="position:absolute;top:14px;right:25px"
-                    @click="$router.push('/login')"
-                  >
-                    <v-icon class="mdi">mdi-logout</v-icon>
-                  </v-btn>
-                </div>
-                <b style="position:absolute;bottom: 10px;right: 15px;font-size:10px">v{{version}}</b>
+
+                <v-list-item
+                  href="https://www.lapreuvenumerique.com"
+                  target="_blank"
+                  style="bottom: 0px; position:absolute;"
+                  width="100%"
+                >
+                  <v-list-item-icon>
+                    <v-icon> mdi-open-in-new </v-icon>
+                  </v-list-item-icon>
+
+                  <v-list-item-content>
+                    <v-list-item-title>{{
+                      $t("home.website")
+                    }}</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+                <b
+                  style="position:absolute;bottom: 10px;right: 15px;font-size:10px"
+                  >v{{ version }}</b
+                >
               </v-list>
             </div>
           </v-navigation-drawer>
         </v-card>
       </v-col>
       <v-col cols="10" :key="keyReload">
-        <proof-deposit v-if="this.pageOpened=='proofDeposit'" :user="user" v-on:reset="reset"></proof-deposit>
-        <mass-deposit v-if="this.pageOpened=='massDeposit'" :user="user" v-on:reset="reset"></mass-deposit>
-        <integrity v-if="this.pageOpened=='integrity'"></integrity>
-        <verify-file-existence v-if="this.pageOpened=='docVerify'" v-on:reset="reset"></verify-file-existence>
+        <proof-deposit
+          v-if="this.pageOpened == 'proofDeposit'"
+          :user="user"
+          v-on:reset="reset"
+        ></proof-deposit>
+        <mass-deposit
+          v-if="this.pageOpened == 'massDeposit'"
+          :user="user"
+          v-on:reset="reset"
+        ></mass-deposit>
+        <integrity v-if="this.pageOpened == 'integrity'"></integrity>
+        <verify-file-existence
+          v-if="this.pageOpened == 'docVerify'"
+          v-on:reset="reset"
+        ></verify-file-existence>
         <query-proof v-if="this.pageOpened == 'proofSearch'"></query-proof>
         <register-form
-          v-if="this.pageOpened=='settings'"
+          v-if="this.pageOpened == 'settings'"
           submitMethod="update"
           :user="user"
           v-on:reset="reset"
@@ -78,7 +114,7 @@ import bcrypt from "bcryptjs";
 import VueCryptojs from "vue-cryptojs";
 export default {
   icons: {
-    iconfont: "md"
+    iconfont: "md",
   },
 
   data() {
@@ -89,39 +125,39 @@ export default {
         "https://alumni.crg.eu/sites/default/files/default_images/default-picture_0_0.png",
       user: {
         customerUid: "",
-        apiKey: ""
+        apiKey: "",
       },
       displayName: "",
       items: [
         {
           title: this.$t("home.proofDeposit"),
           icon: "mdi-upload",
-          label: "proofDeposit"
+          label: "proofDeposit",
         },
         {
           title: this.$t("home.massDeposit"),
           icon: "mdi-upload-multiple",
-          label: "massDeposit"
+          label: "massDeposit",
         },
         {
           title: this.$t("home.proofSearch"),
           icon: "mdi-file-search",
-          label: "proofSearch"
+          label: "proofSearch",
         },
         {
           title: this.$t("home.docVerify"),
           icon: "mdi-file-check",
-          label: "docVerify"
+          label: "docVerify",
         },
         {
           title: this.$t("home.integrity"),
           icon: "mdi-check-circle",
-          label: "integrity"
+          label: "integrity",
         },
-        { title: this.$t("home.settings"), icon: "mdi-cog", label: "settings" }
+        { title: this.$t("home.settings"), icon: "mdi-cog", label: "settings" },
       ],
       credits: 0,
-      version: ""
+      version: "",
     };
   },
   components: {
@@ -130,7 +166,7 @@ export default {
     Integrity,
     VerifyFileExistence,
     QueryProof,
-    MassDeposit
+    MassDeposit,
   },
 
   async mounted() {
@@ -188,7 +224,7 @@ export default {
             text: this.$t("common.exitAbandonUnsavedChanges"),
             confirmButtonText: this.$t("common.confirm"),
             showCancelButton: true,
-            cancelButtonText: this.$t("common.cancel")
+            cancelButtonText: this.$t("common.cancel"),
           });
           if (!resExit.isConfirmed) {
             return;
@@ -209,7 +245,7 @@ export default {
           input: "password",
           confirmButtonText: this.$t("common.confirm"),
           showCancelButton: true,
-          cancelButtonText: this.$t("common.cancel")
+          cancelButtonText: this.$t("common.cancel"),
         });
         if (!resPassword.isConfirmed) {
           return;
@@ -218,14 +254,14 @@ export default {
           swal.fire({
             icon: "error",
             title: this.$t("common.password"),
-            text: this.$t("common.notCorrespondingPassword")
+            text: this.$t("common.notCorrespondingPassword"),
           });
           return;
         }
       }
       this.pageOpened = page;
-    }
-  }
+    },
+  },
 };
 </script>
 
