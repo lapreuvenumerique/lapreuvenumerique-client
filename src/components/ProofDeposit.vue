@@ -2,6 +2,7 @@
   <v-container>
     <v-card class="pa-8">
       <v-card
+        v-show="creditsEnabled"
         :class="credits > 50 ? 'green' : 'red'"
         class="lighten-1 white--text"
         align="right"
@@ -123,6 +124,7 @@ export default {
         addRemoveLinks: true,
         maxFiles: 1,
       },
+      creditsEnabled: false,
       isValid: false,
       maxSize: "1000ko",
       clientInfo: {},
@@ -231,8 +233,19 @@ export default {
       input.value = [...input.value];
     },
     async updateCredits() {
-      const credit = await clientService.getCredits();
-      this.credits = credit.data.credits;
+      try {
+        const credit = await clientService.getCredits();
+        this.creditsEnabled = credit.data.creditsEnabled;
+        console.log(credit.data);
+        if (this.creditsEnabled) {
+          this.credits = credit.data.credits;
+        }
+      } catch (err) {
+        await Swal.fire({
+          title: this.$t("common.error"),
+          text: this.$t("common.serverError"),
+        });
+      }
     },
     uploadProof(file) {
       this.proofData = file;
@@ -305,6 +318,7 @@ export default {
       formData.append("noDuplicate", this.user.noDuplicate);
       formData.append("keepFile", this.user.keepFiles);
       formData.append("email", this.user.email);
+      formData.append("sourceApp", "electronApp");
       formData.append("topic", this.topic.value);
       formData.append("identity", this.user.username);
       try {

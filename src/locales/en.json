@@ -12,9 +12,6 @@
     "usernameLabel": "Username",
     "passwordRequired": "Password required",
     "passwordWrong": "Password must include at least an uppercase, a lowercase letter, a number and must contain between 8 to 30 characters",
-    "secretKeyRequired": "Secret key required",
-    "secretKeyCount": "64 characters required",
-    "secretKeyLabel": "Secret key",
     "errorUsername": "Username already exists",
     "errorServer": "Web service unavailable, please try again later",
     "permissionsInfo": "Set the permissions of the account",
@@ -60,7 +57,6 @@
     "keepFiles": "Allow keeping of files",
     "price": "Price",
     "maxSize": "Max size",
-    "dividedSpaces": "(divided by spaces)",
     "noFile": "No proof",
     "noFileProvided": "No proof was provided"
   },
@@ -78,7 +74,6 @@
     "verifyFileExistence": "Verify existence of a file",
     "fileExists": "File exists with id : | Files exist with ids :",
     "noFileExists": "No file exists with this fingerprint",
-    "noFileProvided": "No file was provided",
     "uploadProof": "Upload your file",
     "uploadProofSubtitle": "Drag or click to browse",
     "verify": "Verify"

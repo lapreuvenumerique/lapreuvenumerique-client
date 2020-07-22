@@ -66,7 +66,9 @@
     "integrityOfBlockchain": "L'intégrité de la blockchain avec ",
     "recordIsCorrect": "preuves est correcte | preuve est correcte | preuves est correcte",
     "verify": "Vérifier",
-    "blockchainIntegrityIncorrect": "L'intégrité de la blockchain est incorrect, merci de contactez votre administrateur"
+    "blockchainIntegrityIncorrect": "L'intégrité de la blockchain est incorrect, merci de contactez votre administrateur",
+    "second": "seconde | secondes",
+    "waitFor": "Attendez pour"
   },
   "fileExistence": {
     "verifyFileExistence": "Verifier l'existence d'une preuve",
