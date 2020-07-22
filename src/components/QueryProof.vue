@@ -91,21 +91,11 @@
           <v-btn
             color="primary"
             @click="
-              getDataFromApi(queryPage ++).then((data) => {
-                proofs = data.items;
-                searchProofCount = data.total;
-              })"
-            v-if="dataOnSearch == fields"
-            class="mr-5"
-            >{{ $t("common.loadmore") }}</v-btn
-          >
-          <v-btn
-            color="primary"
-            @click="
-              getDataFromApi(queryPage = 1).then((data) => {
-                proofs = data.items;
-                searchProofCount = data.total;
-              })
+              () =>
+                getDataFromApi('reset').then((data) => {
+                  proofs = data.items;
+                  searchProofCount = data.total;
+                })
             "
             >{{ $t("common.search") }}</v-btn
           >
@@ -122,17 +112,20 @@
           ></v-text-field>
         </v-col>
       </v-row>
-
       <v-data-table
         :headers="headers"
         :items="proofs"
         item-key="id"
+        hide-default-footer
         class="elevation-1"
         :server-items-length="searchProofCount"
         :expanded.sync="expanded"
         show-expand
+        :options.sync="options"
         :search="search"
         :footer-props="footerProps"
+        fixed-header
+        height="700px"
       >
         <template v-slot:item.actions="{ item }">
           <v-icon
@@ -162,12 +155,17 @@
           </td>
         </template>
       </v-data-table>
-      <div class="text-center pt-2">
-        <v-pagination
-          v-model="queryPage"
-          :length="Math.ceil(proofCount / 50)"
-        ></v-pagination>
-      </div>
+      <template>
+        <div class="text-xs-center">
+          <v-pagination
+            @input="setPage"
+            v-model="queryPage"
+            :length="Math.ceil(proofCount / 50)"
+            prev-icon="mdi-menu-left"
+            next-icon="mdi-menu-right"
+          ></v-pagination>
+        </div>
+      </template>
     </v-card>
   </v-container>
 </template>
@@ -179,17 +177,6 @@ import moment from "moment";
 import numeral from "numeral";
 export default {
   components: {},
-  watch: {
-    options: {
-      handler() {
-        this.getDataFromApi(queryPage).then((data) => {
-          this.desserts = data.items;
-          this.totalDesserts = data.total;
-        });
-      },
-      deep: true,
-    },
-  },
   data() {
     return {
       footerProps: {
@@ -200,7 +187,7 @@ export default {
       finishedLoading: false,
       proofCount: 0,
       headers: [
-        { text: this.$t("proofQuery.id"), value: "id" },
+        { text: this.$t("proofQuery.id"), value: "id", sortable: false },
         { text: this.$t("common.togglelist.filename"), value: "fileName" },
         { text: this.$t("common.togglelist.folderName"), value: "folderName" },
         { text: this.$t("common.togglelist.reference"), value: "reference" },
@@ -283,7 +270,9 @@ export default {
       dataOnSearch: [],
       showLoadMore: false,
       queryPage: 1,
-      options: {},
+      options: {
+        pagination: this.queryPage,
+      },
       searchProofCount: 0,
     };
   },
@@ -294,16 +283,31 @@ export default {
   watch: {
     options: {
       handler() {
-        this.getDataFromApi(queryPage).then((data) => {
-          this.proofs = data.items;
-          this.searchProofCount = data.total;
-        });
+        if (this.dataOnSearch == this.fields) {
+          this.getDataFromApi().then((data) => {
+            this.proofs = data.items;
+            this.searchProofCount = data.total;
+          });
+        }
       },
       deep: true,
     },
   },
   methods: {
-    async getDataFromApi(queryPage) {
+    setPage(page) {
+      this.queryPage = page;
+      this.getDataFromApi().then((data) => {
+        this.proofs = data.items;
+        this.searchProofCount = data.total;
+      });
+    },
+    async getDataFromApi(method) {
+      let queryPage = 1;
+      if (method != "reset") {
+        queryPage = this.queryPage;
+      } else {
+        this.queryPage = 1;
+      }
       this.loading = true;
       const { page, itemsPerPage } = this.options;
 
@@ -324,22 +328,27 @@ export default {
       data["page"] = queryPage;
       try {
         const res = await clientService.getQuery(data);
+        if (res.data.files[0].proofCount) {
+          this.proofCount = parseInt(res.data.files[0].proofCount);
+        }else{
+          await this.loadProofCount()
+        }
         waitAlert.close();
         this.dataOnSearch = this.fields;
         this.user = res;
-        console.log(res.data.files)
         this.proofs = res.data.files;
         for (let i = 0; i < this.proofs.length; i++) {
           this.proofs[i].uploaddate = moment(this.proofs[i].uploaddate).format(
             "L"
           );
+          this.proofs[i].deadline = moment(this.proofs[i].deadline).format("L");
         }
-        const items = this.fields;
-        const total = items.length;
+        let items = this.proofs;
+        const total = this.proofCount;
 
-        if (itemsPerPage > 0) {
-          items = items.slice((page - 1) * itemsPerPage, page * itemsPerPage);
-        }
+        //if (itemsPerPage > 0) {
+        //  items = items.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+        //}
         return {
           items,
           total,
@@ -380,7 +389,7 @@ export default {
     async loadProofCount() {
       try {
         const res = await clientService.getProofCount();
-        this.proofCount = res.data.number;
+        this.proofCount = parseInt(res.data.number, 10);
       } catch (err) {
         console.log(err);
       }

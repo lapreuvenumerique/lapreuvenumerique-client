@@ -13,12 +13,12 @@
               >mdi-currency-usd-circle-outline</v-icon
             >
           </v-col>
-          <v-col cols="6" class="text-right px-7">
+          <v-col cols="6" class="text-right pr-5 pa-0">
             <span style="font-size:15px; font-weight: 300;">{{
               capitalizeFLetter($tc("common.credit", credits))
             }}</span>
             <br />
-            <b style="font-size:25px;white-space: nowrap;">{{
+            <b style="font-size:25px;white-space: nowrap;" class="">{{
               formatNumber(credits)
             }}</b>
           </v-col>
@@ -328,7 +328,7 @@ export default {
         console.log(err);
         let text =
           this.$t("common.dataNotUploaded") + " : " + err.response.message;
-        switch (err.data.status) {
+        switch (err.response.status) {
           case 401: {
             text = this.$t("common.keyRevokedDisabled");
           }
@@ -337,20 +337,10 @@ export default {
           }
           case 500: {
           }
-          default:
-            {
-            }
-            Swal.fire({
-              title: this.$t("common.errorUpload"),
-              text: text,
-              icon: "error",
-              confirmButtonText: "OK",
-            });
-            break;
         }
         Swal.fire({
           title: this.$t("common.errorUpload"),
-          text,
+          text: text,
           icon: "error",
           confirmButtonText: "OK",
         });

@@ -4,7 +4,7 @@
       <v-col cols="4">
         <a href="https://www.lapreuvenumerique.com" target="_blank">
           <v-img
-            src="../../build/background.png"
+            src="../../public/iconLOWQUALITY.png"
             style="position: absolute; top: 50px; left:50px;"
             width="200px"
           ></v-img

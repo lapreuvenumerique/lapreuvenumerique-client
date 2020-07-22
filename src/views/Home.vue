@@ -13,7 +13,7 @@
               <v-list>
                 <div style="top: 10px;right: 10px">
                   <v-btn
-                    style="position:absolute;top:14px;right:25px"
+                    style="position:absolute;top:14px;right:25px;z-index: 50"
                     @click="$router.push('/login')"
                   >
                     <v-icon class="mdi">mdi-logout</v-icon>
