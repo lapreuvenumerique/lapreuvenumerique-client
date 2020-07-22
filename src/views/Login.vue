@@ -1,14 +1,14 @@
 <template>
-  <v-container fill-height fluid>
+  <v-container fill-height fluid class="body">
+    <a
+      href="https://www.lapreuvenumerique.com"
+      target="_blank"
+      style="position:absolute; left: 50%; transform: translate(-50%, 0); top: 100px"
+    >
+      <v-img src="../../public/iconLOWQUALITY.png" width="300px"></v-img
+    ></a>
     <v-row justify="center" align="center" style="height:'100%';">
       <v-col cols="4">
-        <a href="https://www.lapreuvenumerique.com" target="_blank">
-          <v-img
-            src="../../public/iconLOWQUALITY.png"
-            style="position: absolute; top: 50px; left:50px;"
-            width="200px"
-          ></v-img
-        ></a>
         <v-card class="elevation-12">
           <v-toolbar color="primary" dark flat>
             <v-toolbar-title>{{ this.$t("login.headerInfo") }}</v-toolbar-title>
@@ -102,3 +102,12 @@ export default {
   },
 };
 </script>
+<style scoped>
+#app {
+  background: none;
+}
+.body {
+  background-image: url("../../public/autre-la-preuve-numerique/LaPreueveNumerique Background 1c.png");
+  background-size:100% 100%;
+}
+</style>

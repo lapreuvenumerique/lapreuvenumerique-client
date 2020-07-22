@@ -328,7 +328,7 @@ export default {
       data["page"] = queryPage;
       try {
         const res = await clientService.getQuery(data);
-        if (res.data.files[0].proofCount) {
+        if (res.data.files[0]?.proofCount) {
           this.proofCount = parseInt(res.data.files[0].proofCount);
         }else{
           await this.loadProofCount()
