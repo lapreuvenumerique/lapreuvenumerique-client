@@ -43,7 +43,11 @@
                     :label="field.title"
                     outlined
                     v-model="field.value"
-                    v-if="field.field != 'keywords' && field.field != 'topic'"
+                    v-if="
+                      field.field != 'keywords' &&
+                        field.field != 'topic' &&
+                        field.field != 'uploadDate'
+                    "
                     dense
                     required
                     autofocus
@@ -82,6 +86,12 @@
                     required
                     v-if="field.field == 'topic'"
                   ></v-select>
+                  <v-date-picker
+                    v-model="field.value"
+                    v-if="field.field == 'uploadDate'"
+                    width="290"
+                    class="mt-4"
+                  ></v-date-picker>
                 </v-col>
               </v-row>
             </v-expansion-panel-content>
@@ -257,13 +267,13 @@ export default {
           value: null,
         },
         {
-          field: "uploadDate",
-          title: this.$t("common.togglelist.date"),
+          field: "fingerprint",
+          title: this.$t("common.togglelist.fingerprint"),
           value: null,
         },
         {
-          field: "fingerprint",
-          title: this.$t("common.togglelist.fingerprint"),
+          field: "uploadDate",
+          title: this.$t("common.togglelist.date"),
           value: null,
         },
       ],
@@ -330,15 +340,15 @@ export default {
         const res = await clientService.getQuery(data);
         if (res.data.files[0]?.proofCount) {
           this.proofCount = parseInt(res.data.files[0].proofCount);
-        }else{
-          await this.loadProofCount()
+        } else {
+          await this.loadProofCount();
         }
         waitAlert.close();
         this.dataOnSearch = this.fields;
         this.user = res;
         this.proofs = res.data.files;
         for (let i = 0; i < this.proofs.length; i++) {
-          this.proofs[i].uploaddate = moment(this.proofs[i].uploaddate).format(
+          this.proofs[i].uploadDate = moment(this.proofs[i].uploadDate).format(
             "L"
           );
           this.proofs[i].deadline = moment(this.proofs[i].deadline).format("L");
@@ -396,42 +406,6 @@ export default {
     },
     formatNumber(number) {
       return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-    },
-    async searchQuery(count) {
-      let waitAlert = swal.fire({
-        title: this.$t("common.wait"),
-        text: this.$t("proofQuery.searchingDB"),
-        icon: "info",
-        showConfirmButton: false,
-        allowOutsideClick: false,
-      });
-      let data = {};
-      for (let i = 0; i < this.fields.length; i++) {
-        const value = this.fields[i].value;
-        if (value) {
-          data[this.fields[i].field] = value;
-        }
-      }
-      data["page"] = this.queryPage;
-      try {
-        const res = await clientService.getQuery(data);
-        waitAlert.close();
-        this.dataOnSearch = this.fields;
-        this.user = res;
-        this.proofs = res.data.files;
-        for (let i = 0; i < this.proofs.length; i++) {
-          this.proofs[i].uploaddate = moment(this.proofs[i].uploaddate).format(
-            "L"
-          );
-        }
-      } catch (err) {
-        console.log(err);
-        let errorRes = await swal.fire({
-          title: this.$t("common.error"),
-          text: this.$t("proofQuery.noResponse"),
-          icon: "error",
-        });
-      }
     },
   },
 };

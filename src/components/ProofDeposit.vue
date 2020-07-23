@@ -32,25 +32,7 @@
       <v-form v-model="isValid">
         <v-row>
           <v-col cols="12">
-            <vue-dropzone
-              ref="proofDropzone"
-              id="dropzone"
-              :options="dropzoneOptions"
-              :useCustomSlot="true"
-              @vdropzone-success="(file, response) => this.uploadProof(file)"
-              @vdropzone-removed-file="
-                (file, err, response) => this.removeProof()
-              "
-            >
-              <div class="dropzone-custom-content">
-                <h3 class="dropzone-custom-title">
-                  {{ this.$t("proofDeposit.uploadProof") }}
-                </h3>
-                <div class="subtitle">
-                  {{ this.$t("proofDeposit.uploadProofSubtitle") }}
-                </div>
-              </div>
-            </vue-dropzone>
+            <VueFileAgent v-model="fileAgentFiles" multiple="false"></VueFileAgent>
           </v-col>
           <v-col cols="6" v-for="input in inputs" :key="input.title">
             <v-text-field
@@ -105,12 +87,13 @@
   </v-container>
 </template>
 <script>
-import vue2Dropzone from "vue2-dropzone";
 import dbService from "../service/db-service";
 import Swal from "sweetalert2";
 import clientService from "@/service/client-service";
 import proofService from "@/service/proof-service";
 import numeral from "numeral";
+import VueFileAgent from "vue-file-agent";
+import VueFileAgentStyles from "vue-file-agent/dist/vue-file-agent.css";
 export default {
   data() {
     return {
@@ -118,12 +101,6 @@ export default {
       inputs: [],
       chipsinputs: [],
       credits: 0,
-      dropzoneOptions: {
-        url: "https://httpbin.org/post",
-        thumbnailWidth: 500,
-        addRemoveLinks: true,
-        maxFiles: 1,
-      },
       creditsEnabled: false,
       isValid: false,
       maxSize: "1000ko",
@@ -131,11 +108,10 @@ export default {
       creditCost: 0,
       topics: [],
       topic: { isActive: false, value: "Default" },
+      fileAgentFiles: [],
     };
   },
-  components: {
-    vueDropzone: vue2Dropzone,
-  },
+  components: {},
   async mounted() {
     this.loadTopics();
     this.updateCredits();
@@ -236,7 +212,6 @@ export default {
       try {
         const credit = await clientService.getCredits();
         this.creditsEnabled = credit.data.creditsEnabled;
-        console.log(credit.data);
         if (this.creditsEnabled) {
           this.credits = credit.data.credits;
         }
@@ -246,12 +221,6 @@ export default {
           text: this.$t("common.serverError"),
         });
       }
-    },
-    uploadProof(file) {
-      this.proofData = file;
-    },
-    removeProof() {
-      this.proofData = "";
     },
     reset() {
       this.$emit("reset");
@@ -273,10 +242,10 @@ export default {
       return;
     },
     async sendProof() {
+      this.proofData = this.fileAgentFiles[0].file;
       if (!this.isValid) {
         return;
       }
-      console.log(this.proofData.dataURL);
       if (!this.proofData) {
         await Swal.fire({
           icon: "error",
@@ -366,3 +335,33 @@ export default {
   },
 };
 </script>
+<style scoped>
+.dropbox {
+  outline: 2px dashed grey; /* the dash box */
+  outline-offset: -10px;
+  background: lightcyan;
+  color: dimgray;
+  padding: 10px 10px;
+  min-height: 200px; /* minimum height */
+  position: relative;
+  cursor: pointer;
+}
+
+.input-file {
+  opacity: 0; /* invisible but it's there! */
+  width: 100%;
+  height: 200px;
+  position: absolute;
+  cursor: pointer;
+}
+
+.dropbox:hover {
+  background: lightblue; /* when mouse over to the drop zone, change color */
+}
+
+.dropbox p {
+  font-size: 1.2em;
+  text-align: center;
+  padding: 50px 0;
+}
+</style>

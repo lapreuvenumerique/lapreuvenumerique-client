@@ -100,7 +100,6 @@
 
 <script>
 import swal from "sweetalert2";
-import "vue2-dropzone/dist/vue2Dropzone.min.css";
 import "material-design-icons-iconfont/dist/material-design-icons.css";
 import dbService from "../service/db-service";
 import RegisterForm from "@/components/RegisterForm.vue";

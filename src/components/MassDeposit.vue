@@ -32,25 +32,12 @@
       <v-form v-model="isValid">
         <v-row>
           <v-col cols="12">
-            <vue-dropzone
-              ref="proofDropzone"
-              id="dropzone"
-              :options="dropzoneOptions"
-              :useCustomSlot="true"
-              @vdropzone-success="(file, response) => this.uploadProof(file)"
-              @vdropzone-removed-file="
-                (file, err, response) => this.removeProof(file)
-              "
-            >
-              <div class="dropzone-custom-content">
-                <h3 class="dropzone-custom-title">
-                  {{ this.$t("massdeposit.uploadProofs") }}
-                </h3>
-                <div class="subtitle">
-                  {{ this.$t("massdeposit.uploadProofsSubtitle") }}
-                </div>
-              </div>
-            </vue-dropzone>
+            <VueFileAgent
+              deletable="true"
+              v-model="fileAgentFiles"
+              multiple="true"
+              @beforedelete="removeProof($event)"
+            ></VueFileAgent>
           </v-col>
           <v-col cols="6" v-for="input in inputs" :key="input.title">
             <v-text-field
@@ -114,12 +101,13 @@
 </template>
 
 <script>
-import vue2Dropzone from "vue2-dropzone";
 import dbService from "../service/db-service";
 import Swal from "sweetalert2";
 import clientService from "@/service/client-service";
 import proofService from "@/service/proof-service";
 import numeral from "numeral";
+import VueFileAgent from "vue-file-agent";
+import VueFileAgentStyles from "vue-file-agent/dist/vue-file-agent.css";
 export default {
   data() {
     return {
@@ -127,10 +115,6 @@ export default {
       inputs: [],
       chipsinputs: [],
       credits: 0,
-      dropzoneOptions: {
-        url: "https://httpbin.org/post",
-        addRemoveLinks: true,
-      },
       creditsEnabled: false,
       isValid: false,
       maxSize: "1000ko",
@@ -138,11 +122,10 @@ export default {
       creditCost: 0,
       topics: [],
       topic: { isActive: false, value: "Default" },
+      fileAgentFiles: [],
     };
   },
-  components: {
-    vueDropzone: vue2Dropzone,
-  },
+  components: {},
   props: {
     user: Object,
   },
@@ -257,7 +240,6 @@ export default {
       try {
         const credit = await clientService.getCredits();
         this.creditsEnabled = credit.data.creditsEnabled;
-        console.log(credit.data);
         if (this.creditsEnabled) {
           this.credits = credit.data.credits;
         }
@@ -268,13 +250,10 @@ export default {
         });
       }
     },
-    uploadProof(file) {
-      this.proofData.push(file);
-    },
     removeProof(file) {
-      const index = this.proofData.indexOf(file);
+      const index = this.fileAgentFiles.indexOf(file);
       if (index > -1) {
-        this.proofData.splice(index, 1);
+        this.fileAgentFiles.splice(index, 1);
       }
     },
     reset() {
@@ -300,6 +279,11 @@ export default {
       return;
     },
     async sendProof() {
+      for (let i = 0; i < this.fileAgentFiles.length; i++) {
+        if (this.fileAgentFiles[i].file.size > 0) {
+          this.proofData[i] = this.fileAgentFiles[i].file;
+        }
+      }
       if (!this.isValid) {
         await Swal.fire({
           icon: "error",

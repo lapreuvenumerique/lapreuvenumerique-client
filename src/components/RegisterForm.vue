@@ -1,14 +1,18 @@
 <template style="font-family: Helvetica;">
   <v-container>
     <v-card class="pa-8">
-      <h2
-        class="mb-5"
-      >{{submitMethod == 'update'? this.$t("home.settings"): this.$t("common.register") + " :"}}</h2>
+      <h2 class="mb-5">
+        {{
+          submitMethod == "update"
+            ? this.$t("home.settings")
+            : this.$t("common.register") + " :"
+        }}
+      </h2>
 
       <v-row>
         <v-col>
           <v-row>
-            <v-col :cols="submitMethod == 'update'? 4: 6">
+            <v-col :cols="submitMethod == 'update' ? 4 : 6">
               <v-form v-model="isValid">
                 <v-text-field
                   v-model="user.displayName"
@@ -25,44 +29,33 @@
                 ></v-text-field>
               </v-form>
             </v-col>
-            <v-col
-              v-on:vdropzone-success="uploadImage(file)"
-              :cols="submitMethod == 'update'? 4: 6"
-            >
-              <vue-dropzone
-                ref="imageDropzone"
-                id="dropzone"
-                :options="dropzoneOptions"
-                :useCustomSlot="true"
-                @vdropzone-success="(file, response) => this.uploadImage(file)"
-              >
-                <div class="dropzone-custom-content">
-                  <h3 class="dropzone-custom-title">{{this.$t("home.dropzoneHeader")}}</h3>
-                  <div class="subtitle">{{this.$t("home.dropzoneSubtitle")}}</div>
-                </div>
-              </vue-dropzone>
+            <v-col :cols="submitMethod == 'update' ? 4 : 6">
+              <v-file-input v-model="profilePicture" multiple="false"></v-file-input>
             </v-col>
-            <v-col cols="4" v-if="this.submitMethod == 'update'">
+            <v-col cols="4" v-if="submitMethod == 'update'">
               <v-text-field
                 v-model="password"
                 :append-icon="passwordeyevalue ? 'mdi-eye' : 'mdi-eye-off'"
                 :rules="passwordRules"
                 :type="passwordeyevalue ? 'password' : 'text'"
                 @click:append="() => (passwordeyevalue = !passwordeyevalue)"
-                :label="this.$t('home.newPassword')"
+                :label="$t('home.newPassword')"
               ></v-text-field>
               <v-text-field
                 v-model="confirmPassword"
-                :append-icon="confirmPasswordeyevalue ? 'mdi-eye' : 'mdi-eye-off'"
+                :append-icon="
+                  confirmPasswordeyevalue ? 'mdi-eye' : 'mdi-eye-off'
+                "
                 :rules="confirmPasswordRules"
                 :type="confirmPasswordeyevalue ? 'password' : 'text'"
-                @click:append="() => (confirmPasswordeyevalue = !confirmPasswordeyevalue)"
-                :label="this.$t('home.confirmNewPassword')"
+                @click:append="
+                  () => (confirmPasswordeyevalue = !confirmPasswordeyevalue)
+                "
+                :label="$t('home.confirmNewPassword')"
               ></v-text-field>
-              <v-btn
-                color="primary"
-                @click="changePassword();"
-              >{{this.$t("common.validatePassword")}}</v-btn>
+              <v-btn color="primary" @click="changePassword()">{{
+                $t("common.validatePassword")
+              }}</v-btn>
             </v-col>
           </v-row>
           <v-form v-model="isValid2">
@@ -90,10 +83,14 @@
                   <v-text-field
                     v-if="this.submitMethod == 'register'"
                     v-model="confirmPassword"
-                    :append-icon="confirmPasswordeyevalue ? 'mdi-eye' : 'mdi-eye-off'"
+                    :append-icon="
+                      confirmPasswordeyevalue ? 'mdi-eye' : 'mdi-eye-off'
+                    "
                     :rules="confirmPasswordRules"
                     :type="confirmPasswordeyevalue ? 'password' : 'text'"
-                    @click:append="() => (confirmPasswordeyevalue = !confirmPasswordeyevalue)"
+                    @click:append="
+                      () => (confirmPasswordeyevalue = !confirmPasswordeyevalue)
+                    "
                     :label="this.$t('home.confirmPassword')"
                     required
                     outlined
@@ -102,7 +99,8 @@
                     v-if="this.passwordError"
                     type="error"
                     class="mt-3"
-                  >{{$t("home.passwordDifferent")}}</v-alert>
+                    >{{ $t("home.passwordDifferent") }}</v-alert
+                  >
                   <v-text-field
                     v-model="user.customerUid"
                     outlined
@@ -121,21 +119,29 @@
                     :label="this.$t('common.apiKeyLabel')"
                   ></v-text-field>
                 </span>
-                <v-switch inset :label="$t('proofDeposit.noDuplicate')" v-model="user.noDuplicate"></v-switch>
-                <v-switch inset :label="$t('proofDeposit.keepFiles')" v-model="user.keepFiles"></v-switch>
+                <v-switch
+                  inset
+                  :label="$t('proofDeposit.noDuplicate')"
+                  v-model="user.noDuplicate"
+                ></v-switch>
+                <v-switch
+                  inset
+                  :label="$t('proofDeposit.keepFiles')"
+                  v-model="user.keepFiles"
+                ></v-switch>
               </v-col>
             </v-row>
 
-            <h4 class="mt-8">{{this.$t("common.togglelist.title")}}</h4>
+            <h4 class="mt-8">{{ this.$t("common.togglelist.title") }}</h4>
             <v-row>
               <v-col cols="6">
                 <v-row dense>
                   <v-col cols="3"></v-col>
                   <v-col cols="3" class="text-center">
-                    <span>{{this.$t("common.togglelist.available")}}</span>
+                    <span>{{ this.$t("common.togglelist.available") }}</span>
                   </v-col>
                   <v-col cols="3" class="text-center">
-                    <span>{{this.$t("common.togglelist.required")}}</span>
+                    <span>{{ this.$t("common.togglelist.required") }}</span>
                   </v-col>
                 </v-row>
               </v-col>
@@ -143,22 +149,33 @@
                 <v-row dense>
                   <v-col cols="3"></v-col>
                   <v-col cols="3" class="text-center">
-                    <span>{{this.$t("common.togglelist.available")}}</span>
+                    <span>{{ this.$t("common.togglelist.available") }}</span>
                   </v-col>
                   <v-col cols="3" class="text-center">
-                    <span>{{this.$t("common.togglelist.required")}}</span>
+                    <span>{{ this.$t("common.togglelist.required") }}</span>
                   </v-col>
                 </v-row>
               </v-col>
             </v-row>
             <v-row dense no-gutters class="ma-0">
-              <v-col cols="6" v-for="toggle in toggles" :key="toggle.title" dense>
+              <v-col
+                cols="6"
+                v-for="toggle in toggles"
+                :key="toggle.title"
+                dense
+              >
                 <v-row dense no-gutters class="ma-0">
                   <v-col cols="3">
-                    <span class="layout align-center fill-height">{{toggle.title}}</span>
+                    <span class="layout align-center fill-height">{{
+                      toggle.title
+                    }}</span>
                   </v-col>
                   <v-col cols="3" class="d-flex justify-center">
-                    <v-switch v-model="toggle.enabled1" class="ma-0 layout" inset></v-switch>
+                    <v-switch
+                      v-model="toggle.enabled1"
+                      class="ma-0 layout"
+                      inset
+                    ></v-switch>
                   </v-col>
                   <v-col cols="3" class="d-flex justify-center">
                     <v-switch
@@ -179,14 +196,16 @@
           <v-btn
             @click="$router.push('/login')"
             color="primary"
-            v-if="submitMethod== 'register'"
-          >{{ $t("common.cancel")}}</v-btn>
+            v-if="submitMethod == 'register'"
+            >{{ $t("common.cancel") }}</v-btn
+          >
         </v-col>
         <v-col class="text-right">
-          <v-btn
-            @click="register"
-            color="primary"
-          >{{ this.submitMethod== "register"? $t("common.register"):$t("register.save")}}</v-btn>
+          <v-btn @click="register" color="primary">{{
+            this.submitMethod == "register"
+              ? $t("common.register")
+              : $t("register.save")
+          }}</v-btn>
         </v-col>
       </v-row>
     </v-card>
@@ -194,107 +213,99 @@
 </template>
 <script>
 import swal from "sweetalert2";
-import vue2Dropzone from "vue2-dropzone";
 import dbService from "../service/db-service";
 import bcrypt from "bcryptjs";
 import VueCryptojs from "vue-cryptojs";
+import VueFileAgent from "vue-file-agent";
+import VueFileAgentStyles from "vue-file-agent/dist/vue-file-agent.css";
 export default {
   data() {
     return {
       email: "",
       updatingPassword: false,
       customerUIDRules: [
-        value => !!value || this.$t("common.uidRequired"),
-        value => value.length == 36 || this.$t("common.uidCount")
+        (value) => !!value || this.$t("common.uidRequired"),
+        (value) => value.length == 36 || this.$t("common.uidCount"),
       ],
       apiKeyeyevalue: true,
       apiKeyRules: [
-        value => !!value || this.$t("common.apiKeyRequired"),
-        value => value.length == 64 || this.$t("common.apiKeyCount")
+        (value) => !!value || this.$t("common.apiKeyRequired"),
+        (value) => value.length == 64 || this.$t("common.apiKeyCount"),
       ],
       passwordeyevalue: true,
       password: "",
       passwordRules: [
-        value => !!value || this.$t("common.uidRequired"),
-        value =>
+        (value) => !!value || this.$t("common.uidRequired"),
+        (value) =>
           value.search(/((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,30})/g) != -1 ||
-          this.$t("common.passwordWrong")
+          this.$t("common.passwordWrong"),
       ],
       confirmPasswordeyevalue: true,
       confirmPassword: "",
       passwordError: false,
       confirmPasswordRules: [
-        value => !!value || this.$t("common.uidRequired"),
-        value =>
+        (value) => !!value || this.$t("common.uidRequired"),
+        (value) =>
           value.search(/((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,30})/g) != -1 ||
-          this.$t("common.passwordWrong")
+          this.$t("common.passwordWrong"),
       ],
-      dropzoneOptions: {
-        url: "https://httpbin.org/post",
-        thumbnailWidth: 500,
-        addRemoveLinks: true,
-        maxFiles: 1
-      },
       toggles: [
         {
           index: "folderName",
           title: this.$t("common.togglelist.folderName"),
           enabled1: true,
-          enabled2: false
+          enabled2: false,
         },
         {
           index: "reference",
           title: this.$t("common.togglelist.reference"),
           enabled1: true,
-          enabled2: false
+          enabled2: false,
         },
         {
           index: "copy",
           title: this.$t("common.togglelist.copy"),
           enabled1: true,
-          enabled2: false
+          enabled2: false,
         },
         {
           index: "batchNumber",
           title: this.$t("common.togglelist.batchNumber"),
           enabled1: true,
-          enabled2: false
+          enabled2: false,
         },
         {
           index: "topic",
           title: this.$t("common.togglelist.topic"),
           enabled1: true,
-          enabled2: false
+          enabled2: false,
         },
         {
           index: "rgpdDuration",
           title: this.$t("common.togglelist.rgpdDuration"),
           enabled1: true,
-          enabled2: false
+          enabled2: false,
         },
         {
           index: "keywords",
           title: this.$t("common.togglelist.keywords"),
           enabled1: true,
-          enabled2: false
-        }
+          enabled2: false,
+        },
       ],
       isValid: false,
-      isValid2: false
+      isValid2: false,
+      profilePicture: {},
     };
   },
   props: {
     user: Object,
-    submitMethod: String
+    submitMethod: String,
   },
   async mounted() {
     this.user.noDuplicate = false;
     this.user.keepFiles = true;
     this.syncToggles();
-    const dropzone = this.$refs.imageDropzone;
-    dropzone.$el.addEventListener("vdropzone-success", $event =>
-      this.uploadImage($event)
-    );
     if (this.submitMethod == "update") {
       const encryptedKey = dbService.getSecretKey();
       const decryptedApi = this.CryptoJS.AES.decrypt(
@@ -309,14 +320,16 @@ export default {
       this.user.customerUid = decryptedCustomer;
     }
   },
-  components: {
-    vueDropzone: vue2Dropzone
-  },
+  components: {},
   methods: {
-    uploadImage(file) {
-      this.user.userPicture = file.dataURL;
+    removeProof(file) {
+      const index = this.profilePicture.indexOf(file);
+      if (index > -1) {
+        this.profilePicture.splice(index, 1);
+      }
     },
     async register() {
+      console.log(this.profilePicture[0])
       if (this.isValid && this.isValid2) {
         if (this.submitMethod == "register") {
           if (this.password != this.confirmPassword) {
@@ -342,7 +355,7 @@ export default {
           text: this.$t("common.uploadingData"),
           icon: "info",
           showConfirmButton: false,
-          allowOutsideClick: false
+          allowOutsideClick: false,
         });
         if (this.submitMethod == "register") {
           const encryptedKey = dbService.getSecretKey();
@@ -354,6 +367,7 @@ export default {
             this.user.customerUid,
             encryptedKey
           ).toString();
+          let fileReader = new FileReader();
           const res = await dbService.register(
             this.user.username,
             await bcrypt.hash(this.confirmPassword, 12),
@@ -361,7 +375,7 @@ export default {
             encryptedApiKey,
             encryptedCustomer,
             properties,
-            this.user.userPicture,
+            fileReader.readAsDataURL(this.profilePicture[0]),
             this.user.email,
             this.user.noDuplicate,
             this.user.keepFiles
@@ -370,7 +384,7 @@ export default {
             title: this.$t("common.success"),
             text: this.$t("register.accountCreated"),
             icon: "success",
-            showConfirmButton: true
+            showConfirmButton: true,
           });
           if (res.status == "SUCCESS") {
             this.$router.push("/login");
@@ -387,6 +401,7 @@ export default {
             this.user.customerUid,
             encryptedKey
           ).toString();
+          let fileReader = new FileReader();
           const res = await dbService.updateUserById(
             this.$store.state.id,
             this.user.username,
@@ -394,7 +409,7 @@ export default {
             encryptedApiKey,
             encryptedCustomer,
             properties,
-            this.user.userPicture,
+            fileReader.readAsDataURL(this.profilePicture[0]),
             this.user.email,
             this.user.noDuplicate,
             this.user.keepFiles
@@ -405,7 +420,7 @@ export default {
               title: this.$t("common.saveSuccess"),
               text: this.$t("common.configChanged"),
               icon: "success",
-              confirmButtonText: "OK"
+              confirmButtonText: "OK",
             });
           } else {
             this.errorUsername = true;
@@ -420,7 +435,7 @@ export default {
           title: this.$t("common.passwordDifferentTitle"),
           text: this.$t("common.passwordDifferent"),
           icon: "error",
-          confirmButtonText: "OK"
+          confirmButtonText: "OK",
         });
         return;
       }
@@ -437,7 +452,7 @@ export default {
           title: this.$t("common.passwordSuccess"),
           text: this.$t("common.passwordChanged"),
           icon: "success",
-          confirmButtonText: "OK"
+          confirmButtonText: "OK",
         });
       } catch (err) {}
     },
@@ -453,8 +468,8 @@ export default {
         this.toggles[i].enabled2 =
           prop[this.toggles[i].index] == 2 ? true : false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

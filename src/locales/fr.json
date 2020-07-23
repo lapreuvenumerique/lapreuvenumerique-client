@@ -74,6 +74,7 @@
     "verifyFileExistence": "Verifier l'existence d'une preuve",
     "fileExists": "Aucune preuve n'existe | Une preuve existe avec cette id: | Des preuves existent avec ces ids:",
     "noFileExists": "Aucune preuve n'existe avec cette empreinte numérique",
+    "noFileProvided": "Aucune preuve n'a été fournie",
     "uploadProof": "Envoyez votre preuve",
     "uploadProofSubtitle": "Glissez votre preuve ici ou cliquez pour rechercher",
     "verify": "Vérifier"

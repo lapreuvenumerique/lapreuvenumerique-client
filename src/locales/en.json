@@ -74,6 +74,7 @@
     "verifyFileExistence": "Verify existence of a file",
     "fileExists": "File exists with id : | Files exist with ids :",
     "noFileExists": "No file exists with this fingerprint",
+    "noFileProvided": "No file was provided",
     "uploadProof": "Upload your file",
     "uploadProofSubtitle": "Drag or click to browse",
     "verify": "Verify"

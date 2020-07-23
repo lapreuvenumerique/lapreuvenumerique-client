@@ -5,18 +5,12 @@
       <v-form v-model="isValid">
         <v-row>
           <v-col cols="12">
-            <vue-dropzone
-              ref="proofDropzone"
-              id="dropzone"
-              :options="dropzoneOptions"
-              :useCustomSlot="true"
-              @vdropzone-success="(file, response) => this.uploadProof(file)"
-            >
-              <div class="dropzone-custom-content">
-                <h3 class="dropzone-custom-title">{{this.$t("fileExistence.uploadProof")}}</h3>
-                <div class="subtitle">{{this.$t("fileExistence.uploadProofSubtitle")}}</div>
-              </div>
-            </vue-dropzone>
+            <VueFileAgent v-model="fileAgentFiles" multiple="false"></VueFileAgent>
+          </v-col>
+          <v-col cols="12" class="text-right">
+            <v-btn color="primary" @click="sendProof">
+              {{$t("common.submit")}}
+            </v-btn>
           </v-col>
         </v-row>
       </v-form>
@@ -26,41 +20,28 @@
 
 <script>
 import proofService from "@/service/proof-service";
-import vue2Dropzone from "vue2-dropzone";
 import Swal from "sweetalert2";
+import VueFileAgent from "vue-file-agent";
+import VueFileAgentStyles from "vue-file-agent/dist/vue-file-agent.css";
 export default {
   data() {
     return {
       proofData: "",
       isValid: false,
-      dropzoneOptions: {
-        url: "https://httpbin.org/post",
-        thumbnailWidth: 500,
-        addRemoveLinks: true,
-        maxFiles: 1
-      }
+      fileAgentFiles: []
     };
   },
   mounted() {
-    const dropzone = this.$refs.proofDropzone;
-    if (dropzone) {
-      dropzone.$el.addEventListener("vdropzone-success", $event =>
-        this.uploadProof($event)
-      );
-    }
+    
   },
   components: {
-    vueDropzone: vue2Dropzone
   },
   methods: {
-    uploadProof(file) {
-      this.proofData = file;
-      this.sendProof();
-    },
     reset() {
       this.$emit("reset");
     },
     async sendProof() {
+      this.proofData = this.fileAgentFiles[0]?.file
       if (this.proofData) {
         let formData = new FormData();
         formData.append("file", this.proofData);
