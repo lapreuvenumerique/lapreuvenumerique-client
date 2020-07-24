@@ -1,4 +1,4 @@
-# vue-client
+# La Preuve Numérique Client
 
 ## Project setup
 ```
