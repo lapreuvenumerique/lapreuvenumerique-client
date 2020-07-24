@@ -36,8 +36,4 @@ body {
 #app {
   background: none;
 }
-.back {
-  background-image: url("../assets/clouds.jpg");
-  background-size: cover;
-}
 </style>

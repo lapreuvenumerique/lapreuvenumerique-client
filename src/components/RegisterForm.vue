@@ -30,7 +30,11 @@
               </v-form>
             </v-col>
             <v-col :cols="submitMethod == 'update' ? 4 : 6">
-              <v-file-input v-model="profilePicture" multiple="false"></v-file-input>
+              <v-file-input
+                v-model="profilePicture"
+                multiple="false"
+                :label="$t('register.profilePicture')"
+              ></v-file-input>
             </v-col>
             <v-col cols="4" v-if="submitMethod == 'update'">
               <v-text-field
@@ -218,6 +222,7 @@ import bcrypt from "bcryptjs";
 import VueCryptojs from "vue-cryptojs";
 import VueFileAgent from "vue-file-agent";
 import VueFileAgentStyles from "vue-file-agent/dist/vue-file-agent.css";
+import clientService from "@/service/client-service";
 export default {
   data() {
     return {
@@ -329,9 +334,41 @@ export default {
       }
     },
     async register() {
-      console.log(this.profilePicture[0])
       if (this.isValid && this.isValid2) {
+        this.$store.commit("setCredentials", {
+          customerUid: this.user.customerUid,
+          apiKey: this.user.apiKey,
+        });
+        try {
+          const valid = await clientService.getValid();
+        } catch (err) {
+          console.log(err);
+          switch (err.response?.status) {
+            case 500: {
+              swal.fire({
+                icon: "error",
+                title: this.$t("common.error"),
+                text: this.$t("common.serverError"),
+              });
+              break;
+            }
+            default: {
+              swal.fire({
+                icon: "error",
+                title: this.$t("common.credentialsIncorrect"),
+                text: this.$t("register.apiUidIncorrect"),
+              });
+              break;
+            }
+          }
+          return;
+        }
+
         if (this.submitMethod == "register") {
+          this.$store.commit("setCredentials", {
+            customerUid: null,
+            apiKey: null,
+          });
           if (this.password != this.confirmPassword) {
             this.passwordError = true;
             return;
@@ -368,6 +405,10 @@ export default {
             encryptedKey
           ).toString();
           let fileReader = new FileReader();
+          let picturedata = "";
+          if (this.profilePicture[0]) {
+            picturedata = fileReader.readAsDataURL(this.profilePicture[0]);
+          }
           const res = await dbService.register(
             this.user.username,
             await bcrypt.hash(this.confirmPassword, 12),
@@ -375,21 +416,28 @@ export default {
             encryptedApiKey,
             encryptedCustomer,
             properties,
-            fileReader.readAsDataURL(this.profilePicture[0]),
+            picturedata,
             this.user.email,
             this.user.noDuplicate,
             this.user.keepFiles
           );
-          let successAlert = swal.fire({
-            title: this.$t("common.success"),
-            text: this.$t("register.accountCreated"),
-            icon: "success",
-            showConfirmButton: true,
-          });
+
           if (res.status == "SUCCESS") {
+            let successAlert = swal.fire({
+              title: this.$t("common.success"),
+              text: this.$t("register.accountCreated"),
+              icon: "success",
+              showConfirmButton: true,
+            });
             this.$router.push("/login");
           } else {
             this.errorUsername = true;
+            swal.fire({
+              title: this.$t("common.error"),
+              text: this.$t("common.error"),
+              icon: "error",
+              confirmButtonText: "OK",
+            });
           }
         } else {
           const encryptedKey = dbService.getSecretKey();
@@ -402,6 +450,10 @@ export default {
             encryptedKey
           ).toString();
           let fileReader = new FileReader();
+          let picturedata = "";
+          if (this.profilePicture[0]) {
+            picturedata = fileReader.readAsDataURL(this.profilePicture[0]);
+          }
           const res = await dbService.updateUserById(
             this.$store.state.id,
             this.user.username,
@@ -409,7 +461,7 @@ export default {
             encryptedApiKey,
             encryptedCustomer,
             properties,
-            fileReader.readAsDataURL(this.profilePicture[0]),
+            picturedata,
             this.user.email,
             this.user.noDuplicate,
             this.user.keepFiles
@@ -424,6 +476,13 @@ export default {
             });
           } else {
             this.errorUsername = true;
+            swal.fire({
+              title: this.$t("common.error"),
+              text: this.$t("common.error"),
+              icon: "error",
+              confirmButtonText: "OK",
+            });
+            return;
           }
         }
       }

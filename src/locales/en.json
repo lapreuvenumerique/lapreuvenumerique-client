@@ -7,6 +7,7 @@
     "errorServer": "Web service unavailable, please try again later"
   },
   "register": {
+    "profilePicture": "Profile picture",
     "headerInfo": "Register your new account",
     "usernameRequired": "Username required",
     "usernameLabel": "Username",
@@ -17,7 +18,8 @@
     "permissionsInfo": "Set the permissions of the account",
     "save": "Save",
     "reset": "Reset",
-    "accountCreated": "Account successfully created"
+    "accountCreated": "Account successfully created",
+    "apiUidIncorrect": "The api key or the customer uid you provided isn't correct"
   },
   "proofQuery": {
     "noResponse": "No response to your request",
@@ -40,8 +42,6 @@
     "docVerify": "Verify a file",
     "integrity": "Blockchain integrity",
     "settings": "Settings",
-    "dropzoneHeader": "Drop your profile picture here",
-    "dropzoneSubtitle": "...or click to browse",
     "newPassword": "New password",
     "confirmNewPassword": "Confirm new password",
     "password": "Password",
@@ -51,8 +51,6 @@
   },
   "proofDeposit": {
     "proofDeposit": "Proof deposit",
-    "uploadProof": "Upload your proof",
-    "uploadProofSubtitle": "Drag or click to browse",
     "noDuplicate": "Don't allow duplicate files",
     "keepFiles": "Allow keeping of files",
     "price": "Price",
@@ -75,15 +73,11 @@
     "fileExists": "File exists with id : | Files exist with ids :",
     "noFileExists": "No file exists with this fingerprint",
     "noFileProvided": "No file was provided",
-    "uploadProof": "Upload your file",
-    "uploadProofSubtitle": "Drag or click to browse",
     "verify": "Verify"
   },
   "massdeposit": {
     "massdeposit": "Mass deposit",
     "proofsDeposit": "Proofs deposit",
-    "uploadProofs": "Upload your proofs",
-    "uploadProofsSubtitle": "Drag or click to browse",
     "maxSizePerFile": "Max size per file",
     "formError": "Information entered contains an error",
     "batchNumberRequired": "Note that the batch number is required",
@@ -163,6 +157,7 @@
     "serverError": "Server error",
     "errorOccured": "An error occured",
     "infoNotValid": "Information provided is not valid",
-    "loadmore": "Load more"
+    "loadmore": "Load more",
+    "notEnoughCredits": "Not enough credits to upload a proof"
   }
 }

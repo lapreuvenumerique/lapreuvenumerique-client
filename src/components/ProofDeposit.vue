@@ -32,7 +32,10 @@
       <v-form v-model="isValid">
         <v-row>
           <v-col cols="12">
-            <VueFileAgent v-model="fileAgentFiles" multiple="false"></VueFileAgent>
+            <VueFileAgent
+              v-model="fileAgentFiles"
+              multiple="false"
+            ></VueFileAgent>
           </v-col>
           <v-col cols="6" v-for="input in inputs" :key="input.title">
             <v-text-field
@@ -161,19 +164,27 @@ export default {
       resmaxSize = Math.round(resmaxSize);
       this.maxSize = resmaxSize + suffix;
     } catch (err) {
-      if (err.response.status == 401) {
-        const alertErr = await Swal.fire({
-          icon: "error",
-          title: this.$t("common.error"),
-          text: this.$t("common.keyRevokedDisabled"),
-        });
-        this.$router.push("/login");
+      switch (err.response?.status) {
+        case 401: {
+          const alertErr = await Swal.fire({
+            icon: "error",
+            title: this.$t("common.error"),
+            text: this.$t("common.keyRevokedDisabled"),
+          });
+          this.$router.push("/login");
+        }
+        default: {
+          const alertErr = await Swal.fire({
+            icon: "error",
+            title: this.$t("common.error"),
+            text: this.$t("common.serverError"),
+          });
+        }
       }
-      console.log(err);
     }
     for (let i = 0; i < this.inputs.length; i++) {
       if (this.inputs[i].title == "rgpdDuration") {
-        this.inputs[i].value = 2;
+        this.inputs[i].value = 1;
       }
     }
   },
@@ -188,8 +199,8 @@ export default {
           this.topics.push(res.data.topics[i].name);
         }
       } catch (err) {
-        console.log(err.response.status);
-        if (err.response.status == 401) {
+        console.log(err.response?.status);
+        if (err.response?.status == 401) {
           const alertErr = await Swal.fire({
             icon: "error",
             title: this.$t("common.error"),
@@ -216,10 +227,15 @@ export default {
           this.credits = credit.data.credits;
         }
       } catch (err) {
-        await Swal.fire({
-          title: this.$t("common.error"),
-          text: this.$t("common.serverError"),
-        });
+        switch (err.response?.status) {
+          case 500: {
+            await Swal.fire({
+              icon: "error",
+              title: this.$t("common.error"),
+              text: this.$t("common.serverError"),
+            });
+          }
+        }
       }
     },
     reset() {
@@ -310,15 +326,25 @@ export default {
       } catch (err) {
         console.log(err);
         let text =
-          this.$t("common.dataNotUploaded") + " : " + err.response.message;
-        switch (err.response.status) {
+          this.$t("common.dataNotUploaded") + " : " + err.response?.message;
+        switch (err.response?.status) {
           case 401: {
             text = this.$t("common.keyRevokedDisabled");
+            break;
+          }
+          case 403: {
+            text = this.$t("common.notEnoughCredits");
+            break;
           }
           case 422: {
             text = this.$t("common.infoNotValid");
+            break;
           }
           case 500: {
+            break;
+          }
+          default:{
+            text= this.$t("common.serverError")
           }
         }
         Swal.fire({

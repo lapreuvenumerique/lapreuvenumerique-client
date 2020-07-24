@@ -17,7 +17,9 @@
     "permissionsInfo": "Indiquez les permissions de ce compte",
     "save": "Enregistrer",
     "reset": "Réinitialiser",
-    "accountCreated": "Compte créé avec succès"
+    "accountCreated": "Compte créé avec succès",
+    "apiUidIncorrect": "La clé d'api ou l'uid de client fournit n'est pas correct",
+    "profilePicture": "Photo de profil"
   },
   "proofQuery": {
     "noResponse": "Aucune réponse à votre requète",
@@ -40,8 +42,6 @@
     "docVerify": "Vérifier l'existence d'un fichier",
     "integrity": "Intégrité de la blockchain",
     "settings": "Paramètres",
-    "dropzoneHeader": "Glissez votre photo de profil ici",
-    "dropzoneSubtitle": "...ou cliquez pour rechercher",
     "newPassword": "Nouveau mot de passe",
     "confirmNewPassword": "Confirmer votre nouveau mot de passe",
     "password": "Mot de passe",
@@ -51,8 +51,6 @@
   },
   "proofDeposit": {
     "proofDeposit": "Dépôt de preuve",
-    "uploadProof": "Envoyez votre preuve",
-    "uploadProofSubtitle": "Glissez votre preuve ici ou cliquez pour rechercher",
     "noDuplicate": "Ne pas autoriser les preuves en double",
     "keepFiles": "Autoriser la tenue des preuves",
     "price": "Prix",
@@ -75,15 +73,11 @@
     "fileExists": "Aucune preuve n'existe | Une preuve existe avec cette id: | Des preuves existent avec ces ids:",
     "noFileExists": "Aucune preuve n'existe avec cette empreinte numérique",
     "noFileProvided": "Aucune preuve n'a été fournie",
-    "uploadProof": "Envoyez votre preuve",
-    "uploadProofSubtitle": "Glissez votre preuve ici ou cliquez pour rechercher",
     "verify": "Vérifier"
   },
   "massdeposit": {
     "massdeposit": "Dépôt de preuves de masse",
     "proofsDeposit": "Dépôt de preuves",
-    "uploadProofs": "Envoyez vos preuves",
-    "uploadProofsSubtitle": "Glissez votre preuve ici ou cliquez pour rechercher",
     "maxSizePerFile": "Taille maximale par preuve",
     "formError": "L'information donnée n'est pas valide",
     "batchNumberRequired": "Notez que le numéro de lot est requis",
@@ -163,6 +157,7 @@
     "serverError": "Erreur serveur",
     "errorOccured": "Une erreur est survenue",
     "infoNotValid": "Information entrée non valide",
-    "loadmore": "Charger plus"
+    "loadmore": "Charger plus",
+    "notEnoughCredits": "Pas assez de crédits pour déposer une preuve"
   }
 }

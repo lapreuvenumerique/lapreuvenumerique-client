@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as cfg from "../config"
 import store from "../store/index"
 
-axios.defaults.baseURL = "http://api.lapreuvenumerique.com:8086";
+axios.defaults.baseURL = "https://api.lapreuvenumerique.com";
 
 /**
  * Handles all HTTP calls
@@ -47,7 +47,8 @@ export class HttpService {
     getHeaders() {
         const headers = {
             'Authorization': 'Basic ' + store.state.apiKey,
-            'x-customeruid': store.state.customerUid
+            'x-customeruid': store.state.customerUid,
+            "Access-Control-Allow-Origin": "*"
         }
         return headers
     }

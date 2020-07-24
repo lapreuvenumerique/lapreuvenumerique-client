@@ -189,7 +189,7 @@ export default {
       resmaxSize = Math.round(resmaxSize);
       this.maxSize = resmaxSize + suffix;
     } catch (err) {
-      if (err.response.status == 401) {
+      if (err.response?.status == 401) {
         const alertErr = await Swal.fire({
           icon: "error",
           title: this.$t("common.error"),
@@ -201,7 +201,7 @@ export default {
     }
     for (let i = 0; i < this.inputs.length; i++) {
       if (this.inputs[i].title == "rgpdDuration") {
-        this.inputs[i].value = 2;
+        this.inputs[i].value = 1;
       }
     }
   },
@@ -216,7 +216,7 @@ export default {
           this.topics.push(res.data.topics[i].name);
         }
       } catch (err) {
-        console.log(err.response.status);
+        console.log(err.response?.status);
         if (err.status == 401) {
           const alertErr = await Swal.fire({
             icon: "error",
@@ -262,7 +262,7 @@ export default {
 
     handleCreditCost() {
       this.creditCost = 0;
-      let rgpdDuration = 2;
+      let rgpdDuration = 1;
       for (let i = 0; i < this.inputs.length; i++) {
         if (this.inputs[i].title == "rgpdDuration" && this.inputs[i].value) {
           rgpdDuration = this.inputs[i].value;
@@ -270,6 +270,7 @@ export default {
       }
       for (let s = 0; s < this.proofData.length; s++) {
         const file = this.proofData[s];
+        console.log(this.proofData);
         const cost =
           Math.ceil(file.size / 1024 / this.clientInfo.creditSizeKo) *
           rgpdDuration *
@@ -356,10 +357,14 @@ export default {
       } catch (err) {
         console.log(err);
         let text =
-          this.$t("common.dataNotUploaded") + " : " + err.response.message;
-        switch (err.response.status) {
+          this.$t("common.dataNotUploaded") + " : " + err.response?.message;
+        switch (err.response?.status) {
           case 401: {
-            text = this.$t("common.credentialsIncorrect");
+            text = this.$t("common.keyRevokedDisabled");
+            break;
+          }
+          case 403: {
+            text = this.$t("common.notEnoughCredits");
             break;
           }
           case 422: {
@@ -371,6 +376,8 @@ export default {
             break;
           }
           default: {
+            text = this.$t("common.serverError");
+            break;
           }
         }
         Swal.fire({

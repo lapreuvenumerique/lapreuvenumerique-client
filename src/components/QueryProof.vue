@@ -338,7 +338,7 @@ export default {
       data["page"] = queryPage;
       try {
         const res = await clientService.getQuery(data);
-        if (res.data.files[0]?.proofCount) {
+        if (res.data?.files[0].proofCount) {
           this.proofCount = parseInt(res.data.files[0].proofCount);
         } else {
           await this.loadProofCount();
@@ -355,22 +355,24 @@ export default {
         }
         let items = this.proofs;
         const total = this.proofCount;
-
-        //if (itemsPerPage > 0) {
-        //  items = items.slice((page - 1) * itemsPerPage, page * itemsPerPage);
-        //}
         return {
           items,
           total,
         };
       } catch (err) {
         console.log(err);
-        let errorRes = await swal.fire({
-          title: this.$t("common.error"),
-          text: this.$t("proofQuery.noResponse"),
-          icon: "error",
-        });
-        return;
+        switch (err.response?.status) {
+          case 400: {
+          }
+          default: {
+            let errorRes = await swal.fire({
+              title: this.$t("common.error"),
+              text: this.$t("common.serverError"),
+              icon: "error",
+            });
+            return;
+          }
+        }
       }
     },
     async loadTopics() {
@@ -415,6 +417,6 @@ export default {
   display: none;
 }
 tbody tr:nth-of-type(even) {
-  background-color: rgba(255, 214, 92, 1);
+  background-color: rgba(255, 255, 255, 0.5);
 }
 </style>
