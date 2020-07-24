@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as cfg from "../config"
 import store from "../store/index"
 
-axios.defaults.baseURL = "https://api.lapreuvenumerique.com";
+axios.defaults.baseURL = "http://apidev.lapreuvenumerique.com:8086";
 
 /**
  * Handles all HTTP calls

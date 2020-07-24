@@ -1,7 +1,7 @@
 <template>
   <v-container fluid style="height: 100%;background:white;" class="pa-0">
     <v-row style="height: 100%;" class="pa-0">
-      <v-col cols="2" style="height: 100%;" class="pa-0">
+      <v-col cols="2" style="height: 100%; overflow-y:none;" class="pa-0">
         <v-card style="width: 100%; height: 100%; left: 0px; up: 0px;">
           <v-navigation-drawer
             dark
@@ -70,7 +70,7 @@
           </v-navigation-drawer>
         </v-card>
       </v-col>
-      <v-col cols="10" :key="keyReload">
+      <v-col cols="10" :key="keyReload" style="overflow-y: scroll;max-height: 100%">
         <proof-deposit
           v-if="this.pageOpened == 'proofDeposit'"
           :user="user"

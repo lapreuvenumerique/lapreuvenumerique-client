@@ -127,7 +127,7 @@
         :items="proofs"
         item-key="id"
         hide-default-footer
-        class="elevation-1"
+        class="elevation-1 fixed-header v-table__overflow"
         :server-items-length="searchProofCount"
         :expanded.sync="expanded"
         show-expand
@@ -135,7 +135,7 @@
         :search="search"
         :footer-props="footerProps"
         fixed-header
-        height="700px"
+        style="max-height: calc(70vh - 10px);backface-visibility: hidden;"
       >
         <template v-slot:item.actions="{ item }">
           <v-icon
@@ -198,19 +198,45 @@ export default {
       proofCount: 0,
       headers: [
         { text: this.$t("proofQuery.id"), value: "id", sortable: false },
-        { text: this.$t("common.togglelist.filename"), value: "fileName" },
-        { text: this.$t("common.togglelist.folderName"), value: "folderName" },
-        { text: this.$t("common.togglelist.reference"), value: "reference" },
-        { text: this.$t("proofQuery.date"), value: "uploadDate" },
-        { text: this.$t("common.togglelist.identity"), value: "identity" },
+        {
+          text: this.$t("common.togglelist.filename"),
+          value: "fileName",
+          sortable: false,
+        },
+        {
+          text: this.$t("common.togglelist.folderName"),
+          value: "folderName",
+          sortable: false,
+        },
+        {
+          text: this.$t("common.togglelist.reference"),
+          value: "reference",
+          sortable: false,
+        },
+        {
+          text: this.$t("proofQuery.date"),
+          value: "uploadDate",
+          sortable: false,
+        },
+        {
+          text: this.$t("common.togglelist.identity"),
+          value: "identity",
+          sortable: false,
+        },
         {
           text: this.$t("common.togglelist.batchNumber"),
           value: "batchNumber",
+          sortable: false,
         },
-        { text: this.$t("common.togglelist.topic"), value: "topic" },
+        {
+          text: this.$t("common.togglelist.topic"),
+          value: "topic",
+          sortable: false,
+        },
         {
           text: this.$t("common.togglelist.deadline"),
           value: "deadline",
+          sortable: false,
         },
         {
           text: this.$t("proofQuery.actions"),
@@ -418,5 +444,53 @@ export default {
 }
 tbody tr:nth-of-type(even) {
   background-color: rgba(255, 255, 255, 0.5);
+}
+.theme--dark.v-table thead th {
+  background-color: #424242;
+}
+.theme--light.v-table thead th {
+  background-color: #fff;
+}
+.fixed-header {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.fixed-header table {
+  table-layout: fixed;
+}
+.fixed-header th {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+.fixed-header th:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+.fixed-header tr.v-datatable__progress th {
+  height: 1px;
+}
+.fixed-header .v-table__overflow {
+  flex-grow: 1;
+  flex-shrink: 1;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+.fixed-header .v-datatable.v-table {
+  flex-grow: 0;
+  flex-shrink: 1;
+}
+.fixed-header .v-datatable.v-table .v-datatable__actions {
+  flex-wrap: nowrap;
+}
+.fixed-header
+  .v-datatable.v-table
+  .v-datatable__actions
+  .v-datatable__actions__pagination {
+  white-space: nowrap;
 }
 </style>
