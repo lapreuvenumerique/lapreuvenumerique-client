@@ -16,7 +16,7 @@
   "main": "background.js",
   "dependencies": {
     "app-root-path": "^3.0.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "core-js": "^3.6.5",
     "dexie": "^3.0.1",
